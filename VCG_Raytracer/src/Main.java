@@ -44,7 +44,7 @@ import utils.algebra.Vec3;
 public class Main {
 
     /** RESOLUTION **/
-
+    /** TEST TEST TEST **/
     static final int IMAGE_WIDTH = 800;
     static final int IMAGE_HEIGHT = 600;
 
