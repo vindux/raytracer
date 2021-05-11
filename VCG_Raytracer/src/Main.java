@@ -23,7 +23,9 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
+import ray.Ray;
 import raytracer.Raytracer;
+import scene.camera.Camera;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
@@ -81,11 +83,12 @@ public class Main {
 
     /** CAMERA **/
 
-    static final Vec3 CAM_POS = null;
-    static final Vec3 LOOK_AT = null;
-    static final Vec3 UP_VECTOR = null;
+    static final Vec3 CAM_POS = new Vec3(0, 0, 17);
+    static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
+    static final Vec3 UP_VECTOR = new Vec3(0, 1, 0);
 
-    static final float VIEW_ANGLE = 0;
+    static final float VIEW_ANGLE = 170f;
+    static final float FOCAL_LENGTH = 35f;
 
     /** DEBUG **/
 
@@ -95,9 +98,19 @@ public class Main {
     /** Initial method. This is where the show begins. **/
     public static void main(String[] args){
         Window renderWindow = new Window(IMAGE_WIDTH, IMAGE_HEIGHT);
+        Camera firstCamera = new Camera(CAM_POS, LOOK_AT, UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH);
+        Ray ray = new Ray(CAM_POS, LOOK_AT);
 
-        System.out.printf("Hello World! Again!");
-        draw(renderWindow);
+        for(int y = 0;y<IMAGE_HEIGHT;y++) {
+            for (int x =0; x <IMAGE_WIDTH; x++) {
+                Vec3 direction = firstCamera.calculateDestination(x, y);
+                ray.setDirection(direction);
+                Vec3 rayDestination = ray.calculateRayAt();
+                System.out.println("RAY : " + rayDestination);
+
+                draw(renderWindow);
+            }
+        }
     }
 
     /**  Draw the scene using our Raytracer **/
@@ -130,6 +143,14 @@ public class Main {
     }
 
     private static void setupCornellBox(Scene renderScene) {
+    }
+
+    private static float transformX(int x) {
+        return (float) ((2*(x+0.5)/IMAGE_WIDTH)-1);
+    }
+
+    private static float transformY(int y) {
+        return (float) ((2*(y+0.5)/IMAGE_HEIGHT)-1);
     }
 
     /** Create our personal renderer and give it all of our items and prefs to calculate our scene **/
