@@ -29,6 +29,7 @@ import scene.camera.Camera;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
+import utils.algebra.Vec2;
 import utils.algebra.Vec3;
 
 /*
@@ -47,8 +48,9 @@ public class Main {
 
     /** RESOLUTION **/
 
-    static final int IMAGE_WIDTH = 800;
     static final int IMAGE_HEIGHT = 600;
+    static final int IMAGE_WIDTH = 800;
+
 
     /** CORNELL_BOX_DIMENSION **/
 
@@ -85,10 +87,10 @@ public class Main {
 
     static final Vec3 CAM_POS = new Vec3(0, 0, 17);
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
-    static final Vec3 UP_VECTOR = new Vec3(0, 1, 0);
+    static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
 
     static final float VIEW_ANGLE = 170f;
-    static final float FOCAL_LENGTH = 35f;
+    static final float FOCAL_LENGTH = 1f;
 
     /** DEBUG **/
 
@@ -98,19 +100,39 @@ public class Main {
     /** Initial method. This is where the show begins. **/
     public static void main(String[] args){
         Window renderWindow = new Window(IMAGE_WIDTH, IMAGE_HEIGHT);
-        Camera firstCamera = new Camera(CAM_POS, LOOK_AT, UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH);
+        Camera firstCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH);
         Ray ray = new Ray(CAM_POS, LOOK_AT);
+        double aspect_ratio = IMAGE_WIDTH/IMAGE_HEIGHT;
+        double img_height = 2*Math.tan(Math.toRadians(170)/2)*FOCAL_LENGTH;
+        double img_width = aspect_ratio*img_height;
 
-        for(int y = 0;y<IMAGE_HEIGHT;y++) {
-            for (int x =0; x <IMAGE_WIDTH; x++) {
-                Vec3 direction = firstCamera.calculateDestination(x, y);
+        Vec3 direction;
+        Vec3 rayDirection;
+        float deltaX;
+        float deltaY;
+        RgbColor color;
+
+        //Wofür Aspect ratio???
+        //Wofür Angle?
+
+        for(int y = IMAGE_HEIGHT-1;y>=0;--y) {
+            for (int x =0; x <IMAGE_WIDTH-1; ++x) {
+                deltaX = (float) ((2*(x+0.5)/IMAGE_WIDTH-1)*img_width/2);
+                deltaY = (float) ((2*(y+0.5)/IMAGE_HEIGHT-1)*img_height/2);
+
+                direction = firstCamera.calculateDirection(deltaX,-deltaY);
                 ray.setDirection(direction);
-                Vec3 rayDestination = ray.calculateRayAt();
-                System.out.println("RAY : " + rayDestination);
+                rayDirection = ray.calculateRayAt(); //+2 und /2
+                rayDirection.x = (rayDirection.x + 2)/2;
+                rayDirection.y = (rayDirection.y + 2)/2;
+                rayDirection.z = (rayDirection.z + 2)/2;
+                color = new RgbColor(rayDirection);
 
-                draw(renderWindow);
+                System.out.println(rayDirection);
+                renderWindow.setPixel(renderWindow.getBufferedImage(), color, new Vec2(x,y));
             }
         }
+        draw(renderWindow);
     }
 
     /**  Draw the scene using our Raytracer **/
@@ -143,14 +165,6 @@ public class Main {
     }
 
     private static void setupCornellBox(Scene renderScene) {
-    }
-
-    private static float transformX(int x) {
-        return (float) ((2*(x+0.5)/IMAGE_WIDTH)-1);
-    }
-
-    private static float transformY(int y) {
-        return (float) ((2*(y+0.5)/IMAGE_HEIGHT)-1);
     }
 
     /** Create our personal renderer and give it all of our items and prefs to calculate our scene **/

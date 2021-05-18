@@ -42,7 +42,7 @@ public class Raytracer {
 
     /**  Constructor **/
     public Raytracer(Scene scene, Window renderWindow, int recursions, RgbColor backColor, RgbColor ambientLight, int antiAliasingSamples, boolean debugOn){
-        Log.print(this, "Init");
+        //Log.print(this, "Init");
         mMaxRecursions = recursions;
 
         mBufferedImage = renderWindow.getBufferedImage();
@@ -73,7 +73,8 @@ public class Raytracer {
 
     /**  This is where our scene is actually ray-traced **/
     public void renderScene(){
-        Log.print(this, "Prepare rendering at " + String.valueOf(stopTime(tStart)));
+        //Log.print(this, "Prepare rendering at " + String.valueOf(stopTime(tStart)));
+
 
         // Here trace the rays ...
 
