@@ -23,13 +23,13 @@ public class Camera {
         this.userUpVector = _userUpVector;
         this.viewAngle = _viewAngle;
         this.focalLength = _focalLength;
-        this.viewVector = lookAt.sub(cameraPosition);
-        this.sideVector = viewVector.cross(userUpVector);
-        this.cameraUpVector = sideVector.cross(viewVector);
+        this.viewVector = lookAt.sub(cameraPosition).normalize();
+        this.sideVector = viewVector.cross(userUpVector).normalize();
+        this.cameraUpVector = sideVector.cross(viewVector).normalize();
     }
 
     public Vec3 calculateDirection(float deltaX, float deltaY) {
-        destinationVector = viewVector.normalize().add(sideVector.multScalar(deltaX));
+        destinationVector = viewVector.add(sideVector.multScalar(deltaX));
         return destinationVector.add(cameraUpVector.multScalar(deltaY));
     }
 
