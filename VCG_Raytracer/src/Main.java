@@ -103,7 +103,7 @@ public class Main {
         Camera firstCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH);
         Ray ray = new Ray(CAM_POS, LOOK_AT);
         double aspect_ratio = IMAGE_WIDTH/IMAGE_HEIGHT;
-        double img_height = 2*Math.tan(Math.toRadians(170)/2)*FOCAL_LENGTH;
+        double img_height = 2*(Math.tan(Math.toRadians(VIEW_ANGLE)/2))*FOCAL_LENGTH;
         double img_width = aspect_ratio*img_height;
 
         Vec3 direction;
@@ -112,23 +112,24 @@ public class Main {
         float deltaY;
         RgbColor color;
 
-        //Wofür Aspect ratio???
-        //Wofür Angle?
+        for(int y = IMAGE_HEIGHT-1;y>=0;y--) {
+            for (int x =0; x <IMAGE_WIDTH; x++) {
+                deltaX = (float) ((2*(x+0.5)/IMAGE_WIDTH-1)*(img_width/2));
+                deltaY = (float) ((2*(y+0.5)/IMAGE_HEIGHT-1)*(img_height/2));
 
-        for(int y = IMAGE_HEIGHT-1;y>=0;--y) {
-            for (int x =0; x <IMAGE_WIDTH-1; ++x) {
-                deltaX = (float) ((2*(x+0.5)/IMAGE_WIDTH-1)*img_width/2);
-                deltaY = (float) ((2*(y+0.5)/IMAGE_HEIGHT-1)*img_height/2);
+                direction = firstCamera.calculateDirection(deltaX,-deltaY).normalize();
+                //ray.setDirection(direction);
+                //rayDirection = ray.calculateRayAt();
 
-                direction = firstCamera.calculateDirection(deltaX,-deltaY);
-                ray.setDirection(direction);
-                rayDirection = ray.calculateRayAt(); //+2 und /2
-                rayDirection.x = (rayDirection.x + 2)/2;
-                rayDirection.y = (rayDirection.y + 2)/2;
-                rayDirection.z = (rayDirection.z + 2)/2;
-                color = new RgbColor(rayDirection);
+                //rayDirection.x = (rayDirection.x+1)/2;
+                //rayDirection.y = (rayDirection.y+1)/2;
+                //rayDirection.z = (rayDirection.z+1)/2;
+                direction.x = (direction.x+1)/2;
+                direction.y = (direction.y+1)/2;
+                direction.z = (direction.z+1)/2;
+                color = new RgbColor(direction);
 
-                System.out.println(rayDirection);
+                System.out.println(direction);
                 renderWindow.setPixel(renderWindow.getBufferedImage(), color, new Vec2(x,y));
             }
         }
