@@ -16,9 +16,13 @@
 
 package raytracer;
 
+import ray.Ray;
 import scene.Scene;
+import scene.camera.Camera;
 import ui.Window;
 import utils.*;
+import utils.algebra.Vec2;
+import utils.algebra.Vec3;
 import utils.io.Log;
 
 import java.awt.image.BufferedImage;
@@ -29,6 +33,7 @@ public class Raytracer {
 
     private Scene mScene;
     private Window mRenderWindow;
+    private Camera camera;
 
     private int mMaxRecursions;
 
@@ -41,20 +46,21 @@ public class Raytracer {
     private long tStart;
 
     /**  Constructor **/
-    public Raytracer(Scene scene, Window renderWindow, int recursions, RgbColor backColor, RgbColor ambientLight, int antiAliasingSamples, boolean debugOn){
+    public Raytracer(Scene _scene, Window _renderWindow, int _recursions, RgbColor _backColor, RgbColor _ambientLight, int _antiAliasingSamples, boolean _debugOn, Camera _camera){
         //Log.print(this, "Init");
-        mMaxRecursions = recursions;
+        mMaxRecursions = _recursions;
 
-        mBufferedImage = renderWindow.getBufferedImage();
+        mBufferedImage = _renderWindow.getBufferedImage();
 
-        mAntiAliasingSamples = antiAliasingSamples;
+        mAntiAliasingSamples = _antiAliasingSamples;
 
-        mBackgroundColor = backColor;
-        mAmbientLight = ambientLight;
-        mScene = scene;
-        mRenderWindow = renderWindow;
-        mDebug = debugOn;
+        mBackgroundColor = _backColor;
+        mAmbientLight = _ambientLight;
+        mScene = _scene;
+        mRenderWindow = _renderWindow;
+        mDebug = _debugOn;
         tStart = System.currentTimeMillis();
+        camera = _camera;
 
         this.exportRendering();
     }
@@ -74,7 +80,34 @@ public class Raytracer {
     /**  This is where our scene is actually ray-traced **/
     public void renderScene(){
         //Log.print(this, "Prepare rendering at " + String.valueOf(stopTime(tStart)));
+        double width = camera.getWidth();
+        double height = camera.getHeight();
+        int screenHeight = camera.getScreenHeight();
+        int screenWidth = camera.getScreenWidth();
 
+        Vec3 direction;
+        float deltaX;
+        float deltaY;
+        RgbColor color;
+        Ray ray;
+        Vec3 cameraDirection;
+
+        for(int y = screenHeight-1;y>=0;y--) {
+            for (int x =0; x <screenWidth; x++) {
+                deltaX = (float) ((2*(x+0.5)/screenWidth-1)*(width/2));
+                deltaY = (float) ((2*(y+0.5)/screenHeight-1)*(height/2));
+                cameraDirection = camera.calculateDirection(deltaX,-deltaY);
+                ray = new Ray(cameraDirection);
+                direction = ray.calculateRayAt(1);
+
+                direction.x = (direction.x+1)/2;
+                direction.y = (direction.y+1)/2;
+                direction.z = (direction.z+1)/2;
+                color = new RgbColor(direction);
+
+                mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), color, new Vec2(x,y));
+            }
+        }
 
         // Here trace the rays ...
 

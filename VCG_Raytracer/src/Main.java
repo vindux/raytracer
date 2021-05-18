@@ -92,6 +92,8 @@ public class Main {
     static final float VIEW_ANGLE = 170f;
     static final float FOCAL_LENGTH = 1f;
 
+    static public Camera firstCamera;
+
     /** DEBUG **/
 
     static final boolean SHOW_PARAM_LABEL = true;
@@ -100,39 +102,6 @@ public class Main {
     /** Initial method. This is where the show begins. **/
     public static void main(String[] args){
         Window renderWindow = new Window(IMAGE_WIDTH, IMAGE_HEIGHT);
-        Camera firstCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH);
-        Ray ray = new Ray(CAM_POS, LOOK_AT);
-        double aspect_ratio = IMAGE_WIDTH/IMAGE_HEIGHT;
-        double img_height = 2*(Math.tan(Math.toRadians(VIEW_ANGLE)/2))*FOCAL_LENGTH;
-        double img_width = aspect_ratio*img_height;
-
-        Vec3 direction;
-        Vec3 rayDirection;
-        float deltaX;
-        float deltaY;
-        RgbColor color;
-
-        for(int y = IMAGE_HEIGHT-1;y>=0;y--) {
-            for (int x =0; x <IMAGE_WIDTH; x++) {
-                deltaX = (float) ((2*(x+0.5)/IMAGE_WIDTH-1)*(img_width/2));
-                deltaY = (float) ((2*(y+0.5)/IMAGE_HEIGHT-1)*(img_height/2));
-
-                direction = firstCamera.calculateDirection(deltaX,-deltaY).normalize();
-                //ray.setDirection(direction);
-                //rayDirection = ray.calculateRayAt();
-
-                //rayDirection.x = (rayDirection.x+1)/2;
-                //rayDirection.y = (rayDirection.y+1)/2;
-                //rayDirection.z = (rayDirection.z+1)/2;
-                direction.x = (direction.x+1)/2;
-                direction.y = (direction.y+1)/2;
-                direction.z = (direction.z+1)/2;
-                color = new RgbColor(direction);
-
-                System.out.println(direction);
-                renderWindow.setPixel(renderWindow.getBufferedImage(), color, new Vec2(x,y));
-            }
-        }
         draw(renderWindow);
     }
 
@@ -160,6 +129,7 @@ public class Main {
     }
 
     private static void setupCameras(Scene renderScene) {
+        firstCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT);
     }
 
     private static void setupObjects(Scene renderScene) {
@@ -177,7 +147,8 @@ public class Main {
                 BACKGROUND_COLOR,
                 AMBIENT_LIGHT,
                 ANTI_ALIASING,
-                SHOW_PARAM_LABEL);
+                SHOW_PARAM_LABEL,
+                firstCamera);
 
         raytracer.renderScene();
     }
