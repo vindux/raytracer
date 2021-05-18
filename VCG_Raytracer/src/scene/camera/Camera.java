@@ -6,29 +6,31 @@ public class Camera {
 
     private Vec3 cameraPosition;
     private Vec3 lookAt;
-    private Vec3 upVector;
+    private Vec3 userUpVector;
+    private Vec3 viewVector;
+    private Vec3 sideVector;
+    private Vec3 cameraUpVector;
+    private Vec3 destinationVector;
     private Float viewAngle;
     private Float focalLength;
-    private Vec3 viewVector;
+    private double width;
+    private double height;
+    private double aspect_ratio;
 
-    public Camera(Vec3 _cameraPosition, Vec3 _lookAt, Vec3 _upVector, float _viewAngle, float _focalLength) {
+    public Camera(Vec3 _cameraPosition, Vec3 _lookAt, Vec3 _userUpVector, float _viewAngle, float _focalLength) {
         this.cameraPosition = _cameraPosition;
         this.lookAt = _lookAt;
-        this.upVector = _upVector;
+        this.userUpVector = _userUpVector;
         this.viewAngle = _viewAngle;
         this.focalLength = _focalLength;
+        this.viewVector = lookAt.sub(cameraPosition);
+        this.sideVector = viewVector.cross(userUpVector);
+        this.cameraUpVector = sideVector.cross(viewVector);
     }
 
-    public Vec3 calculateDestinationPoint() {
-        viewVector = lookAt.sub(cameraPosition);
-        return cameraPosition.add(viewVector);
-    }
-
-    public Vec3 calculateDestination(float deltaX, float deltaY) {
-        Vec3 destinationPoint = calculateDestinationPoint();
-        Vec3 sideVector = viewVector.cross(upVector);
-        Vec3 destinationVector = viewVector.add(sideVector.multScalar(deltaX));
-        return destinationVector.add(upVector.multScalar(deltaY)).normalize();
+    public Vec3 calculateDirection(float deltaX, float deltaY) {
+        destinationVector = viewVector.normalize().add(sideVector.multScalar(deltaX));
+        return destinationVector.add(cameraUpVector.multScalar(deltaY));
     }
 
 }
