@@ -16,10 +16,10 @@
 
  <<< YOUR TEAM NAME >>>
 
-     Master of Documentation:
-     Master of Structure:
-     Master of Performance:
-     Master of Theory:
+     Master of Documentation: Timur Linden
+     Master of Structure: Philipp Reichel
+     Master of Performance: Matthias Wolpert
+     Master of Theory: Alexander Funke
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
@@ -37,27 +37,24 @@ import utils.algebra.Vec3;
 
     TEAM:
 
-    1.
-    2.
-    3.
-    4.
+    1. Alexander Funke
+    2. Matthias Wolpert
+    3. Philipp Reichel
+    4. Timur Linden
  */
 
 // Main application class. This is the routine called by the JVM to run the program.
 public class Main {
 
     /** RESOLUTION **/
-
     static final int IMAGE_HEIGHT = 600;
     static final int IMAGE_WIDTH = 800;
 
 
     /** CORNELL_BOX_DIMENSION **/
-
     static final float BOX_DIMENSION = 4f;
 
     /** RAYTRACER **/
-
     static final int RECURSIONS = 0;
     static final int ANTI_ALIASING = 1;
     static final boolean USE_SOFT_SHADOWS = false;
@@ -84,7 +81,6 @@ public class Main {
     static final float AO_MAX_DISTANCE = 0f;
 
     /** CAMERA **/
-
     static final Vec3 CAM_POS = new Vec3(0, 0, 17);
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
     static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
@@ -95,7 +91,6 @@ public class Main {
     static public Camera firstCamera;
 
     /** DEBUG **/
-
     static final boolean SHOW_PARAM_LABEL = true;
 
 

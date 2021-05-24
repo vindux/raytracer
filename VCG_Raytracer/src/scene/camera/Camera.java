@@ -2,6 +2,11 @@ package scene.camera;
 
 import utils.algebra.Vec3;
 
+/**
+ * Camera class
+ * Specifies camera and properties of the portion we see at the end
+ **/
+
 public class Camera {
 
     private Vec3 cameraPosition;
@@ -67,6 +72,7 @@ public class Camera {
         return screenWidth;
     }
 
+    /** Constructor **/
     public Camera(Vec3 _cameraPosition, Vec3 _lookAt, Vec3 _userUpVector, float _viewAngle, float _focalLength, int _screenWidth, int _screenHeight) {
         this.cameraPosition = _cameraPosition;
         this.lookAt = _lookAt;
@@ -83,6 +89,9 @@ public class Camera {
         this.width = aspect_ratio*height;
     }
 
+    /**
+     * Method that calculates the direction of our viewpoint
+     **/
     public Vec3 calculateDirection(float deltaX, float deltaY) {
         destinationVector = viewVector.add(sideVector.multScalar(deltaX));
         return destinationVector.add(cameraUpVector.multScalar(deltaY));
