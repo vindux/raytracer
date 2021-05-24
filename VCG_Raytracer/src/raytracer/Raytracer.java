@@ -111,11 +111,6 @@ public class Raytracer {
                 ray = new Ray(cameraDirection);
                 direction = ray.calculateRayAt(1);
 
-                // Tweak the direction
-                direction.x = (direction.x+1)/2;
-                direction.y = (direction.y+1)/2;
-                direction.z = (direction.z+1)/2;
-
                 // Get rendered color and paint the screen
                 color = new RgbColor(direction);
                 mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), color, new Vec2(x,y));

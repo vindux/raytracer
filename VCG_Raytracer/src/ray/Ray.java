@@ -28,7 +28,11 @@ public class Ray {
      * Parameter t influences the length of the vector
     **/
     public Vec3 calculateRayAt(float t) {
-        return direction.multScalar(t).normalize();
+        Vec3 rayVector = direction.multScalar(t).normalize();
+        rayVector.x = (rayVector.x+1)/2;
+        rayVector.y = (rayVector.y+1)/2;
+        rayVector.z = (rayVector.z+1)/2;
+        return rayVector;
     }
 
 }
