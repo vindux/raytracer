@@ -87,7 +87,6 @@ public class Camera extends SceneObject {
         this.screenHeight = _screenHeight;
         this.screenWidth = _screenWidth;
         this.aspect_ratio = screenWidth/screenHeight;
-        System.out.println("ASPECT : " + aspect_ratio);
         this.height = 2*(Math.tan(Math.toRadians(viewAngle)/2))*focalLength;
         this.width = aspect_ratio*height;
         this.focalPoint = cameraPosition.add(viewVector.sub(cameraPosition).multScalar(focalLength).normalize());
