@@ -1,5 +1,6 @@
 package scene;
 
+import ray.Ray;
 import utils.algebra.Vec3;
 
 /**
@@ -10,5 +11,4 @@ public abstract class SceneObject {
 
     /** Constructor **/
     public SceneObject() {}
-   
 }

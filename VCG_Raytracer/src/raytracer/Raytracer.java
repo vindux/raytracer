@@ -18,6 +18,8 @@ package raytracer;
 
 import ray.Ray;
 import scene.Scene;
+import scene.SceneObject;
+import scene.Shape;
 import scene.camera.Camera;
 import ui.Window;
 import utils.*;
@@ -87,8 +89,8 @@ public class Raytracer {
         // Get height and width properties
         double width = camera.getWidth();
         double height = camera.getHeight();
-        int screenHeight = camera.getScreenHeight();
-        int screenWidth = camera.getScreenWidth();
+        float screenHeight = camera.getScreenHeight();
+        float screenWidth = camera.getScreenWidth();
 
         // Set up variables for our raytracing
         float deltaX;
@@ -99,22 +101,33 @@ public class Raytracer {
         Vec3 cameraDirection;
 
         // Iterate through every pixel
-        for(int y = screenHeight-1; y >= 0; y--) {
+        for(int y = 0; y < screenHeight; y++) {
             for (int x = 0; x < screenWidth; x++) {
 
                 // First transform pixel to world coordinates
                 deltaX = (float) ((2*(x+0.5)/screenWidth-1)*(width/2));
-                deltaY = (float) ((2*(y+0.5)/screenHeight-1)*(height/2));
+                deltaY = (float) ((2*(y+0.5)/screenHeight-1)*-(height/2));
 
                 // Create the ray
                 cameraDirection = camera.calculateDirection(deltaX,-deltaY);
-                ray = new Ray(cameraDirection);
-                direction = ray.calculateRayAt(1);
+                ray = new Ray(camera.getCameraPosition(), cameraDirection, 1);
 
-                // Get rendered color and paint the screen
-                color = new RgbColor(direction);
-                mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), color, new Vec2(x,y));
+                // Iterate through every shape in the scene
+                for (Shape object : mScene.getObjects() ) {
+                    object.intersect(ray);
+
+                    /*
+                     * If we do not hit the object, we paint the background color
+                     * If we hit the object, we paint another color
+                     */
+                    if (object.isHit()) {
+                        mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), RgbColor.CYAN, new Vec2(x,y));
+                    } else {
+                        mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), mBackgroundColor, new Vec2(x,y));
+                    }
+                }
             }
         }
+        mRenderWindow.exportRendering("1",1,1,true);
     }
 }

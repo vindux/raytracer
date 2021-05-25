@@ -81,11 +81,11 @@ public class Main {
     static final float AO_MAX_DISTANCE = 0f;
 
     /** CAMERA **/
-    static final Vec3 CAM_POS = new Vec3(0, 0, 17);
+    static final Vec3 CAM_POS = new Vec3(0, 0, 4);
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
     static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
 
-    static final float VIEW_ANGLE = 170f;
+    static final float VIEW_ANGLE = 70f;
     static final float FOCAL_LENGTH = 1f;
 
     static public Camera firstCamera;
@@ -128,6 +128,7 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
+        renderScene.createSphere(new Vec3(0,0,0), 1);
     }
 
     private static void setupCornellBox(Scene renderScene) {

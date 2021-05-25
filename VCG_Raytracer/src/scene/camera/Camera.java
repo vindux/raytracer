@@ -1,5 +1,6 @@
 package scene.camera;
 
+import scene.SceneObject;
 import utils.algebra.Vec3;
 
 /**
@@ -7,7 +8,7 @@ import utils.algebra.Vec3;
  * Specifies camera and properties of the portion we see at the end
  **/
 
-public class Camera {
+public class Camera extends SceneObject {
 
     private Vec3 cameraPosition;
     private Vec3 lookAt;
@@ -16,13 +17,14 @@ public class Camera {
     private Vec3 sideVector;
     private Vec3 cameraUpVector;
     private Vec3 destinationVector;
-    private Float viewAngle;
-    private Float focalLength;
+    private Vec3 focalPoint;
+    private float viewAngle;
+    private float focalLength;
     private double width;
     private double height;
     private double aspect_ratio;
-    private int screenHeight;
-    private int screenWidth;
+    private float screenHeight;
+    private float screenWidth;
 
     public Vec3 getCameraPosition() {
         return cameraPosition;
@@ -64,16 +66,16 @@ public class Camera {
         return height;
     }
 
-    public int getScreenHeight() {
+    public float getScreenHeight() {
         return screenHeight;
     }
 
-    public int getScreenWidth() {
+    public float getScreenWidth() {
         return screenWidth;
     }
 
     /** Constructor **/
-    public Camera(Vec3 _cameraPosition, Vec3 _lookAt, Vec3 _userUpVector, float _viewAngle, float _focalLength, int _screenWidth, int _screenHeight) {
+    public Camera(Vec3 _cameraPosition, Vec3 _lookAt, Vec3 _userUpVector, float _viewAngle, float _focalLength, float _screenWidth, float _screenHeight) {
         this.cameraPosition = _cameraPosition;
         this.lookAt = _lookAt;
         this.userUpVector = _userUpVector;
@@ -85,8 +87,10 @@ public class Camera {
         this.screenHeight = _screenHeight;
         this.screenWidth = _screenWidth;
         this.aspect_ratio = screenWidth/screenHeight;
+        System.out.println("ASPECT : " + aspect_ratio);
         this.height = 2*(Math.tan(Math.toRadians(viewAngle)/2))*focalLength;
         this.width = aspect_ratio*height;
+        this.focalPoint = cameraPosition.add(viewVector.sub(cameraPosition).multScalar(focalLength).normalize());
     }
 
     /**
@@ -94,7 +98,7 @@ public class Camera {
      **/
     public Vec3 calculateDirection(float deltaX, float deltaY) {
         destinationVector = viewVector.add(sideVector.multScalar(deltaX));
-        return destinationVector.add(cameraUpVector.multScalar(deltaY));
+        return destinationVector.add(cameraUpVector.multScalar(deltaY)).add(focalPoint);
     }
 
 }
