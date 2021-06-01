@@ -83,6 +83,17 @@ public class Raytracer {
         return tDelta / 1000.0;
     }
 
+    /** Create intersection instance **/
+    public Intersection intersect(double hitValue, Ray ray, Shape shape) {
+        Intersection intersection = new Intersection();
+        intersection.setHit(hitValue != Double.NaN);
+        if (intersection.isHit()) {
+            intersection.setIntersectionPoint(ray.getDirection().multScalar(ray.getT()));
+            intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
+        }
+        return intersection;
+    }
+
     /**  This is where our scene is actually ray-traced **/
     public void renderScene(){
         Log.print(this, "Prepare rendering at " + String.valueOf(stopTime(tStart)));
@@ -99,6 +110,7 @@ public class Raytracer {
         Ray ray;
         Vec3 direction;
         Vec3 cameraDirection;
+        Vec3 lightVector;
 
         // Iterate through every pixel
         for(int y = 0; y < screenHeight; y++) {
@@ -115,12 +127,13 @@ public class Raytracer {
                 // Iterate through every shape in the scene
                 for (Shape object : mScene.getObjects() ) {
                     double discriminant = object.intersect(ray);
+                    intersect(discriminant, ray, object);
 
                     /*
                      * If we do not hit the object, we paint the background color
                      * If we hit the object, we paint another color
                      */
-                    if (object.isHit()) {
+                    if (discriminant >= 0) {
                         mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), RgbColor.CYAN, new Vec2(x,y));
                     } else {
                         mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), mBackgroundColor, new Vec2(x,y));

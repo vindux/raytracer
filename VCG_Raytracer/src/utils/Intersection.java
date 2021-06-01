@@ -19,9 +19,7 @@ public class Intersection {
     private boolean hit;
 
     /** Constructor **/
-    public Intersection(boolean _hit) {
-        this.hit = _hit;
-    }
+    public Intersection() {}
 
     public Vec3 getIntersectionPoint() {
         return intersectionPoint;
