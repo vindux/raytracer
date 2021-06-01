@@ -9,12 +9,12 @@ public class PointLight extends Light {
 
     /** Constructor **/
     public PointLight (Vec3 _position, RgbColor _intensity) {
-        super();
+        super(_position, _intensity);
         this.position = _position;
         this.intensity = _intensity;
     }
 
-    public RgbColor getIntensity() {
+    public RgbColor getColor() {
         return intensity;
     }
 
