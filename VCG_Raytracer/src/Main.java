@@ -121,6 +121,9 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
+        renderScene.createPointLight(new Vec3 (4,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
+        renderScene.createPointLight(new Vec3 (0,4,0), new RgbColor(0.0f, 1.0f, 0.0f));
+        renderScene.createPointLight(new Vec3 (0,0,4), new RgbColor(0.0f, 0.0f, 1.0f));
     }
 
     private static void setupCameras(Scene renderScene) {
