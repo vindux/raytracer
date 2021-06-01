@@ -13,9 +13,9 @@ public class Sphere extends Shape {
 
     private Vec3 center;
     private int radius;
-    private Intersection intersection;
     private Vec3 rayDirection;
     private Vec3 rayStartPoint;
+    private Vec3 normal;
 
     /** Constructor **/
     public Sphere(Vec3 _center, int _radius) {
@@ -40,14 +40,18 @@ public class Sphere extends Shape {
         this.radius = _radius;
     }
 
-    public boolean isHit() {
-        return intersection.isHit();
+    public Vec3 getNormal() {
+        return normal;
+    }
+
+    public void setNormal(Vec3 normal) {
+        this.normal = normal;
     }
 
     /**
      * Method that calculates intersection between a sphere and a ray
      */
-    public void intersect(Ray ray) {
+    public double intersect(Ray ray) {
         // First, get ray parameters
         rayDirection = ray.getDirection();
         rayStartPoint = ray.getStartPoint();
@@ -63,10 +67,9 @@ public class Sphere extends Shape {
          * TODO: Later on we will set different cases, for now we only need to know if we hit the sphere
          */
         if (discriminant < 0) {
-            // no intersection
-            intersection = new Intersection(false);
+            return Double.NaN;
         } else {
-            intersection = new Intersection(true);
+            return discriminant;
         }
     }
 }

@@ -15,4 +15,7 @@ public class Lambert extends Material {
         Vec3 diffuse = (light.getColor().multScalar(mDiffuseCoefficent)).multRGB(normal.scalar(lightvector.normalize()));
     }
 
+    //schnittpunkt raydirectr.multscalar*t
+    //lightvector = schnittpunkt - lichtposition
+    //normale = intersectionpoint - center
 }

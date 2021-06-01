@@ -9,7 +9,7 @@ import utils.Intersection;
  */
 public class Shape extends SceneObject {
 
-    public void intersect(Ray ray) {}
+    public double intersect(Ray ray) { return Double.NaN; }
     public boolean isHit() { return true; }
 }
 

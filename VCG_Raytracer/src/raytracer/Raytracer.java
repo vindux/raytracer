@@ -114,7 +114,7 @@ public class Raytracer {
 
                 // Iterate through every shape in the scene
                 for (Shape object : mScene.getObjects() ) {
-                    object.intersect(ray);
+                    double discriminant = object.intersect(ray);
 
                     /*
                      * If we do not hit the object, we paint the background color
