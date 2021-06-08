@@ -84,7 +84,6 @@ public class RgbColor {
         if( this.red() > 1 ) colors.x = 1f;
         if( this.green() > 1 ) colors.y = 1f;
         if( this.blue() > 1 ) colors.z = 1f;
-
         if( this.red() < 0 ) colors.x = 0f;
         if( this.green() < 0 ) colors.y = 0f;
         if( this.blue() < 0 ) colors.z = 0f;

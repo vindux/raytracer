@@ -1,23 +1,25 @@
 package scene.material;
 
+import utils.RgbColor;
 import utils.algebra.Vec3;
 
-public class Material {
+public abstract class Material {
 
-    protected Vec3 mAmbientLight;
-    protected Vec3 mDiffuseLight;
-    protected Vec3 mSpecularLight;
+    protected RgbColor mAmbientLight;
+    protected RgbColor mDiffuseLight;
+    protected RgbColor mSpecularLight;
+    protected Vec3 normal;
+    protected Vec3 intersectionPoint;
     protected float mDiffuseCoefficent;
     protected float mAmbientCoefficent;
     protected float mSpecularCoefficent;
 
-    public Material(Vec3 _ambientLight, Vec3 _diffuseLight, Vec3 _specularLight, float _diffuseCoefficent, float _ambientCoefficent, float _specularCoefficent) {
-        this.mAmbientLight = _ambientLight;
-        this.mDiffuseLight = _diffuseLight;
-        this.mSpecularLight = _specularLight;
-        this.mDiffuseCoefficent = _diffuseCoefficent;
-        this.mAmbientCoefficent = _ambientCoefficent;
-        this.mSpecularCoefficent = _specularCoefficent;
+    public Material(RgbColor mAmbientLight, RgbColor mDiffuseLight, float mAmbientCoefficent, float mDiffuseCoefficent, Vec3 normal, Vec3 intersectionPoint) {
+        this.mAmbientLight = mAmbientLight;
+        this.mDiffuseLight = mDiffuseLight;
+        this.normal = normal;
+        this.intersectionPoint = intersectionPoint;
+        this.mDiffuseCoefficent = mDiffuseCoefficent;
+        this.mAmbientCoefficent = mAmbientCoefficent;
     }
-
 }

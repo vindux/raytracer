@@ -21,6 +21,8 @@ import scene.Scene;
 import scene.SceneObject;
 import scene.Shape;
 import scene.camera.Camera;
+import scene.light.Light;
+import scene.material.Lambert;
 import ui.Window;
 import utils.*;
 import utils.algebra.Vec2;
@@ -28,6 +30,8 @@ import utils.algebra.Vec3;
 import utils.io.Log;
 
 import java.awt.image.BufferedImage;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 
 /**
  * Raytracer class
@@ -86,7 +90,11 @@ public class Raytracer {
     /** Create intersection instance **/
     public Intersection intersect(double hitValue, Ray ray, Shape shape) {
         Intersection intersection = new Intersection();
-        intersection.setHit(hitValue != Double.NaN);
+        if (hitValue >= 0)
+            intersection.setHit(true);
+        else
+            intersection.setHit(false);
+        intersection.setShape(shape);
         if (intersection.isHit()) {
             intersection.setIntersectionPoint(ray.getDirection().multScalar(ray.getT()));
             intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
@@ -102,6 +110,7 @@ public class Raytracer {
         double height = camera.getHeight();
         float screenHeight = camera.getScreenHeight();
         float screenWidth = camera.getScreenWidth();
+        ArrayList<Light> lights = mScene.getLights();
 
         // Set up variables for our raytracing
         float deltaX;
@@ -127,14 +136,26 @@ public class Raytracer {
                 // Iterate through every shape in the scene
                 for (Shape object : mScene.getObjects() ) {
                     double discriminant = object.intersect(ray);
-                    intersect(discriminant, ray, object);
+                    Intersection intersection = intersect(discriminant, ray, object);
 
                     /*
                      * If we do not hit the object, we paint the background color
                      * If we hit the object, we paint another color
                      */
-                    if (discriminant >= 0) {
-                        mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), RgbColor.CYAN, new Vec2(x,y));
+                    if (intersection.isHit()) {
+                        for (Light light : lights) {
+                            switch (object.getMaterial()) {
+                                case "normal":
+                                    mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), RgbColor.YELLOW, new Vec2(x,y));
+                                    break;
+                                case "lambert":
+                                    Lambert lambert = new Lambert(RgbColor.BLACK,0.25f, RgbColor.CYAN, 1f, intersection.getNormal(), intersection.getIntersectionPoint() , light);
+                                    mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), lambert.getRGB(light), new Vec2(x,y));
+                                    break;
+                                default:
+                                    //do nothing
+                            }
+                        }
                     } else {
                         mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), mBackgroundColor, new Vec2(x,y));
                     }

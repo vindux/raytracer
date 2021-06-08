@@ -26,11 +26,14 @@
 import ray.Ray;
 import raytracer.Raytracer;
 import scene.camera.Camera;
+import scene.light.Light;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
 import utils.algebra.Vec2;
 import utils.algebra.Vec3;
+
+import java.util.ArrayList;
 
 /*
     - THE RAYTRACER -
@@ -74,7 +77,7 @@ public class Main {
     static final int GI_SAMPLES = 0;
 
     static final RgbColor LIGHT_COLOR = null;
-    static final RgbColor AMBIENT_LIGHT = null;
+    static final RgbColor AMBIENT_LIGHT = RgbColor.RED;
 
     static final boolean USE_AO = false;
     static final int NUMBER_OF_AO_SAMPLES = 0;
@@ -121,9 +124,9 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (4,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,4,0), new RgbColor(0.0f, 1.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,0,4), new RgbColor(0.0f, 0.0f, 1.0f));
+        renderScene.createPointLight(new Vec3 (20,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
+        renderScene.createPointLight(new Vec3 (0,20,0), new RgbColor(0.0f, 1.0f, 0.0f));
+        renderScene.createPointLight(new Vec3 (0,0,20), new RgbColor(0.0f, 0.0f, 1.0f));
     }
 
     private static void setupCameras(Scene renderScene) {

@@ -6,16 +6,20 @@ import utils.algebra.Vec3;
 
 public class Lambert extends Material {
 
-    public Lambert(Vec3 _ambientLight, Vec3 _diffuseLight, Vec3 _specularLight, float _diffuseCoefficent, float _ambientCoefficent, float _specularCoefficent) {
-        super(_ambientLight, _diffuseLight, _specularLight, _diffuseCoefficent, _ambientCoefficent, _specularCoefficent);
+    private Vec3 lightPosition;
+    private Vec3 lightVector;
+
+    public Lambert(RgbColor _ambientLight, float _ambientCoefficent, RgbColor _diffuseLight, float _diffuseCoefficent, Vec3 _normal, Vec3 _intersectionPoint, Light _light) {
+        super(_ambientLight, _diffuseLight, _ambientCoefficent, _diffuseCoefficent, _normal, _intersectionPoint);
+        this.lightPosition = _light.getPosition();
+        this.lightVector = intersectionPoint.sub(lightPosition);
     }
 
     public RgbColor getRGB(Light light) {
-        Vec3 ambient = mAmbientLight.multScalar(mAmbientCoefficent).normalize();
-        Vec3 diffuse = (light.getColor().multScalar(mDiffuseCoefficent)).multRGB(normal.scalar(lightvector.normalize()));
+        RgbColor ambient = mAmbientLight.multScalar(mAmbientCoefficent);
+        RgbColor diffuse = (light.getColor().multScalar(mDiffuseCoefficent)).multScalar(normal.scalar(lightVector.normalize()));
+
+        return ambient.add(diffuse);
     }
 
-    //schnittpunkt raydirectr.multscalar*t
-    //lightvector = schnittpunkt - lichtposition
-    //normale = intersectionpoint - center
 }

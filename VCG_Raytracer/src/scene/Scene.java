@@ -29,7 +29,7 @@ public class Scene {
     public ArrayList<Light> getLights() { return lights; }
 
     public void createSphere(Vec3 _center, int _radius) {
-        Sphere sphere = new Sphere(_center, _radius);
+        Sphere sphere = new Sphere(_center, _radius, "lambert");
         objects.add(sphere);
     }
 

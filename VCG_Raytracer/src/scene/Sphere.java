@@ -18,18 +18,9 @@ public class Sphere extends Shape {
     private Vec3 normal;
 
     /** Constructor **/
-    public Sphere(Vec3 _center, int _radius) {
-        super();
-        this.center = _center;
+    public Sphere(Vec3 _center, int _radius, String _material) {
+        super(_center, _material);
         this.radius = _radius;
-    }
-
-    public Vec3 getCenter() {
-        return center;
-    }
-
-    public void setCenter(Vec3 _center) {
-        this.center = _center;
     }
 
     public int getRadius() {

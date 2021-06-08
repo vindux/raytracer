@@ -57,6 +57,14 @@ public class Intersection {
         return shape;
     }
 
+    public void setShape(Shape shape) {
+        this.shape = shape;
+    }
+
+    public void setDistance(float distance) {
+        this.distance = distance;
+    }
+
     public float getDistance() {
         return distance;
     }
