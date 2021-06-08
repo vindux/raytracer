@@ -90,15 +90,37 @@ public class Raytracer {
     /** Create intersection instance **/
     public Intersection intersect(double hitValue, Ray ray, Shape shape) {
         Intersection intersection = new Intersection();
+        float rayTValue = ray.getT();
+        if (rayTValue == Float.NaN) {
+            intersection.setHit(false);
+            return intersection;
+        }
+        intersection.setShape(shape);
         if (hitValue >= 0)
             intersection.setHit(true);
         else
             intersection.setHit(false);
-        intersection.setShape(shape);
         if (intersection.isHit()) {
-            intersection.setIntersectionPoint(ray.getDirection().multScalar(ray.getT()));
+            intersection.setIntersectionPoint(ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT())));
             intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
         }
+        return intersection;
+    }
+
+    /** Check light intersection **/
+    public Intersection intersectLight(Vec3 _intersectionPoint, Light _light, Shape shape) {
+        Ray ray = new Ray(_intersectionPoint, _intersectionPoint.sub(_light.getPosition()), 1);
+        Intersection intersection = new Intersection();
+        Vec3 part1 = _light.getPosition().sub(_intersectionPoint);
+
+        // WIP NAMES CAN CHANGE
+        float part2 = part1.x + part1.y + part1.z;
+        float part3 = ray.getDirection().x + ray.getDirection().y + ray.getDirection().z;
+        float rayTValue = part2/part3;
+        ray.setT(rayTValue);
+        intersection.setIntersectionPoint(ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT())));
+        intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
+
         return intersection;
     }
 
@@ -110,7 +132,6 @@ public class Raytracer {
         double height = camera.getHeight();
         float screenHeight = camera.getScreenHeight();
         float screenWidth = camera.getScreenWidth();
-        ArrayList<Light> lights = mScene.getLights();
 
         // Set up variables for our raytracing
         float deltaX;
@@ -120,6 +141,7 @@ public class Raytracer {
         Vec3 direction;
         Vec3 cameraDirection;
         Vec3 lightVector;
+        RgbColor pixelColor = null;
 
         // Iterate through every pixel
         for(int y = 0; y < screenHeight; y++) {
@@ -143,19 +165,22 @@ public class Raytracer {
                      * If we hit the object, we paint another color
                      */
                     if (intersection.isHit()) {
-                        for (Light light : lights) {
+                        for (Light light : mScene.getLights()) {
+                            // Objekt das wir uns gerade anschauen nicht mit sich selbst schneiden, vorher prüfen welches shape
                             switch (object.getMaterial()) {
                                 case "normal":
-                                    mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), RgbColor.YELLOW, new Vec2(x,y));
+                                    pixelColor = RgbColor.YELLOW;
                                     break;
                                 case "lambert":
-                                    Lambert lambert = new Lambert(RgbColor.BLACK,0.25f, RgbColor.CYAN, 1f, intersection.getNormal(), intersection.getIntersectionPoint() , light);
-                                    mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), lambert.getRGB(light), new Vec2(x,y));
+                                    Intersection lightIntersection = intersectLight(intersection.getIntersectionPoint(), light, object);
+                                    Lambert lambert = new Lambert(RgbColor.WHITE, 0.5f, RgbColor.YELLOW, 0.5f, intersection.getNormal(), intersection.getIntersectionPoint(), light);
+                                    pixelColor = lambert.getRGB(light);
                                     break;
                                 default:
                                     //do nothing
                             }
                         }
+                        mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
                     } else {
                         mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), mBackgroundColor, new Vec2(x,y));
                     }

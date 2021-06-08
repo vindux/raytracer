@@ -60,7 +60,24 @@ public class Sphere extends Shape {
         if (discriminant < 0) {
             return Double.NaN;
         } else {
-            return discriminant;
+            float t0 = (float) ((-(raySphereEquation1)-Math.sqrt(Math.pow(raySphereEquation1,2)-4*raySphereEquation2))/2);
+            float t1 = (float) ((-(raySphereEquation1)+Math.sqrt(Math.pow(raySphereEquation1,2)-4*raySphereEquation2))/2);
+
+            if (discriminant == 0) {
+                // It does not matter which t we take since both are equal
+                ray.setT(t0);
+            } else if (discriminant > 0) {
+                if (t0 > 0 && t1 > 0) {
+                    ray.setT(Math.max(t0, t1));
+                } else if (t0 < 0 && t1 < 0) {
+                    ray.setT(Float.NaN);
+                } else if (t0 < 0 && t1 > 0) {
+                    ray.setT(t1);
+                } else if (t0 > 0 && t1 < 0) {
+                    ray.setT(t0);
+                }
+            }
         }
+        return discriminant;
     }
 }

@@ -77,7 +77,7 @@ public class Main {
     static final int GI_SAMPLES = 0;
 
     static final RgbColor LIGHT_COLOR = null;
-    static final RgbColor AMBIENT_LIGHT = RgbColor.RED;
+    static final RgbColor AMBIENT_LIGHT = null;
 
     static final boolean USE_AO = false;
     static final int NUMBER_OF_AO_SAMPLES = 0;
@@ -124,9 +124,12 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (20,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,20,0), new RgbColor(0.0f, 1.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,0,20), new RgbColor(0.0f, 0.0f, 1.0f));
+        renderScene.createPointLight(new Vec3 (3,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
+        renderScene.createPointLight(new Vec3 (0,3,0), new RgbColor(0.0f, 1.0f, 0.0f));
+        renderScene.createPointLight(new Vec3 (0,0,3), new RgbColor(0.0f, 0.0f, 1.0f));
+        for(Light light : renderScene.getLights()) {
+            System.out.println("LIGHT ARRAY : " + light.getColor() + "  POS :  " + light.getPosition());
+        }
     }
 
     private static void setupCameras(Scene renderScene) {

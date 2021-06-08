@@ -12,12 +12,12 @@ public class Lambert extends Material {
     public Lambert(RgbColor _ambientLight, float _ambientCoefficent, RgbColor _diffuseLight, float _diffuseCoefficent, Vec3 _normal, Vec3 _intersectionPoint, Light _light) {
         super(_ambientLight, _diffuseLight, _ambientCoefficent, _diffuseCoefficent, _normal, _intersectionPoint);
         this.lightPosition = _light.getPosition();
-        this.lightVector = intersectionPoint.sub(lightPosition);
+        this.lightVector = intersectionPoint.sub(lightPosition).normalize();
     }
 
     public RgbColor getRGB(Light light) {
         RgbColor ambient = mAmbientLight.multScalar(mAmbientCoefficent);
-        RgbColor diffuse = (light.getColor().multScalar(mDiffuseCoefficent)).multScalar(normal.scalar(lightVector.normalize()));
+        RgbColor diffuse = light.getColor().multScalar(mDiffuseCoefficent).multScalar(normal.scalar(lightVector));
 
         return ambient.add(diffuse);
     }

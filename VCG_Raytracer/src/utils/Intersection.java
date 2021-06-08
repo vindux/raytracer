@@ -34,7 +34,7 @@ public class Intersection {
     }
 
     public void setNormal(Vec3 normal) {
-        this.normal = normal;
+        this.normal = normal.normalize();
     }
 
     public Vec3 getInRay() {
