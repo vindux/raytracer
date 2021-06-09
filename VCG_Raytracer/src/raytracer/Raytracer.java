@@ -30,8 +30,6 @@ import utils.algebra.Vec3;
 import utils.io.Log;
 
 import java.awt.image.BufferedImage;
-import java.lang.reflect.Array;
-import java.util.ArrayList;
 
 /**
  * Raytracer class
@@ -143,6 +141,10 @@ public class Raytracer {
         Vec3 lightVector;
         RgbColor pixelColor = null;
 
+        // Prepare materials
+        Lambert lambert = new Lambert(RgbColor.WHITE, 0.5f, RgbColor.RED, 0.5f);
+
+
         // Iterate through every pixel
         for(int y = 0; y < screenHeight; y++) {
             for (int x = 0; x < screenWidth; x++) {
@@ -172,9 +174,14 @@ public class Raytracer {
                                     pixelColor = RgbColor.YELLOW;
                                     break;
                                 case "lambert":
-                                    Intersection lightIntersection = intersectLight(intersection.getIntersectionPoint(), light, object);
-                                    Lambert lambert = new Lambert(RgbColor.WHITE, 0.5f, RgbColor.YELLOW, 0.5f, intersection.getNormal(), intersection.getIntersectionPoint(), light);
-                                    pixelColor = lambert.getRGB(light);
+                                    //Intersection lightIntersection = intersectLight(intersection.getIntersectionPoint(), light, object);
+                                    if (pixelColor == null) {
+                                        pixelColor = lambert.getRGB(light, intersection);
+                                    } else {
+                                        RgbColor bufferedColor = new RgbColor(pixelColor.colors);
+                                        pixelColor = lambert.getRGB(light, intersection);
+                                        pixelColor = pixelColor.sub(bufferedColor);
+                                    }
                                     break;
                                 default:
                                     //do nothing
