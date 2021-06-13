@@ -12,22 +12,22 @@ import utils.algebra.Vec3;
 public class Sphere extends Shape {
 
     private Vec3 center;
-    private int radius;
+    private float radius;
     private Vec3 rayDirection;
     private Vec3 rayStartPoint;
     private Vec3 normal;
 
     /** Constructor **/
-    public Sphere(Vec3 _center, int _radius, String _material) {
+    public Sphere(Vec3 _center, Float _radius, String _material) {
         super(_center, _material);
         this.radius = _radius;
     }
 
-    public int getRadius() {
+    public float getRadius() {
         return radius;
     }
 
-    public void setRadius(int _radius) {
+    public void setRadius(Float _radius) {
         this.radius = _radius;
     }
 

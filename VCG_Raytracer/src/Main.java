@@ -25,6 +25,7 @@
 
 import ray.Ray;
 import raytracer.Raytracer;
+import scene.Sphere;
 import scene.camera.Camera;
 import scene.light.Light;
 import ui.Window;
@@ -84,12 +85,12 @@ public class Main {
     static final float AO_MAX_DISTANCE = 0f;
 
     /** CAMERA **/
-    static final Vec3 CAM_POS = new Vec3(0, 0, 4);
+    static final Vec3 CAM_POS = new Vec3(0, 0, 10);
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
     static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
 
     static final float VIEW_ANGLE = 70f;
-    static final float FOCAL_LENGTH = 1f;
+    static final float FOCAL_LENGTH = 5f;
 
     static public Camera firstCamera;
 
@@ -127,9 +128,6 @@ public class Main {
         renderScene.createPointLight(new Vec3 (3,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
         renderScene.createPointLight(new Vec3 (0,3,0), new RgbColor(0.0f, 1.0f, 0.0f));
         renderScene.createPointLight(new Vec3 (0,0,3), new RgbColor(0.0f, 0.0f, 1.0f));
-        for(Light light : renderScene.getLights()) {
-            System.out.println("LIGHT ARRAY : " + light.getColor() + "  POS :  " + light.getPosition());
-        }
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -137,7 +135,7 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(0,0,0), 1);
+        renderScene.createSphere(new Vec3(1,1,-2), 1.25f, "lambert");
     }
 
     private static void setupCornellBox(Scene renderScene) {

@@ -25,6 +25,7 @@ import scene.light.Light;
 import scene.material.Lambert;
 import ui.Window;
 import utils.*;
+import utils.algebra.Matrix4x4;
 import utils.algebra.Vec2;
 import utils.algebra.Vec3;
 import utils.io.Log;
@@ -99,7 +100,7 @@ public class Raytracer {
         else
             intersection.setHit(false);
         if (intersection.isHit()) {
-            intersection.setIntersectionPoint(ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT())));
+            intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT())), true));
             intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
         }
         return intersection;
@@ -159,6 +160,10 @@ public class Raytracer {
 
                 // Iterate through every shape in the scene
                 for (Shape object : mScene.getObjects() ) {
+                    Matrix4x4 inverse = object.getTransformMatrix().invert();
+                    ray.setDirection(inverse.multVec3(ray.getDirection(), false));
+                    ray.setStartPoint(inverse.multVec3(ray.getDirection(), true));
+
                     double discriminant = object.intersect(ray);
                     Intersection intersection = intersect(discriminant, ray, object);
 

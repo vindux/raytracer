@@ -28,8 +28,8 @@ public class Scene {
     public ArrayList<Shape> getObjects() { return objects; }
     public ArrayList<Light> getLights() { return lights; }
 
-    public void createSphere(Vec3 _center, int _radius) {
-        Sphere sphere = new Sphere(_center, _radius, "lambert");
+    public void createSphere(Vec3 _center, Float _radius, String _material) {
+        Sphere sphere = new Sphere(_center, _radius, _material);
         objects.add(sphere);
     }
 
