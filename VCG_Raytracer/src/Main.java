@@ -89,8 +89,8 @@ public class Main {
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
     static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
 
-    static final float VIEW_ANGLE = 70f;
-    static final float FOCAL_LENGTH = 5f;
+    static final float VIEW_ANGLE = 50f;
+    static final float FOCAL_LENGTH = 4f;
 
     static public Camera firstCamera;
 
@@ -135,8 +135,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(1,1,-2), 1.25f, "lambert");
-        renderScene.createSphere(new Vec3(-1,-1,-5), 0.75f, "lambert");
+        renderScene.createSphere(new Vec3(1,1,-5), 1.25f, "lambert");
+        renderScene.createSphere(new Vec3(-1,-1,-8), 0.75f, "lambert");
     }
 
     private static void setupCornellBox(Scene renderScene) {
