@@ -193,8 +193,6 @@ public class Raytracer {
                             }
                         }
                         mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
-                    } else {
-                        mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), mBackgroundColor, new Vec2(x,y));
                     }
                 }
             }
