@@ -31,6 +31,7 @@ import utils.algebra.Vec3;
 import utils.io.Log;
 
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
 /**
  * Raytracer class
@@ -100,8 +101,10 @@ public class Raytracer {
         else
             intersection.setHit(false);
         if (intersection.isHit()) {
-            intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT())), true));
+            Vec3 rayDefinition = ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT()));
+            intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(rayDefinition, true));
             intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
+            intersection.setDistance(rayTValue);
         }
         return intersection;
     }
@@ -141,10 +144,14 @@ public class Raytracer {
         Vec3 cameraDirection;
         Vec3 lightVector;
         RgbColor pixelColor = null;
+        Intersection intersection = null;
+        float nearest = 99999;
+        Shape nearestShape = null;
+        ArrayList<Shape> shapeList = mScene.getObjects();
+        ArrayList<Light> lightList = mScene.getLights();
 
         // Prepare materials
         Lambert lambert = new Lambert(RgbColor.WHITE, 0.5f, RgbColor.RED, 0.5f);
-
 
         // Iterate through every pixel
         for(int y = 0; y < screenHeight; y++) {
@@ -158,42 +165,47 @@ public class Raytracer {
                 cameraDirection = camera.calculateDirection(deltaX,-deltaY);
                 ray = new Ray(camera.getCameraPosition(), cameraDirection, 1);
 
+                // Find nearest shape
                 // Iterate through every shape in the scene
-                for (Shape object : mScene.getObjects() ) {
-                    Matrix4x4 inverse = object.getTransformMatrix().invert();
+                for (Shape shape : shapeList ) {
+                    Matrix4x4 inverse = shape.getTransformMatrix().invert();
                     ray.setDirection(inverse.multVec3(ray.getDirection(), false));
                     ray.setStartPoint(inverse.multVec3(ray.getDirection(), true));
 
-                    double discriminant = object.intersect(ray);
-                    Intersection intersection = intersect(discriminant, ray, object);
-
-                    /*
-                     * If we do not hit the object, we paint the background color
-                     * If we hit the object, we paint another color
-                     */
-                    if (intersection.isHit()) {
-                        for (Light light : mScene.getLights()) {
-                            // Objekt das wir uns gerade anschauen nicht mit sich selbst schneiden, vorher prüfen welches shape
-                            switch (object.getMaterial()) {
-                                case "normal":
-                                    pixelColor = RgbColor.YELLOW;
-                                    break;
-                                case "lambert":
-                                    //Intersection lightIntersection = intersectLight(intersection.getIntersectionPoint(), light, object);
-                                    if (pixelColor == null) {
-                                        pixelColor = lambert.getRGB(light, intersection);
-                                    } else {
-                                        RgbColor bufferedColor = new RgbColor(pixelColor.colors);
-                                        pixelColor = lambert.getRGB(light, intersection);
-                                        pixelColor = pixelColor.sub(bufferedColor);
-                                    }
-                                    break;
-                                default:
-                                    //do nothing
-                            }
-                        }
-                        mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
+                    double discriminant = shape.intersect(ray);
+                    intersection = intersect(discriminant, ray, shape);
+                    if (intersection.getDistance() < nearest) {
+                        nearestShape = shape;
+                        nearest = intersection.getDistance();
                     }
+                }
+
+                /*
+                 * If we do not hit the object, we paint the background color
+                 * If we hit the object, we paint another color
+                 */
+                if (intersection.isHit()) {
+                    for (Light light : lightList) {
+                        // Objekt das wir uns gerade anschauen nicht mit sich selbst schneiden, vorher prüfen welches shape
+                        switch (nearestShape.getMaterial()) {
+                            case "normal":
+                                pixelColor = RgbColor.YELLOW;
+                                break;
+                            case "lambert":
+                                //Intersection lightIntersection = intersectLight(intersection.getIntersectionPoint(), light, object);
+                                if (pixelColor == null) {
+                                    pixelColor = lambert.getRGB(light, intersection);
+                                } else {
+                                    RgbColor bufferedColor = new RgbColor(pixelColor.colors);
+                                    pixelColor = lambert.getRGB(light, intersection);
+                                    pixelColor = pixelColor.sub(bufferedColor);
+                                }
+                                break;
+                            default:
+                                //do nothing
+                        }
+                    }
+                    mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
                 }
             }
         }
