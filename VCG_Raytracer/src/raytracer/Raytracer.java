@@ -104,7 +104,7 @@ public class Raytracer {
             Vec3 rayDefinition = ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT()));
             intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(rayDefinition, true));
             intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
-            intersection.setDistance(rayTValue);
+            intersection.setDistance(rayDefinition.length());
         }
         return intersection;
     }
@@ -145,10 +145,10 @@ public class Raytracer {
         Vec3 lightVector;
         RgbColor pixelColor = null;
         Intersection intersection = null;
-        float nearest = 99999;
         Shape nearestShape = null;
         ArrayList<Shape> shapeList = mScene.getObjects();
         ArrayList<Light> lightList = mScene.getLights();
+        float nearest = 99999;
 
         // Prepare materials
         Lambert lambert = new Lambert(RgbColor.WHITE, 0.5f, RgbColor.RED, 0.5f);
@@ -177,6 +177,9 @@ public class Raytracer {
                     if (intersection.getDistance() < nearest) {
                         nearestShape = shape;
                         nearest = intersection.getDistance();
+                        System.out.println("NEAREST : " + intersection.getDistance());
+                    } else {
+                        System.out.println(nearest);
                     }
                 }
 
