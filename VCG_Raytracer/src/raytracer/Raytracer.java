@@ -145,6 +145,7 @@ public class Raytracer {
         Vec3 lightVector;
         RgbColor pixelColor = null;
         Intersection intersection = null;
+        Intersection tempIntersection = null;
         ArrayList<Shape> shapeList = mScene.getObjects();
         ArrayList<Light> lightList = mScene.getLights();
 
@@ -178,6 +179,7 @@ public class Raytracer {
                         if (intersection.getDistance() <= nearest) {
                             nearestShape = shape;
                             nearest = intersection.getDistance();
+                            tempIntersection = intersection;
                             //System.out.println("NEAREST : " + intersection.getDistance());
                         }
                     }
@@ -187,7 +189,8 @@ public class Raytracer {
                  * If we do not hit the object, we paint the background color
                  * If we hit the object, we paint another color
                  */
-                if (intersection.isHit()) {
+                if (tempIntersection != null && tempIntersection.isHit() && nearestShape != null) {
+                    System.out.println("Intersection " + tempIntersection.getIntersectionPoint());
                     for (Light light : lightList) {
                         // Objekt das wir uns gerade anschauen nicht mit sich selbst schneiden, vorher prüfen welches shape
                         switch (nearestShape.getMaterial()) {
@@ -197,10 +200,10 @@ public class Raytracer {
                             case "lambert":
                                 //Intersection lightIntersection = intersectLight(intersection.getIntersectionPoint(), light, object);
                                 if (pixelColor == null) {
-                                    pixelColor = lambert.getRGB(light, intersection);
+                                    pixelColor = lambert.getRGB(light, tempIntersection);
                                 } else {
                                     RgbColor bufferedColor = new RgbColor(pixelColor.colors);
-                                    pixelColor = lambert.getRGB(light, intersection);
+                                    pixelColor = lambert.getRGB(light, tempIntersection);
                                     pixelColor = pixelColor.sub(bufferedColor);
                                 }
                                 break;
