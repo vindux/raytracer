@@ -32,13 +32,14 @@ public class Plane extends Shape {
         rayDirection = ray.getDirection();
         rayStartPoint = ray.getStartPoint();
 
+        // Break down of the plane-ray equation
         float rayPlaneEquation1 = normal.scalar(rayDirection);
         Vec3 rayPlaneEquation2 = center.sub(rayStartPoint).normalize();
         float t;
 
-        if(rayPlaneEquation1 > 0.9) {
+        if(rayPlaneEquation1 == 0) {
             return Double.NaN;
-        }else if(rayPlaneEquation1 != 0){
+        }else if(rayPlaneEquation1 >= 0){
             t = (rayPlaneEquation2.scalar(normal))/rayPlaneEquation1;
             ray.setT(t);
         }
