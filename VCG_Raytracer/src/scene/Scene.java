@@ -32,6 +32,10 @@ public class Scene {
         Sphere sphere = new Sphere(_center, _radius, _material);
         objects.add(sphere);
     }
+    public void createPlane(Vec3 _center, Vec3 _normal, String _material) {
+        Plane plane = new Plane(_center, _normal, _material);
+        objects.add(plane);
+    }
 
     public void createPointLight(Vec3 _position, RgbColor _intensity){
         PointLight pointlight = new PointLight(_position, _intensity);

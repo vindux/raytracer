@@ -135,8 +135,9 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-1,1,-8), 0.85f, "lambert");
-        renderScene.createSphere(new Vec3(1,1,-5), 1.25f, "lambert");
+        renderScene.createSphere(new Vec3(-1,-1,-8), 0.85f, "lambert");
+        renderScene.createSphere(new Vec3(1,-1,-8), 1.25f, "lambert");
+        renderScene.createPlane(new Vec3(1,5,-10), new Vec3(0,1,0),"lambert");
     }
 
     private static void setupCornellBox(Scene renderScene) {

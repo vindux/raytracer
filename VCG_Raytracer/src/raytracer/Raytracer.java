@@ -105,7 +105,6 @@ public class Raytracer {
             intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(rayDefinition, true));
             intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
             intersection.setDistance(intersection.getIntersectionPoint().sub(ray.getStartPoint()).length());
-            //System.out.println(intersection.getDistance());
         }
         return intersection;
     }
@@ -180,7 +179,6 @@ public class Raytracer {
                             nearestShape = shape;
                             nearest = intersection.getDistance();
                             tempIntersection = intersection;
-                            //System.out.println("NEAREST : " + intersection.getDistance());
                         }
                     }
                 }
@@ -190,7 +188,6 @@ public class Raytracer {
                  * If we hit the object, we paint another color
                  */
                 if (tempIntersection != null && tempIntersection.isHit() && nearestShape != null) {
-                    System.out.println("Intersection " + tempIntersection.getIntersectionPoint());
                     for (Light light : lightList) {
                         // Objekt das wir uns gerade anschauen nicht mit sich selbst schneiden, vorher prüfen welches shape
                         switch (nearestShape.getMaterial()) {
