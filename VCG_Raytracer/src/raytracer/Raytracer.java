@@ -16,6 +16,7 @@
 
 package raytracer;
 
+import org.w3c.dom.css.RGBColor;
 import ray.Ray;
 import scene.Scene;
 import scene.SceneObject;
@@ -23,6 +24,7 @@ import scene.Shape;
 import scene.camera.Camera;
 import scene.light.Light;
 import scene.material.Lambert;
+import scene.material.Phong;
 import ui.Window;
 import utils.*;
 import utils.algebra.Matrix4x4;
@@ -151,6 +153,7 @@ public class Raytracer {
 
         // Prepare materials
         Lambert lambert = new Lambert(RgbColor.WHITE, 0.5f, RgbColor.RED, 0.5f);
+        Phong phong = new Phong(RgbColor.WHITE, 0.5f, RgbColor.RED, 0.5f, RgbColor.WHITE, 0.8f, 2);
 
         // Iterate through every pixel
         for(int y = 0; y < screenHeight; y++) {
@@ -204,6 +207,15 @@ public class Raytracer {
                                 } else {
                                     RgbColor bufferedColor = new RgbColor(pixelColor.colors);
                                     pixelColor = lambert.getRGB(light, tempIntersection);
+                                    pixelColor = pixelColor.sub(bufferedColor);
+                                }
+                                break;
+                            case "phong":
+                                if (pixelColor == null) {
+                                    pixelColor = phong.getRGB(light, camera, tempIntersection);
+                                } else {
+                                    RgbColor bufferedColor = new RgbColor(pixelColor.colors);
+                                    pixelColor = phong.getRGB(light, camera, tempIntersection);
                                     pixelColor = pixelColor.sub(bufferedColor);
                                 }
                                 break;

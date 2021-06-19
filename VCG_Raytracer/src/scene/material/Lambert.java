@@ -7,8 +7,8 @@ import utils.algebra.Vec3;
 
 public class Lambert extends Material {
 
-    public Lambert(RgbColor _ambientLight, float _ambientCoefficient, RgbColor _diffuseLight, float _diffuseCoefficient, RgbColor _specularLight, float _specularCoefficient, float _SpecularExponent) {
-        super(_ambientLight, _diffuseLight, _ambientCoefficient, _diffuseCoefficient, _specularLight, _specularCoefficient, _SpecularExponent);
+    public Lambert(RgbColor _ambientLight, float _ambientCoefficient, RgbColor _diffuseLight, float _diffuseCoefficient) {
+        super(_ambientLight, _ambientCoefficient, _diffuseLight, _diffuseCoefficient);
     }
 
     public RgbColor getRGB(Light _light, Intersection _intersection) {
