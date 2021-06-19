@@ -21,4 +21,5 @@ public abstract class Material {
         this.mSpecularCoefficient = mSpecularCoefficient;
         this.mSpecularExponent = mSpecularExponent;
     }
+
 }

@@ -19,7 +19,7 @@ public class Phong extends Material{
         Vec3 normal = _intersection.getNormal().normalize();
         Vec3 reflectionVector = (normal.sub(lightVector)).multScalar(normal.scalar(lightVector)).multScalar(2);
 
-        RgbColor specular = _light.getColor().multScalar(mSpecularCoefficient).multScalar(Math.pow((viewVector.scalar(reflectionVector)),mSpecularExponent));
+        RgbColor specular = _light.getColor().multScalar(mSpecularCoefficient).multScalar((float) Math.pow((viewVector.scalar(reflectionVector)),mSpecularExponent));
 
         return specular;
     }
