@@ -8,8 +8,8 @@ import utils.algebra.Vec3;
 
 public class Phong extends Material{
 
-    public Phong(RgbColor _specularLight, float _specularCoefficient, float _SpecularExponent) {
-        super(_specularLight, _specularCoefficient, _SpecularExponent);
+    public Phong(RgbColor _ambientLight, float _ambientCoefficient, RgbColor _diffuseLight, float _diffuseCoefficient, RgbColor _specularLight, float _specularCoefficient, float _SpecularExponent) {
+        super(_ambientLight, _diffuseLight, _ambientCoefficient, _diffuseCoefficient, _specularLight, _specularCoefficient, _SpecularExponent);
     }
 
     public RgbColor getRGB(Light _light, Camera _camera, Intersection _intersection){
