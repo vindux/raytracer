@@ -8,8 +8,8 @@ import utils.algebra.Vec3;
 
 public class Phong extends Material{
 
-    public Phong(RgbColor _specularLight, float _specularCoefficent) {
-        super(_specularLight, _specularCoefficent);
+    public Phong(RgbColor _specularLight, float _specularCoefficient, float _SpecularExponent) {
+        super(_specularLight, _specularCoefficient, _SpecularExponent);
     }
 
     public RgbColor getRGB(Light _light, Camera _camera, Intersection _intersection){
@@ -19,7 +19,7 @@ public class Phong extends Material{
         Vec3 normal = _intersection.getNormal().normalize();
         Vec3 reflectionVector = (normal.sub(lightVector)).multScalar(normal.scalar(lightVector)).multScalar(2);
 
-        RgbColor specular = _light.getColor().multScalar(mSpecularCoefficent).multScalar(viewVector.scalar(reflectionVector));
+        RgbColor specular = _light.getColor().multScalar(mSpecularCoefficient).multScalar(Math.pow((viewVector.scalar(reflectionVector)),mSpecularExponent));
 
         return specular;
     }
