@@ -87,6 +87,7 @@ public class Raytracer {
         return tDelta / 1000.0;
     }
 
+
     /** Create intersection instance **/
     public Intersection intersect(double hitValue, Ray ray, Shape shape) {
         Intersection intersection = new Intersection();
