@@ -133,7 +133,7 @@ public class Raytracer {
 				float nearest = 99999;
 				Shape nearestShape = null;
 				RgbColor pixelColor = null;
-				RgbColor pixelColorAmbient;
+				RgbColor pixelColorAmbient = null;
 				RgbColor pixelColorDiffuse = null;
 
 				// First transform pixel to world coordinates
@@ -163,28 +163,25 @@ public class Raytracer {
 						}
 					}
 				}
-				// Depending on the material we set the color on hit
+				// Depending on the material calculate the pixel color
 				if (tempIntersection != null && tempIntersection.isHit() && nearestShape != null) {
 					for (int i = 0; i < lightList.size(); i++) {
-						switch (nearestShape.getMaterial()) {
-							case "normal":
-								pixelColor = RgbColor.WHITE;
-								break;
+						switch (nearestShape.getMaterial().toString().toLowerCase()) {
 							case "lambert":
-								// For every light we sum up the pixel colors
-								pixelColorAmbient = lambert.getAmbient();
 								pixelColorDiffuse = (pixelColorDiffuse == null)
 										? lambert.getDiffuse(lightList.get(i), tempIntersection)
 										: pixelColorDiffuse.add(lambert.getDiffuse(lightList.get(i), tempIntersection));
-								// Then we add the sum to the ambient
-								if (i == lightList.size()-1)
-									pixelColor = (pixelColorDiffuse != null)
-											? pixelColorAmbient.add(pixelColorDiffuse)
-											: pixelColorAmbient;
 								break;
-							default:
-								// do nothing
 						}
+					}
+					// Then we add the sum to the ambient
+					switch (nearestShape.getMaterial().toString().toLowerCase()) {
+						case "lambert":
+							pixelColorAmbient = lambert.getAmbient();
+							pixelColor = (pixelColorDiffuse != null)
+									? pixelColorAmbient.add(pixelColorDiffuse)
+									: pixelColorAmbient;
+							break;
 					}
 					mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 				}

@@ -16,4 +16,9 @@ public abstract class Material {
         this.mDiffuseCoefficient = mDiffuseCoefficient;
         this.mAmbientCoefficient = mAmbientCoefficient;
     }
+
+    // Returning the name of the material
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
 }

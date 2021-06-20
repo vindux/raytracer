@@ -25,6 +25,7 @@
 
 import raytracer.Raytracer;
 import scene.camera.Camera;
+import scene.material.Lambert;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
@@ -87,6 +88,9 @@ public class Main {
 
     static public Camera mCamera;
 
+    /** MATERIALS **/
+    static Lambert lambertWhite = new Lambert(RgbColor.WHITE, 0.5f, 0.5f);
+
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
 
@@ -128,8 +132,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-0.5f,0,-5), 0.75f, "lambert");
-        renderScene.createSphere(new Vec3(1,0,-6), 1.25f, "lambert");
+        renderScene.createSphere(new Vec3(-0.5f,0,-5), 0.75f, lambertWhite);
+        renderScene.createSphere(new Vec3(1,0,-6), 1.25f, lambertWhite);
     }
 
     private static void setupCornellBox(Scene renderScene) {

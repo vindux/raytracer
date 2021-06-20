@@ -1,6 +1,7 @@
 package scene;
 
 import ray.Ray;
+import scene.material.Material;
 import utils.algebra.Vec3;
 
 /**
@@ -17,7 +18,7 @@ public class Sphere extends Shape {
     private Vec3 normal;
 
     /** Constructor **/
-    public Sphere(Vec3 _center, Float _radius, String _material) {
+    public Sphere(Vec3 _center, Float _radius, Material _material) {
         super(_center, _material);
         this.radius = _radius;
     }
