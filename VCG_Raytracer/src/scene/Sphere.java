@@ -1,7 +1,6 @@
 package scene;
 
 import ray.Ray;
-import utils.Intersection;
 import utils.algebra.Vec3;
 
 /**
@@ -54,8 +53,7 @@ public class Sphere extends Shape {
 
         /*
          * Do the intersection test
-         * The discriminant can already lead to an answer without calculating much
-         * TODO: Later on we will set different cases, for now we only need to know if we hit the sphere
+         * The discriminant can already lead to an answer without calculating everything
          */
         if (discriminant < 0) {
             return Double.NaN;

@@ -3,23 +3,26 @@ package scene.light;
 import utils.RgbColor;
 import utils.algebra.Vec3;
 
+/**
+ * Point light class
+ */
 public class PointLight extends Light {
-    private Vec3 position;
-    private RgbColor intensity;
+    private Vec3 mPosition;
+    private RgbColor mIntensity;
 
     /** Constructor **/
     public PointLight (Vec3 _position, RgbColor _intensity) {
         super(_position, _intensity);
-        this.position = _position;
-        this.intensity = _intensity;
+        this.mPosition = _position;
+        this.mIntensity = _intensity;
     }
 
     public RgbColor getColor() {
-        return intensity;
+        return mIntensity;
     }
 
     public Vec3 getPosition() {
-        return position;
+        return mPosition;
     }
 
 }

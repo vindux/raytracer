@@ -2,6 +2,9 @@ package scene.camera;
 
 import utils.algebra.Vec3;
 
+/**
+ * Perspective camera class
+ */
 public class PerspectiveCamera extends Camera {
 
     /** Constructor **/

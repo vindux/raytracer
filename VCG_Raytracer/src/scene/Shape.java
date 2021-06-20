@@ -1,8 +1,6 @@
 package scene;
 
 import ray.Ray;
-import scene.material.Material;
-import utils.Intersection;
 import utils.algebra.Matrix4x4;
 import utils.algebra.Vec3;
 

@@ -23,19 +23,12 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-import ray.Ray;
 import raytracer.Raytracer;
-import scene.Sphere;
 import scene.camera.Camera;
-import scene.light.Light;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
-import utils.algebra.Vec2;
 import utils.algebra.Vec3;
-
-import java.util.ArrayList;
-
 /*
     - THE RAYTRACER -
 
@@ -92,7 +85,7 @@ public class Main {
     static final float VIEW_ANGLE = 50f;
     static final float FOCAL_LENGTH = 4f;
 
-    static public Camera firstCamera;
+    static public Camera mCamera;
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -125,18 +118,18 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (3,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,3,0), new RgbColor(0.0f, 1.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,0,3), new RgbColor(0.0f, 0.0f, 1.0f));
+        renderScene.createPointLight(new Vec3 (0,1,0), new RgbColor(RgbColor.WHITE.colors));
+        //renderScene.createPointLight(new Vec3 (0,5,0), new RgbColor(RgbColor.GREEN.colors));
+        //renderScene.createPointLight(new Vec3 (0,0,5), new RgbColor(RgbColor.BLUE.colors));
     }
 
     private static void setupCameras(Scene renderScene) {
-        firstCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT);
+        mCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT);
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-1,1,-8), 0.85f, "lambert");
-        renderScene.createSphere(new Vec3(1,1,-3), 1.25f, "phong");
+        renderScene.createSphere(new Vec3(0,0,-3), 1f, "phong");
+        //renderScene.createSphere(new Vec3(1,0,-6), 1.25f, "phong");
     }
 
     private static void setupCornellBox(Scene renderScene) {
@@ -152,7 +145,7 @@ public class Main {
                 AMBIENT_LIGHT,
                 ANTI_ALIASING,
                 SHOW_PARAM_LABEL,
-                firstCamera);
+                mCamera);
 
         raytracer.renderScene();
     }
