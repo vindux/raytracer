@@ -125,9 +125,9 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (3,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,3,0), new RgbColor(0.0f, 1.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,0,3), new RgbColor(0.0f, 0.0f, 1.0f));
+        renderScene.createPointLight(new Vec3 (5,0,0), new RgbColor(RgbColor.RED.colors));
+        renderScene.createPointLight(new Vec3 (0,5,0), new RgbColor(RgbColor.GREEN.colors));
+        renderScene.createPointLight(new Vec3 (0,0,5), new RgbColor(RgbColor.BLUE.colors));
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -135,8 +135,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-1,1,-8), 0.75f, "lambert");
-        renderScene.createSphere(new Vec3(1,1,-5), 1.25f, "lambert");
+        renderScene.createSphere(new Vec3(-1,0,-5), 0.75f, "lambert");
+        renderScene.createSphere(new Vec3(1,1,-6), 1.25f, "lambert");
     }
 
     private static void setupCornellBox(Scene renderScene) {

@@ -105,24 +105,7 @@ public class Raytracer {
 			intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(rayDefinition, true));
 			intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
 			intersection.setDistance(intersection.getIntersectionPoint().sub(ray.getStartPoint()).length());
-			//System.out.println(intersection.getDistance());
 		}
-		return intersection;
-	}
-
-	/** Check light intersection **/
-	public Intersection intersectLight(Vec3 _intersectionPoint, Light _light, Shape shape) {
-		Ray ray = new Ray(_intersectionPoint, _intersectionPoint.sub(_light.getPosition()), 1);
-		Intersection intersection = new Intersection();
-		Vec3 part1 = _light.getPosition().sub(_intersectionPoint);
-
-		// WIP NAMES CAN CHANGE
-		float part2 = part1.x + part1.y + part1.z;
-		float part3 = ray.getDirection().x + ray.getDirection().y + ray.getDirection().z;
-		float rayTValue = part2/part3;
-		ray.setT(rayTValue);
-		intersection.setIntersectionPoint(ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT())));
-		intersection.setNormal(intersection.getIntersectionPoint().sub(shape.getCenter()));
 		return intersection;
 	}
 
@@ -139,9 +122,7 @@ public class Raytracer {
 		float deltaX;
 		float deltaY;
 		Ray ray;
-		Vec3 direction;
 		Vec3 cameraDirection;
-		Vec3 lightVector;
 		Intersection intersection;
 		Intersection tempIntersection = null;
 		ArrayList<Shape> shapeList = mScene.getObjects();
@@ -167,15 +148,17 @@ public class Raytracer {
 				cameraDirection = camera.calculateDirection(deltaX,-deltaY);
 				ray = new Ray(camera.getCameraPosition(), cameraDirection, 1);
 
-				// Find nearest shape
-				// Iterate through every shape in the scene
+				// Find nearest shape in the scene
 				for (Shape shape : shapeList ) {
+					// Invert matrix and ray for transformed shape
 					Matrix4x4 inverse = shape.getTransformMatrix().invert();
 					ray.setDirection(inverse.multVec3(ray.getDirection(), false));
 					ray.setStartPoint(inverse.multVec3(ray.getDirection(), true));
 
 					double discriminant = shape.intersect(ray);
 					intersection = intersect(discriminant, ray, shape);
+
+					// If we hit the shape we compare the distance with the current nearest shape
 					if (intersection.isHit()) {
 						if (intersection.getDistance() <= nearest) {
 							nearestShape = shape;
@@ -184,30 +167,27 @@ public class Raytracer {
 						}
 					}
 				}
-
-				/*
-				 * If we do not hit the object, we paint the background color
-				 * If we hit the object, we paint another color
-				 */
+				// Depending on the material we set the color on hit
 				if (tempIntersection != null && tempIntersection.isHit() && nearestShape != null) {
-					pixelColorAmbient = lambert.getAmbient(); // set ambient
 					for (int i = 0; i < lightList.size(); i++) {
-						// Objekt das wir uns gerade anschauen nicht mit sich selbst schneiden, vorher prüfen welches shape
 						switch (nearestShape.getMaterial()) {
 							case "normal":
-								pixelColor = RgbColor.YELLOW;
+								pixelColor = RgbColor.WHITE;
 								break;
 							case "lambert":
-								//Intersection lightIntersection = intersectLight(intersection.getIntersectionPoint(), light, object);
-								// set diffuse
+								// For every light we sum up the pixel colors
+								pixelColorAmbient = lambert.getAmbient();
 								pixelColorDiffuse = (pixelColorDiffuse == null)
 										? lambert.getDiffuse(lightList.get(i), tempIntersection)
 										: pixelColorDiffuse.add(lambert.getDiffuse(lightList.get(i), tempIntersection));
-								// last iteration add ambient + diffuse
-								if (i == lightList.size()-1) pixelColor = (pixelColorDiffuse != null) ? pixelColorAmbient.add(pixelColorDiffuse) : pixelColorAmbient;
+								// Then we add the sum to the ambient
+								if (i == lightList.size()-1)
+									pixelColor = (pixelColorDiffuse != null)
+											? pixelColorAmbient.add(pixelColorDiffuse)
+											: pixelColorAmbient;
 								break;
 							default:
-								break;
+								// do nothing
 						}
 					}
 					mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));

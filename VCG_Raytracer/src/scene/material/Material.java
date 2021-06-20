@@ -2,18 +2,18 @@ package scene.material;
 
 import utils.RgbColor;
 
+/**
+ * Base class for materials
+ */
 public abstract class Material {
 
     protected RgbColor mAmbientLight;
-    protected RgbColor mDiffuseLight;
-    protected RgbColor mSpecularLight;
-    protected float mDiffuseCoefficent;
-    protected float mAmbientCoefficent;
-    protected float mSpecularCoefficent;
+    protected float mDiffuseCoefficient;
+    protected float mAmbientCoefficient;
 
-    public Material(RgbColor mAmbientLight, float mAmbientCoefficent, float mDiffuseCoefficent) {
+    public Material(RgbColor mAmbientLight, float mAmbientCoefficient, float mDiffuseCoefficient) {
         this.mAmbientLight = mAmbientLight;
-        this.mDiffuseCoefficent = mDiffuseCoefficent;
-        this.mAmbientCoefficent = mAmbientCoefficent;
+        this.mDiffuseCoefficient = mDiffuseCoefficient;
+        this.mAmbientCoefficient = mAmbientCoefficient;
     }
 }

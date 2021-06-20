@@ -4,6 +4,10 @@ import scene.SceneObject;
 import utils.RgbColor;
 import utils.algebra.Vec3;
 
+/**
+ * Base class for lights
+ * Can be used in a scene to set up light
+ */
 public class Light extends SceneObject {
 
     protected Vec3 mPosition;
