@@ -11,9 +11,8 @@ public abstract class Material {
     protected float mAmbientCoefficent;
     protected float mSpecularCoefficent;
 
-    public Material(RgbColor mAmbientLight, RgbColor mDiffuseLight, float mAmbientCoefficent, float mDiffuseCoefficent) {
+    public Material(RgbColor mAmbientLight, float mAmbientCoefficent, float mDiffuseCoefficent) {
         this.mAmbientLight = mAmbientLight;
-        this.mDiffuseLight = mDiffuseLight;
         this.mDiffuseCoefficent = mDiffuseCoefficent;
         this.mAmbientCoefficent = mAmbientCoefficent;
     }

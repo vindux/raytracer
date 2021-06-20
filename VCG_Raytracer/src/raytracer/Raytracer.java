@@ -157,6 +157,9 @@ public class Raytracer {
             for (int x = 0; x < screenWidth; x++) {
                 float nearest = 99999;
                 Shape nearestShape = null;
+                RgbColor pixelColor = null;
+                RgbColor pixelColorAmbient;
+                RgbColor pixelColorDiffuse = null;
 
                 // First transform pixel to world coordinates
                 deltaX = (float) ((2*(x+0.5)/screenWidth-1)*(width/2));
