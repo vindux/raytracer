@@ -18,7 +18,6 @@ package raytracer;
 
 import ray.Ray;
 import scene.Scene;
-import scene.SceneObject;
 import scene.Shape;
 import scene.camera.Camera;
 import scene.light.Light;
@@ -96,10 +95,7 @@ public class Raytracer {
 			return intersection;
 		}
 		intersection.setShape(shape);
-		if (hitValue >= 0)
-			intersection.setHit(true);
-		else
-			intersection.setHit(false);
+		intersection.setHit(hitValue >= 0);
 		if (intersection.isHit()) {
 			Vec3 rayDefinition = ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT()));
 			intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(rayDefinition, true));

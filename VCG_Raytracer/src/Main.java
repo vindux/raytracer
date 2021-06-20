@@ -23,19 +23,12 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-import ray.Ray;
 import raytracer.Raytracer;
-import scene.Sphere;
 import scene.camera.Camera;
-import scene.light.Light;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
-import utils.algebra.Vec2;
 import utils.algebra.Vec3;
-
-import java.util.ArrayList;
-
 /*
     - THE RAYTRACER -
 
@@ -92,7 +85,7 @@ public class Main {
     static final float VIEW_ANGLE = 50f;
     static final float FOCAL_LENGTH = 4f;
 
-    static public Camera firstCamera;
+    static public Camera mCamera;
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -131,12 +124,12 @@ public class Main {
     }
 
     private static void setupCameras(Scene renderScene) {
-        firstCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT);
+        mCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT);
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-1,0,-5), 0.75f, "lambert");
-        renderScene.createSphere(new Vec3(1,1,-6), 1.25f, "lambert");
+        renderScene.createSphere(new Vec3(-0.5f,0,-5), 0.75f, "lambert");
+        renderScene.createSphere(new Vec3(1,0,-6), 1.25f, "lambert");
     }
 
     private static void setupCornellBox(Scene renderScene) {
@@ -152,7 +145,7 @@ public class Main {
                 AMBIENT_LIGHT,
                 ANTI_ALIASING,
                 SHOW_PARAM_LABEL,
-                firstCamera);
+                mCamera);
 
         raytracer.renderScene();
     }

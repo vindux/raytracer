@@ -1,7 +1,6 @@
 package scene;
 
 import ray.Ray;
-import utils.Intersection;
 import utils.algebra.Vec3;
 
 /**

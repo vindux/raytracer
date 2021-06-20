@@ -10,70 +10,70 @@ import utils.algebra.Vec3;
  **/
 public class Intersection {
 
-    private Vec3 intersectionPoint;
-    private Vec3 normal;
-    private Vec3 inRay;
-    private Vec3 outRay;
-    private Shape shape;
-    private float distance;
-    private boolean hit;
+    private Vec3 mIntersectionPoint;
+    private Vec3 mNormal;
+    private Vec3 mInRay;
+    private Vec3 mOutRay;
+    private Shape mShape;
+    private float mDistance;
+    private boolean mHit;
 
     /** Constructor **/
     public Intersection() {}
 
     public Vec3 getIntersectionPoint() {
-        return intersectionPoint;
+        return mIntersectionPoint;
     }
 
     public void setIntersectionPoint(Vec3 intersectionPoint) {
-        this.intersectionPoint = intersectionPoint;
+        this.mIntersectionPoint = intersectionPoint;
     }
 
     public Vec3 getNormal() {
-        return normal;
+        return mNormal;
     }
 
     public void setNormal(Vec3 normal) {
-        this.normal = normal.normalize();
+        this.mNormal = normal.normalize();
     }
 
     public Vec3 getInRay() {
-        return inRay;
+        return mInRay;
     }
 
     public void setInRay(Vec3 inRay) {
-        this.inRay = inRay;
+        this.mInRay = inRay;
     }
 
     public Vec3 getOutRay() {
-        return outRay;
+        return mOutRay;
     }
 
     public void setOutRay(Vec3 outRay) {
-        this.outRay = outRay;
+        this.mOutRay = outRay;
     }
 
     public Shape getShape() {
-        return shape;
+        return mShape;
     }
 
     public void setShape(Shape shape) {
-        this.shape = shape;
+        this.mShape = shape;
     }
 
     public void setDistance(float distance) {
-        this.distance = distance;
+        this.mDistance = distance;
     }
 
     public float getDistance() {
-        return distance;
+        return mDistance;
     }
 
     public boolean isHit() {
-        return hit;
+        return mHit;
     }
 
     public void setHit(boolean hit) {
-        this.hit = hit;
+        this.mHit = hit;
     }
 }
