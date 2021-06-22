@@ -143,11 +143,10 @@ public class Raytracer {
 
 				// Create the ray
 				cameraDirection = camera.calculateDirection(deltaX,-deltaY);
-				ray = new Ray(camera.getCameraPosition(), cameraDirection, 1);
 
 				// Find nearest shape in the scene
 				for (Shape shape : shapeList ) {
-					//System.out.println(shape.getClass().getSimpleName());
+					ray = new Ray(camera.getCameraPosition(), cameraDirection, 1);
 					// Invert matrix and ray for transformed shape
 					Matrix4x4 inverse = shape.getTransformMatrix().invert();
 					ray.setDirection(inverse.multVec3(ray.getDirection(), false));
@@ -160,8 +159,6 @@ public class Raytracer {
 					if (intersection.isHit()) {
 						if (intersection.getDistance() <= nearest) {
 							nearestShape = shape;
-							if (nearestShape.getClass().getSimpleName() == "Sphere")
-								System.out.println(nearestShape.getClass().getSimpleName());
 							nearest = intersection.getDistance();
 							tempIntersection = intersection;
 						}
