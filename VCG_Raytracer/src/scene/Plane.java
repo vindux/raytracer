@@ -16,16 +16,19 @@ public class Plane extends Shape {
     private Vec3 rayDirection;
     private Vec3 rayStartPoint;
 
-    /** Constructor **/
-    public Plane (Vec3 _center, Vec3 _normal, Material _material){
-        super (_center, _normal, _material);
+    /**
+     * Constructor
+     **/
+    public Plane(Vec3 _center, Vec3 _normal, Material _material) {
+        super(_center, _normal, _material);
         this.center = _center;
         this.normal = _normal;
-        this.material =_material;
+        this.material = _material;
     }
 
     /**
      * Method that calculates intersection between a plane and a ray
+     *
      * @return
      */
     public double intersect(Ray ray) {
@@ -35,14 +38,23 @@ public class Plane extends Shape {
 
         // Break down of the plane-ray equation
         float rayPlaneEquation1 = normal.scalar(rayDirection);
-        Vec3 rayPlaneEquation2 = center.sub(rayStartPoint).normalize();
         float t;
 
-        if(rayPlaneEquation1 == 0) {
+       /* if(rayPlaneEquation1 == 0) {
             return Double.NaN;
-        }else if(rayPlaneEquation1 >= 0){
+        }else if >0{
             t = (rayPlaneEquation2.scalar(normal))/rayPlaneEquation1;
             ray.setT(t);
+        }
+        return rayPlaneEquation1; */
+
+        if (Math.abs(rayPlaneEquation1) > 0) {
+            t = center.sub(ray.getStartPoint()).scalar(normal)/rayPlaneEquation1;
+            if ( t >= 0 ) {
+                ray.setT(t);
+            } else {
+                return Double.NaN;
+            }
         }
         return rayPlaneEquation1;
     }

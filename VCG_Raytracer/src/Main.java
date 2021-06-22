@@ -80,23 +80,21 @@ public class Main {
     static final float AO_MAX_DISTANCE = 0f;
 
     /** CAMERA **/
-    static final Vec3 CAM_POS = new Vec3(0, 0, 70);
+    static final Vec3 CAM_POS = new Vec3(0, 0, 25);
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
     static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
 
-    static final float VIEW_ANGLE = 140f;
+    static final float VIEW_ANGLE = 40f;
     static final float FOCAL_LENGTH = 1f;
 
     static public Camera mCamera;
 
     /** MATERIALS **/
-    static Lambert lambertWhite = new Lambert(RgbColor.WHITE, 0.8f, 0f);
-    static Lambert lambertBlue = new Lambert(RgbColor.BLUE, 0.8f, 0f);
-    static Lambert lambertRed = new Lambert(RgbColor.RED, 0.8f, 0f);
-    static Lambert lambertGreen = new Lambert(RgbColor.GREEN, 0.8f, 0f);
-    static Lambert lambertYellow = new Lambert(RgbColor.YELLOW, 0.8f, 0f);
-    static Phong phongBlue = new Phong(RgbColor.BLUE, 0.5f, 0.8f, 1f, 2);
-    static Phong phongRed = new Phong(RgbColor.RED, 0.5f, 0.8f, 1f, 2);
+    static Lambert lambertWhite = new Lambert(RgbColor.WHITE, 0.2f, 0.4f);
+    static Lambert lambertBlue = new Lambert(RgbColor.BLUE, 0.9f, 0.3f);
+    static Lambert lambertRed = new Lambert(RgbColor.RED, 0.9f, 0.3f);
+    static Phong phongBlue = new Phong(RgbColor.BLUE, 0.5f, 0.3f, 0.5f, 15);
+    static Phong phongRed = new Phong(RgbColor.RED, 0.5f, 0.3f, 0.5f, 15);
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -129,9 +127,7 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        //renderScene.createPointLight(new Vec3 (0,3,-1), new RgbColor(RgbColor.GREEN.colors));
-        renderScene.createPointLight(new Vec3 (0,1,0), new RgbColor(RgbColor.WHITE.colors));
-        //renderScene.createPointLight(new Vec3 (0,0,0), new RgbColor(RgbColor.BLUE.colors));
+        renderScene.createPointLight(new Vec3 (0,10, 0), RgbColor.LIGHT_GRAY);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -139,19 +135,17 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-0.5f,0,-2), 0.75f, phongBlue);
-        renderScene.createSphere(new Vec3(1,0,-3), 1.25f, phongRed);
+        renderScene.createSphere(new Vec3(-2,2,2), 1f, phongBlue);
+        renderScene.createSphere(new Vec3(2,0,5), 1f, phongRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {
-        // BG
-        renderScene.createPlane(new Vec3(0,0,-10f), new Vec3(0,0,-1), lambertWhite);
-        //left right
-        renderScene.createPlane(new Vec3(10f,0,0), new Vec3(-1,0,0),lambertRed);
-        renderScene.createPlane(new Vec3(-10f,0,0), new Vec3(1,0,0),lambertBlue);
-        // buttom up
-        renderScene.createPlane(new Vec3(0,-9.9f,0), new Vec3(0,1,0),lambertGreen);
-        renderScene.createPlane(new Vec3(0,9.9f,0), new Vec3(0,-1,0),lambertYellow);
+        renderScene.createPlane(new Vec3(1,0,-1), new Vec3(0,0,-1), lambertWhite);
+        renderScene.createPlane(new Vec3(0, 1.2f,0), new Vec3(0,1,0),lambertWhite);
+        renderScene.createPlane(new Vec3(0,-1.8f,0), new Vec3(0,-1,0),lambertWhite);
+        renderScene.createPlane(new Vec3(-2f,0,0), new Vec3(-1,0,0),lambertRed);
+        renderScene.createPlane(new Vec3(2f,0,0), new Vec3(1,0,0),lambertBlue);
+
     }
 
     /** Create our personal renderer and give it all of our items and prefs to calculate our scene **/
