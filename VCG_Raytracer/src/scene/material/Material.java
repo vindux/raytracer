@@ -1,20 +1,33 @@
 package scene.material;
 
+import scene.camera.Camera;
+import scene.light.Light;
+import utils.Intersection;
 import utils.RgbColor;
 
-public abstract class Material {
+/**
+ * Base class for materials
+ */
+public class Material {
 
     protected RgbColor mAmbientLight;
-    protected RgbColor mDiffuseLight;
-    protected RgbColor mSpecularLight;
-    protected float mDiffuseCoefficent;
-    protected float mAmbientCoefficent;
-    protected float mSpecularCoefficent;
+    protected float mDiffuseCoefficient;
+    protected float mAmbientCoefficient;
 
-    public Material(RgbColor mAmbientLight, RgbColor mDiffuseLight, float mAmbientCoefficent, float mDiffuseCoefficent) {
+    public Material(RgbColor mAmbientLight, float mAmbientCoefficient, float mDiffuseCoefficient) {
         this.mAmbientLight = mAmbientLight;
-        this.mDiffuseLight = mDiffuseLight;
-        this.mDiffuseCoefficent = mDiffuseCoefficent;
-        this.mAmbientCoefficent = mAmbientCoefficent;
+        this.mDiffuseCoefficient = mDiffuseCoefficient;
+        this.mAmbientCoefficient = mAmbientCoefficient;
     }
+
+    public  RgbColor getAmbient() {return  RgbColor.WHITE;}
+
+    // Returning the name of the material
+    public String toString() {
+        return this.getClass().getSimpleName();
+    }
+
+    public RgbColor getDiffuse(Light light, Intersection tempIntersection) {return  RgbColor.WHITE;}
+
+    public RgbColor getDiffuseSpecular(Light light, Camera camera, Intersection tempIntersection) {return  RgbColor.WHITE;}
 }

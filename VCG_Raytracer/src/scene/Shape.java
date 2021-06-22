@@ -1,6 +1,7 @@
 package scene;
 
 import ray.Ray;
+import scene.material.Material;
 import utils.algebra.Matrix4x4;
 import utils.algebra.Vec3;
 
@@ -11,17 +12,17 @@ import utils.algebra.Vec3;
 public class Shape extends SceneObject {
 
     protected Vec3 center;
-    protected String material;
     protected Vec3 normal;
+    protected Material material;
     protected Matrix4x4 transformMatrix = new Matrix4x4();
 
-    public Shape(Vec3 _center, String _material) {
+    public Shape(Vec3 _center, Material _material) {
         this.transformMatrix.translateXYZ(_center);
         this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
         this.material = _material;
     }
 
-    public Shape(Vec3 _center, Vec3 _normal, String _material) {
+    public Shape(Vec3 _center, Vec3 _normal, Material _material) {
         this.transformMatrix.translateXYZ(_center);
         this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
         this.normal = _normal;
@@ -37,12 +38,11 @@ public class Shape extends SceneObject {
 
     public Vec3 getNormal() { return normal; }
     public void setNormal(Vec3 normal) { this.normal = normal; }
-
-
-    public String getMaterial() {
+    public Material getMaterial() {
         return material;
     }
-    public void setMaterial(String material) {
+
+    public void setMaterial(Material material) {
         this.material = material;
     }
 

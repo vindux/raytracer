@@ -7,7 +7,6 @@ import utils.algebra.Vec3;
  * Camera class
  * Specifies camera and properties of the portion we see at the end
  **/
-
 public class Camera extends SceneObject {
 
     private Vec3 cameraPosition;

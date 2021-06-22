@@ -5,21 +5,30 @@ import utils.Intersection;
 import utils.RgbColor;
 import utils.algebra.Vec3;
 
+/**
+ * Lambert material class
+ */
 public class Lambert extends Material {
 
-    public Lambert(RgbColor _ambientLight, float _ambientCoefficent, RgbColor _diffuseLight, float _diffuseCoefficent) {
-        super(_ambientLight, _diffuseLight, _ambientCoefficent, _diffuseCoefficent);
+    private RgbColor mAmbient;
+
+    /**
+     * Constructor
+     */
+    public Lambert(RgbColor _ambientLight, float _ambientCoefficient, float _diffuseCoefficient) {
+        super(_ambientLight, _ambientCoefficient, _diffuseCoefficient);
+        mAmbient = _ambientLight.multScalar(_ambientCoefficient);
     }
 
-    public RgbColor getRGB(Light _light, Intersection _intersection) {
+    public RgbColor getAmbient() {
+        return mAmbient;
+    }
+
+    public RgbColor getDiffuse(Light _light, Intersection _intersection) {
         Vec3 lightPosition = _light.getPosition();
         Vec3 lightVector = _intersection.getIntersectionPoint().sub(lightPosition).normalize();
         Vec3 normal = _intersection.getNormal().normalize();
 
-        RgbColor ambient = mAmbientLight.multScalar(mAmbientCoefficent);
-        RgbColor diffuse = _light.getColor().multScalar(mDiffuseCoefficent).multScalar(normal.scalar(lightVector));
-
-        return ambient.add(diffuse);
+        return _light.getColor().multScalar(mDiffuseCoefficient).multScalar(normal.scalar(lightVector));
     }
-
 }

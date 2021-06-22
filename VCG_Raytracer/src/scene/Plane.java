@@ -1,6 +1,7 @@
 package scene;
 
 import ray.Ray;
+import scene.material.Material;
 import utils.algebra.Vec3;
 
 /**
@@ -16,7 +17,7 @@ public class Plane extends Shape {
     private Vec3 rayStartPoint;
 
     /** Constructor **/
-    public Plane (Vec3 _center, Vec3 _normal, String _material){
+    public Plane (Vec3 _center, Vec3 _normal, Material _material){
         super (_center, _normal, _material);
         this.center = _center;
         this.normal = _normal;

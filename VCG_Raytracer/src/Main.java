@@ -23,19 +23,14 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~*/
 
-import ray.Ray;
 import raytracer.Raytracer;
-import scene.Sphere;
 import scene.camera.Camera;
-import scene.light.Light;
+import scene.material.Lambert;
+import scene.material.Phong;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
-import utils.algebra.Vec2;
 import utils.algebra.Vec3;
-
-import java.util.ArrayList;
-
 /*
     - THE RAYTRACER -
 
@@ -85,14 +80,23 @@ public class Main {
     static final float AO_MAX_DISTANCE = 0f;
 
     /** CAMERA **/
-    static final Vec3 CAM_POS = new Vec3(0, 0, 10);
+    static final Vec3 CAM_POS = new Vec3(0, 0, 70);
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
     static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
 
-    static final float VIEW_ANGLE = 50f;
-    static final float FOCAL_LENGTH = 4f;
+    static final float VIEW_ANGLE = 140f;
+    static final float FOCAL_LENGTH = 1f;
 
-    static public Camera firstCamera;
+    static public Camera mCamera;
+
+    /** MATERIALS **/
+    static Lambert lambertWhite = new Lambert(RgbColor.WHITE, 0.8f, 0f);
+    static Lambert lambertBlue = new Lambert(RgbColor.BLUE, 0.8f, 0f);
+    static Lambert lambertRed = new Lambert(RgbColor.RED, 0.8f, 0f);
+    static Lambert lambertGreen = new Lambert(RgbColor.GREEN, 0.8f, 0f);
+    static Lambert lambertYellow = new Lambert(RgbColor.YELLOW, 0.8f, 0f);
+    static Phong phongBlue = new Phong(RgbColor.BLUE, 0.5f, 0.8f, 1f, 2);
+    static Phong phongRed = new Phong(RgbColor.RED, 0.5f, 0.8f, 1f, 2);
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -125,22 +129,29 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (3,0,0), new RgbColor(1.0f, 0.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,3,0), new RgbColor(0.0f, 1.0f, 0.0f));
-        renderScene.createPointLight(new Vec3 (0,0,3), new RgbColor(0.0f, 0.0f, 1.0f));
+        //renderScene.createPointLight(new Vec3 (0,3,-1), new RgbColor(RgbColor.GREEN.colors));
+        renderScene.createPointLight(new Vec3 (0,1,0), new RgbColor(RgbColor.WHITE.colors));
+        //renderScene.createPointLight(new Vec3 (0,0,0), new RgbColor(RgbColor.BLUE.colors));
     }
 
     private static void setupCameras(Scene renderScene) {
-        firstCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT);
+        mCamera = new Camera(CAM_POS, LOOK_AT, USER_UP_VECTOR, VIEW_ANGLE, FOCAL_LENGTH, IMAGE_WIDTH, IMAGE_HEIGHT);
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-1,-1,-8), 0.85f, "lambert");
-        renderScene.createSphere(new Vec3(1,-1,-8), 1.25f, "lambert");
-        renderScene.createPlane(new Vec3(1,5,0), new Vec3(0,1,0),"lambert");
+        renderScene.createSphere(new Vec3(-0.5f,0,-2), 0.75f, phongBlue);
+        renderScene.createSphere(new Vec3(1,0,-3), 1.25f, phongRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {
+        // BG
+        renderScene.createPlane(new Vec3(0,0,-10f), new Vec3(0,0,-1), lambertWhite);
+        //left right
+        renderScene.createPlane(new Vec3(10f,0,0), new Vec3(-1,0,0),lambertRed);
+        renderScene.createPlane(new Vec3(-10f,0,0), new Vec3(1,0,0),lambertBlue);
+        // buttom up
+        renderScene.createPlane(new Vec3(0,-9.9f,0), new Vec3(0,1,0),lambertGreen);
+        renderScene.createPlane(new Vec3(0,9.9f,0), new Vec3(0,-1,0),lambertYellow);
     }
 
     /** Create our personal renderer and give it all of our items and prefs to calculate our scene **/
@@ -153,7 +164,7 @@ public class Main {
                 AMBIENT_LIGHT,
                 ANTI_ALIASING,
                 SHOW_PARAM_LABEL,
-                firstCamera);
+                mCamera);
 
         raytracer.renderScene();
     }
