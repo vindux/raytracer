@@ -16,12 +16,18 @@ public class Shape extends SceneObject {
     protected Material material;
     protected Matrix4x4 transformMatrix = new Matrix4x4();
 
+    /**
+     * Constructor used for basic shapes
+     */
     public Shape(Vec3 _center, Material _material) {
         this.transformMatrix.translateXYZ(_center);
         this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
         this.material = _material;
     }
 
+    /**
+     * Constructor used for shapes with normals e.g. planes
+     */
     public Shape(Vec3 _center, Vec3 _normal, Material _material) {
         this.transformMatrix.translateXYZ(_center);
         this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);

@@ -11,6 +11,9 @@ public class Phong extends Material{
     private float mSpecularCoefficient;
     private float mSpecularExponent;
 
+    /**
+     * Constructor
+     */
     public Phong(RgbColor _ambientLight, float _ambientCoefficient, float _diffuseCoefficient, float _specularCoefficient, float _specularExponent) {
         super(_ambientLight, _ambientCoefficient, _diffuseCoefficient);
         this.mSpecularCoefficient = _specularCoefficient;

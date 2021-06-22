@@ -95,7 +95,6 @@ public class Main {
     static Lambert lambertRed = new Lambert(RgbColor.RED, 0.9f, 0.3f);
     static Phong phongBlue = new Phong(RgbColor.BLUE, 0.5f, 0.3f, 0.5f, 15);
     static Phong phongRed = new Phong(RgbColor.RED, 0.5f, 0.3f, 0.5f, 15);
-    static Phong phongGreen = new Phong(RgbColor.GREEN, 0.5f, 0.3f, 0.5f, 15);
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -136,9 +135,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-2,0,2), 1f, phongBlue);
-        renderScene.createSphere(new Vec3(2,0,5), 1f, phongRed);
-        renderScene.createSphere(new Vec3(1,0,3), 1f, phongGreen);
+        renderScene.createSphere(new Vec3(-1,2,1), 1f, phongBlue);
+        renderScene.createSphere(new Vec3(1,2,5), 1f, phongRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {

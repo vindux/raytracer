@@ -21,9 +21,7 @@ import scene.Scene;
 import scene.Shape;
 import scene.camera.Camera;
 import scene.light.Light;
-import scene.material.Lambert;
 import scene.material.Material;
-import scene.material.Phong;
 import ui.Window;
 import utils.*;
 import utils.algebra.Matrix4x4;
@@ -132,10 +130,10 @@ public class Raytracer {
 				float nearest = 99999;
 				Shape nearestShape = null;
 				RgbColor pixelColor = null;
-				RgbColor pixelColorAmbient = null;
+				RgbColor pixelColorAmbient;
 				RgbColor pixelColorDiffuse = null;
 				RgbColor pixelColorPhong = null;
-				Material shapeMaterial = null;
+				Material shapeMaterial;
 
 				// First transform pixel to world coordinates
 				deltaX = (float) ((2*(x+0.5)/screenWidth-1)*(width/2));
@@ -167,18 +165,18 @@ public class Raytracer {
 				// Depending on the material calculate the pixel color
 				if (tempIntersection != null && tempIntersection.isHit() && nearestShape != null) {
 					shapeMaterial = nearestShape.getMaterial();
-					for (int i = 0; i < lightList.size(); i++) {
+					for (Light light : lightList) {
 						switch (nearestShape.getMaterial().toString().toLowerCase()) {
 							case "lambert":
 								pixelColorDiffuse = (pixelColorDiffuse == null)
-										? shapeMaterial.getDiffuse(lightList.get(i), tempIntersection)
-										: pixelColorDiffuse.add(shapeMaterial.getDiffuse(lightList.get(i), tempIntersection));
+										? shapeMaterial.getDiffuse(light, tempIntersection)
+										: pixelColorDiffuse.add(shapeMaterial.getDiffuse(light, tempIntersection));
 								break;
-								case "phong":
+							case "phong":
 								// For every light we sum up the pixel colors
 								pixelColorPhong = (pixelColorPhong == null)
-										? shapeMaterial.getDiffuseSpecular(lightList.get(i), camera, tempIntersection)
-										: pixelColorPhong.add(shapeMaterial.getDiffuseSpecular(lightList.get(i), camera, tempIntersection));
+										? shapeMaterial.getDiffuseSpecular(light, camera, tempIntersection)
+										: pixelColorPhong.add(shapeMaterial.getDiffuseSpecular(light, camera, tempIntersection));
 							default:
 								// do nothing
 						}
@@ -186,17 +184,18 @@ public class Raytracer {
 
 					// Then we add the sum to the ambient
 					switch (nearestShape.getMaterial().toString().toLowerCase()) {
-						case "lambert":
+						case "lambert" -> {
 							pixelColorAmbient = shapeMaterial.getAmbient();
 							pixelColor = (pixelColorDiffuse != null)
 									? pixelColorAmbient.add(pixelColorDiffuse)
 									: pixelColorAmbient;
-							break;
-						case "phong":
+						}
+						case "phong" -> {
 							pixelColorAmbient = shapeMaterial.getAmbient();
 							pixelColor = (pixelColorPhong != null)
 									? pixelColorAmbient.add(pixelColorPhong)
 									: pixelColorAmbient;
+						}
 					}
 					mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 				}

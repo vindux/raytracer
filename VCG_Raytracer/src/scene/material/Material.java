@@ -14,6 +14,9 @@ public class Material {
     protected float mDiffuseCoefficient;
     protected float mAmbientCoefficient;
 
+    /**
+     * Constructor
+     */
     public Material(RgbColor mAmbientLight, float mAmbientCoefficient, float mDiffuseCoefficient) {
         this.mAmbientLight = mAmbientLight;
         this.mDiffuseCoefficient = mDiffuseCoefficient;
