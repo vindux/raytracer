@@ -22,6 +22,7 @@ import scene.Shape;
 import scene.camera.Camera;
 import scene.light.Light;
 import scene.material.Lambert;
+import scene.material.Material;
 import scene.material.Phong;
 import ui.Window;
 import utils.*;
@@ -125,19 +126,16 @@ public class Raytracer {
 		ArrayList<Shape> shapeList = mScene.getObjects();
 		ArrayList<Light> lightList = mScene.getLights();
 
-		// Prepare materials
-		Lambert lambert = new Lambert(RgbColor.WHITE, 0.5f, 0.5f);
-		Phong phong = new Phong(RgbColor.RED, 0.5f, 0.8f, 0.7f, 2);
-
 		// Iterate through every pixel
 		for(int y = 0; y < screenHeight; y++) {
 			for (int x = 0; x < screenWidth; x++) {
 				float nearest = 99999;
 				Shape nearestShape = null;
 				RgbColor pixelColor = null;
-				RgbColor pixelColorAmbient;
+				RgbColor pixelColorAmbient = null;
 				RgbColor pixelColorDiffuse = null;
 				RgbColor pixelColorPhong = null;
+				Material shapeMaterial = null;
 
 				// First transform pixel to world coordinates
 				deltaX = (float) ((2*(x+0.5)/screenWidth-1)*(width/2));
@@ -166,40 +164,39 @@ public class Raytracer {
 						}
 					}
 				}
-				// Depending on the material we set the color on hit
+				// Depending on the material calculate the pixel color
 				if (tempIntersection != null && tempIntersection.isHit() && nearestShape != null) {
+					shapeMaterial = nearestShape.getMaterial();
 					for (int i = 0; i < lightList.size(); i++) {
-						switch (nearestShape.getMaterial()) {
-							case "normal":
-								pixelColor = RgbColor.WHITE;
-								break;
+						switch (nearestShape.getMaterial().toString().toLowerCase()) {
 							case "lambert":
-								// For every light we sum up the pixel colors
-								pixelColorAmbient = lambert.getAmbient();
 								pixelColorDiffuse = (pixelColorDiffuse == null)
-										? lambert.getDiffuse(lightList.get(i), tempIntersection)
-										: pixelColorDiffuse.add(lambert.getDiffuse(lightList.get(i), tempIntersection));
-								// Then we add the sum to the ambient
-								if (i == lightList.size()-1)
-									pixelColor = (pixelColorDiffuse != null)
-											? pixelColorAmbient.add(pixelColorDiffuse)
-											: pixelColorAmbient;
+										? shapeMaterial.getDiffuse(lightList.get(i), tempIntersection)
+										: pixelColorDiffuse.add(shapeMaterial.getDiffuse(lightList.get(i), tempIntersection));
 								break;
-							case "phong":
+								case "phong":
 								// For every light we sum up the pixel colors
-								pixelColorAmbient = phong.getAmbient();
 								pixelColorPhong = (pixelColorPhong == null)
-										? phong.getDiffuseSpecular(lightList.get(i), camera, tempIntersection)
-										: pixelColorPhong.add(phong.getDiffuseSpecular(lightList.get(i), camera, tempIntersection));
-								// Then we add the sum to the ambient
-								if (i == lightList.size()-1)
-									pixelColor = (pixelColorPhong != null)
-											? pixelColorAmbient.add(pixelColorPhong)
-											: pixelColorAmbient;
-								break;
+										? shapeMaterial.getDiffuseSpecular(lightList.get(i), camera, tempIntersection)
+										: pixelColorPhong.add(shapeMaterial.getDiffuseSpecular(lightList.get(i), camera, tempIntersection));
 							default:
 								// do nothing
 						}
+					}
+
+					// Then we add the sum to the ambient
+					switch (nearestShape.getMaterial().toString().toLowerCase()) {
+						case "lambert":
+							pixelColorAmbient = shapeMaterial.getAmbient();
+							pixelColor = (pixelColorDiffuse != null)
+									? pixelColorAmbient.add(pixelColorDiffuse)
+									: pixelColorAmbient;
+							break;
+						case "phong":
+							pixelColorAmbient = shapeMaterial.getAmbient();
+							pixelColor = (pixelColorPhong != null)
+									? pixelColorAmbient.add(pixelColorPhong)
+									: pixelColorAmbient;
 					}
 					mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 				}
