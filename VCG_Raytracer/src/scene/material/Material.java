@@ -1,5 +1,6 @@
 package scene.material;
 
+import ray.Ray;
 import scene.camera.Camera;
 import scene.light.Light;
 import utils.Intersection;
@@ -32,5 +33,6 @@ public class Material {
 
     public RgbColor getDiffuse(Light light, Intersection tempIntersection) {return  RgbColor.WHITE;}
 
-    public RgbColor getDiffuseSpecular(Light light, Camera camera, Intersection tempIntersection) {return  RgbColor.WHITE;}
+    public RgbColor getDiffuseSpecular(Light light, Intersection tempIntersection, Ray lightRay) {return  RgbColor.WHITE;}
+    public RgbColor getDiffuseSpecular(Light light, Camera camera, Intersection tempIntersection, Ray lightRay) {return  RgbColor.WHITE;}
 }

@@ -21,6 +21,7 @@ public class Sphere extends Shape {
     public Sphere(Vec3 _center, Float _radius, Material _material) {
         super(_center, _material);
         this.radius = _radius;
+        this.center = _center;
     }
 
     public float getRadius() {
@@ -37,6 +38,10 @@ public class Sphere extends Shape {
 
     public void setNormal(Vec3 normal) {
         this.normal = normal;
+    }
+
+    public Vec3 calculateNormal(Vec3 point) {
+        return point.sub(center).normalize();
     }
 
     /**

@@ -127,7 +127,7 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (0,10, 0), RgbColor.LIGHT_GRAY);
+        renderScene.createPointLight(new Vec3 (0,1.4f, 0), RgbColor.WHITE);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -135,8 +135,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-1,2,1), 1f, phongBlue);
-        renderScene.createSphere(new Vec3(1,2,5), 1f, phongRed);
+        renderScene.createSphere(new Vec3(-0.5f,0,1), 1f, phongBlue);
+        renderScene.createSphere(new Vec3(0.5f,0,2), 1f, phongRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {

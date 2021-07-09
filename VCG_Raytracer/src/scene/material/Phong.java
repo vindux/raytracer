@@ -1,5 +1,6 @@
 package scene.material;
 
+import ray.Ray;
 import scene.light.Light;
 import scene.camera.Camera;
 import utils.Intersection;
@@ -24,7 +25,7 @@ public class Phong extends Material{
         return mAmbientLight.multScalar(mAmbientCoefficient);
     }
 
-    public RgbColor getDiffuseSpecular(Light _light, Camera _camera, Intersection _intersection) {
+    public RgbColor getDiffuseSpecular(Light _light, Camera _camera, Intersection _intersection, Ray lightRay) {
         Vec3 viewVector = _camera.getViewVector();
         Vec3 normal = _intersection.getNormal().normalize();
         Vec3 lightPosition = _light.getPosition();

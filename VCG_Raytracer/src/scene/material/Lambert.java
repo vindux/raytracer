@@ -1,5 +1,6 @@
 package scene.material;
 
+import ray.Ray;
 import scene.light.Light;
 import utils.Intersection;
 import utils.RgbColor;
@@ -24,7 +25,7 @@ public class Lambert extends Material {
         return mAmbient;
     }
 
-    public RgbColor getDiffuse(Light _light, Intersection _intersection) {
+    public RgbColor getDiffuseSpecular(Light _light, Intersection _intersection, Ray lightRay) {
         Vec3 lightPosition = _light.getPosition();
         Vec3 lightVector = _intersection.getIntersectionPoint().sub(lightPosition).normalize();
         Vec3 normal = _intersection.getNormal().normalize();

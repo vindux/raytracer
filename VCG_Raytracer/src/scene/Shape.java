@@ -60,5 +60,6 @@ public class Shape extends SceneObject {
     }
 
     public double intersect(Ray ray) { return Double.NaN; }
+    public Vec3 calculateNormal(Vec3 point) {return null;}
 }
 

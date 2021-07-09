@@ -26,6 +26,10 @@ public class Plane extends Shape {
         this.material = _material;
     }
 
+    public Vec3 calculateNormal(Vec3 point) {
+        return normal;
+    }
+
     /**
      * Method that calculates intersection between a plane and a ray
      */
