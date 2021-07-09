@@ -73,7 +73,7 @@ public class Main {
     static final int GI_SAMPLES = 0;
 
     static final RgbColor LIGHT_COLOR = null;
-    static final RgbColor AMBIENT_LIGHT = null;
+    static final RgbColor AMBIENT_LIGHT = RgbColor.BLACK;
 
     static final boolean USE_AO = false;
     static final int NUMBER_OF_AO_SAMPLES = 0;
@@ -90,11 +90,12 @@ public class Main {
     static public Camera mCamera;
 
     /** MATERIALS **/
+    static Lambert lambertLightWhite = new Lambert(RgbColor.WHITE, 0.2f, 0);
     static Lambert lambertWhite = new Lambert(RgbColor.WHITE, 0.2f, 0.4f);
     static Lambert lambertBlue = new Lambert(RgbColor.BLUE, 0.9f, 0.3f);
     static Lambert lambertRed = new Lambert(RgbColor.RED, 0.9f, 0.3f);
-    static Phong phongBlue = new Phong(RgbColor.BLUE, 0.5f, 0.3f, 0.5f, 15);
-    static Phong phongRed = new Phong(RgbColor.RED, 0.5f, 0.3f, 0.5f, 15);
+    static Phong phongBlue = new Phong(RgbColor.BLUE, 0.5f, 0.3f, 0.5f, 50);
+    static Phong phongRed = new Phong(RgbColor.RED, 0.5f, 0.3f, 0.5f, 50);
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -127,7 +128,7 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (0,1.4f, 0), RgbColor.WHITE);
+        renderScene.createPointLight(new Vec3 (0,1.3f, 0), RgbColor.WHITE);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -135,16 +136,17 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-0.5f,0,1), 1f, phongBlue);
-        renderScene.createSphere(new Vec3(0.5f,0,2), 1f, phongRed);
+        renderScene.createSphere(new Vec3(-0.5f,-2,1), 1f, phongBlue);
+        renderScene.createSphere(new Vec3(0.5f,-2,2), 1f, phongRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {
-        renderScene.createPlane(new Vec3(0,0,-2), new Vec3(0,0,-1), lambertWhite);
-        renderScene.createPlane(new Vec3(0, 1.5f,0), new Vec3(0,1,0),lambertWhite);
-        renderScene.createPlane(new Vec3(0,-1.5f,0), new Vec3(0,-1,0),lambertWhite);
-        renderScene.createPlane(new Vec3(-2f,0,0), new Vec3(-1,0,0),lambertRed);
-        renderScene.createPlane(new Vec3(2f,0,0), new Vec3(1,0,0),lambertBlue);
+        renderScene.createSquare(new Vec3(0,1.45f,0), new Vec3(0,-1,0), 1, lambertRed);
+        renderScene.createPlane(new Vec3(0,0,-2), new Vec3(0,0,1), lambertWhite);
+        renderScene.createPlane(new Vec3(0, 1.5f,0), new Vec3(0,-1,0),lambertWhite);
+        renderScene.createPlane(new Vec3(0,-1.5f,0), new Vec3(0,1,0),lambertWhite);
+        renderScene.createPlane(new Vec3(-2f,0,0), new Vec3(1,0,0),lambertRed);
+        renderScene.createPlane(new Vec3(2f,0,0), new Vec3(-1,0,0),lambertBlue);
 
     }
 

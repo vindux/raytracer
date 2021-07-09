@@ -13,6 +13,7 @@ public class Shape extends SceneObject {
 
     protected Vec3 center;
     protected Vec3 normal;
+    protected float size;
     protected Material material;
     protected Matrix4x4 transformMatrix = new Matrix4x4();
 
@@ -34,13 +35,18 @@ public class Shape extends SceneObject {
         this.normal = _normal;
         this.material = _material;
     }
+    public Shape(Vec3 _center, Vec3 _normal, float _size, Material _material) {
+        this.transformMatrix.translateXYZ(_center);
+        this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
+        this.normal = _normal;
+        this.size = _size;
+        this.material = _material;
+    }
 
     public Vec3 getCenter() {
         return center;
     }
-    public void setCenter(Vec3 _center) {
-        this.center = _center;
-    }
+    public void setCenter(Vec3 _center) { this.center = _center; }
 
     public Vec3 getNormal() { return normal; }
     public void setNormal(Vec3 normal) { this.normal = normal; }

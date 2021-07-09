@@ -27,7 +27,7 @@ public class Lambert extends Material {
 
     public RgbColor getDiffuseSpecular(Light _light, Intersection _intersection, Ray lightRay) {
         Vec3 lightPosition = _light.getPosition();
-        Vec3 lightVector = _intersection.getIntersectionPoint().sub(lightPosition).normalize();
+        Vec3 lightVector = lightPosition.sub(_intersection.getIntersectionPoint()).normalize();
         Vec3 normal = _intersection.getNormal().normalize();
 
         return _light.getColor().multScalar(mDiffuseCoefficient).multScalar(normal.scalar(lightVector));

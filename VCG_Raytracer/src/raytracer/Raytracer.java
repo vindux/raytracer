@@ -93,6 +93,7 @@ public class Raytracer {
 	/** Create intersection instance **/
 	public Intersection intersect(double hitValue, Ray ray, Shape shape) {
 		Intersection intersection = new Intersection();
+		intersection.setInRay(ray.getDirection());
 		float rayTValue = ray.getT();
 		if (rayTValue == Float.NaN) {
 			intersection.setHit(false);
@@ -135,7 +136,7 @@ public class Raytracer {
 			ray = setupRay(x,y);
 			// Invert matrix and ray for transformed shape
 			Matrix4x4 inverse = shape.getTransformMatrix().invert();
-			ray.setDirection(inverse.multVec3(ray.getDirection(), false));
+			//ray.setDirection(inverse.multVec3(ray.getDirection(), false));
 			ray.setStartPoint(inverse.multVec3(ray.getStartPoint(), true));
 
 			double discriminant = shape.intersect(ray);
@@ -155,7 +156,7 @@ public class Raytracer {
 	public RgbColor calculateColor(Intersection intersection) {
 		// Depending on the material calculate the pixel color
 		RgbColor pixelColorDiffuseSpecular = null;
-		RgbColor pixelColor = null;
+		RgbColor pixelColor = mAmbientLight;
 
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
 			for (Light light : lightList) {
@@ -183,6 +184,8 @@ public class Raytracer {
 		}
 		return pixelColor;
 	}
+
+
 
 	/**  This is where our scene is actually ray-traced **/
 	public void renderScene(){

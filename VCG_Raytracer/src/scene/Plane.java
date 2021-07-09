@@ -22,12 +22,12 @@ public class Plane extends Shape {
     public Plane(Vec3 _center, Vec3 _normal, Material _material) {
         super(_center, _normal, _material);
         this.center = _center;
-        this.normal = _normal;
+        this.normal = _normal.multScalar(-1);
         this.material = _material;
     }
 
     public Vec3 calculateNormal(Vec3 point) {
-        return normal;
+        return normal.multScalar(-1);
     }
 
     /**
@@ -42,7 +42,7 @@ public class Plane extends Shape {
         float rayPlaneEquation = normal.scalar(rayDirection);
         float t;
 
-        if (Math.abs(rayPlaneEquation) > 0) {
+        if (Math.abs(rayPlaneEquation) >= 0) {
             t = center.sub(ray.getStartPoint()).scalar(normal)/rayPlaneEquation;
             if ( t >= 0 ) {
                 ray.setT(t);

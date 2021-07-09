@@ -72,7 +72,7 @@ public class Sphere extends Shape {
                 ray.setT(t0);
             } else if (discriminant > 0) {
                 if (t0 > 0 && t1 > 0) {
-                    ray.setT(Math.max(t0, t1));
+                    ray.setT(Math.min(t0, t1));
                 } else if (t0 < 0 && t1 < 0) {
                     ray.setT(Float.NaN);
                 } else if (t0 < 0 && t1 > 0) {

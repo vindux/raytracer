@@ -29,11 +29,20 @@ public class Phong extends Material{
         Vec3 viewVector = _camera.getViewVector();
         Vec3 normal = _intersection.getNormal().normalize();
         Vec3 lightPosition = _light.getPosition();
-        Vec3 lightVector = _intersection.getIntersectionPoint().sub(lightPosition).normalize();
-        Vec3 reflectionVector = (normal.sub(lightVector)).multScalar(normal.scalar(lightVector)).multScalar(2);
+        Vec3 lightVector = lightPosition.sub(_intersection.getIntersectionPoint()).normalize();
+        float diffuseScalar = normal.scalar(lightVector);
+        Vec3 reflectionVector = normal.multScalar(diffuseScalar).multScalar(2).sub(lightVector);
+        float specularScalar = reflectionVector.scalar(_intersection.getInRay().negate());
 
-        float diffuse = mDiffuseCoefficient*(normal.scalar(lightVector));
-        float specular = mSpecularCoefficient*((float) Math.pow((viewVector.scalar(reflectionVector)),mSpecularExponent));
+        if(diffuseScalar <0){
+            diffuseScalar = 0;
+        }
+
+        if(specularScalar<0){
+            specularScalar=0;
+        }
+        float diffuse = mDiffuseCoefficient*(diffuseScalar);
+        float specular = mSpecularCoefficient*((float) Math.pow(specularScalar,mSpecularExponent));
 
         return _light.getColor().multScalar(diffuse+specular);
     }
