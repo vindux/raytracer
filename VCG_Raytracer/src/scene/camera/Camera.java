@@ -96,6 +96,7 @@ public class Camera extends SceneObject {
      **/
     public Vec3 calculateDirection(float deltaX, float deltaY) {
         destinationVector = viewVector.add(sideVector.multScalar(deltaX));
+        //System.out.println(destinationVector.add(cameraUpVector.multScalar(deltaY)).add(focalPoint));
         return destinationVector.add(cameraUpVector.multScalar(deltaY)).add(focalPoint);
     }
 

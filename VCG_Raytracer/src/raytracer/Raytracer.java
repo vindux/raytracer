@@ -153,6 +153,37 @@ public class Raytracer {
 		return nearestIntersection;
 	}
 
+
+	       public Intersection getNearest(Ray lightRay, Shape self, float distance) {
+			   Intersection intersection;
+			   Intersection nearestIntersection = null;
+			   float nearest = distance;
+			   Ray ray;
+
+			   for (Shape shape : shapeList) {
+				   if (shape != self) {
+					   ray = lightRay;
+					   // Invert matrix and ray for transformed shape
+					   Matrix4x4 inverse = shape.getTransformMatrix().invert();
+					   //ray.setDirection(inverse.multVec3(ray.getDirection(), false));
+					   ray.setStartPoint(inverse.multVec3(ray.getStartPoint(), true));
+
+					   double discriminant = shape.intersect(ray);
+					   intersection = intersect(discriminant, ray, shape);
+					   // If we hit the shape we compare the distance with the current nearest shape
+					   if (intersection.isHit()) {
+						   if (intersection.getDistance() <= nearest) {
+							   nearestIntersection = intersection;
+							   nearest = intersection.getDistance();
+						   }
+					   }
+				   }
+			   }
+
+
+			   return nearestIntersection;
+		   }
+
 	public RgbColor calculateColor(Intersection intersection) {
 		// Depending on the material calculate the pixel color
 		RgbColor pixelColorDiffuseSpecular = null;
@@ -161,19 +192,21 @@ public class Raytracer {
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
 			for (Light light : lightList) {
 				Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), 1);
-				switch (intersection.getShape().getMaterial().toString().toLowerCase()) {
-					case "lambert":
-						pixelColorDiffuseSpecular = (pixelColorDiffuseSpecular == null)
-								? intersection.getShape().getMaterial().getDiffuseSpecular(light, intersection, lightRay)
-								: pixelColorDiffuseSpecular.add(intersection.getShape().getMaterial().getDiffuseSpecular(light, intersection, lightRay));
-						break;
-					case "phong":
-						// For every light we sum up the pixel colors
-						pixelColorDiffuseSpecular = (pixelColorDiffuseSpecular == null)
-								? intersection.getShape().getMaterial().getDiffuseSpecular(light, camera, intersection, lightRay)
-								: pixelColorDiffuseSpecular.add(intersection.getShape().getMaterial().getDiffuseSpecular(light, camera, intersection, lightRay));
-					default:
-						// do nothing
+				if(!inShadow(lightRay, intersection.getShape(), light)) {
+					switch (intersection.getShape().getMaterial().toString().toLowerCase()) {
+						case "lambert":
+							pixelColorDiffuseSpecular = (pixelColorDiffuseSpecular == null)
+									? intersection.getShape().getMaterial().getDiffuseSpecular(light, intersection, lightRay)
+									: pixelColorDiffuseSpecular.add(intersection.getShape().getMaterial().getDiffuseSpecular(light, intersection, lightRay));
+							break;
+						case "phong":
+							// For every light we sum up the pixel colors
+							pixelColorDiffuseSpecular = (pixelColorDiffuseSpecular == null)
+									? intersection.getShape().getMaterial().getDiffuseSpecular(light, camera, intersection, lightRay)
+									: pixelColorDiffuseSpecular.add(intersection.getShape().getMaterial().getDiffuseSpecular(light, camera, intersection, lightRay));
+						default:
+							// do nothing
+					}
 				}
 			}
 			RgbColor pixelColorAmbient = intersection.getShape().getMaterial().getAmbient();
@@ -185,6 +218,16 @@ public class Raytracer {
 		return pixelColor;
 	}
 
+   public boolean inShadow(Ray lightRay, Shape self, Light light) {
+	   boolean hit = false;
+	   float distance = lightRay.getStartPoint().sub(light.getPosition()).length();
+	   Intersection intersection = getNearest(lightRay, self, distance);
+	   if (intersection != null && intersection.isHit()) {
+	   		hit = true;
+	   }
+
+	   return hit;
+	}
 
 
 	/**  This is where our scene is actually ray-traced **/
@@ -206,3 +249,5 @@ public class Raytracer {
 		Log.print(this, "Finished rendering at " + stopTime(tStart));
 	}
 }
+
+

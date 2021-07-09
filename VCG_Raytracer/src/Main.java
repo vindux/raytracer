@@ -141,7 +141,7 @@ public class Main {
     }
 
     private static void setupCornellBox(Scene renderScene) {
-        renderScene.createSquare(new Vec3(0,1.45f,0), new Vec3(0,-1,0), 1, lambertRed);
+        //renderScene.createSquare(new Vec3(0,1.45f,0), new Vec3(0,-1,0), 1, lambertRed);
         renderScene.createPlane(new Vec3(0,0,-2), new Vec3(0,0,1), lambertWhite);
         renderScene.createPlane(new Vec3(0, 1.5f,0), new Vec3(0,-1,0),lambertWhite);
         renderScene.createPlane(new Vec3(0,-1.5f,0), new Vec3(0,1,0),lambertWhite);
