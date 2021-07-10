@@ -240,9 +240,15 @@ public class Raytracer {
 
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
 			for (Light light : lightList) {
-				calculatedColor = (calculatedColor == null)
-						? intersection.getShape().getMaterial().getColor(light, intersection)
-						: calculatedColor.add(intersection.getShape().getMaterial().getColor(light, intersection));
+				Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), light.getPosition().sub(intersection.getIntersectionPoint()).normalize(), 0f);
+				if (!inShadow(lightRay, intersection.getShape(), light)) {
+					calculatedColor = (calculatedColor == null)
+							? intersection.getShape().getMaterial().getColor(light, intersection)
+							: calculatedColor.add(intersection.getShape().getMaterial().getColor(light, intersection));
+				}
+				else {
+					return RgbColor.BLACK;
+				}
 			}
 			RgbColor pixelColorAmbient = intersection.getShape().getMaterial().getAmbient();
 			pixelColor = (calculatedColor != null)
@@ -291,6 +297,42 @@ public class Raytracer {
 		return nearestIntersection;
 	}
 
+	public Intersection getNearest(Ray lightRay, Shape self, float distance) {
+		Intersection nearestIntersection = null;
+		float nearest = distance;
+		Ray ray;
+
+		for (Shape shape : shapeList) {
+			if (shape != self) {
+				ray = lightRay;
+				Ray invertedRay = invertRay(ray, shape);
+				Intersection intersection = new Intersection();
+				intersection.setIntersectionRay(invertedRay);
+				intersection.setShape(shape);
+				intersection.intersect();
+				intersection.setIntersectionPoint();
+				intersection.setNormal();
+
+				// If we hit the shape we compare the distance with the current nearest shape
+				if (intersection.isHit()) {
+					if (intersection.getDistance() <= nearest) {
+						nearestIntersection = intersection;
+						nearest = intersection.getDistance();
+					}
+				}
+			}
+		}
+		return nearestIntersection;
+	}
+
+	public boolean inShadow(Ray lightRay, Shape self, Light light) {
+		float distance = lightRay.getStartPoint().sub(light.getPosition()).length();
+		Intersection intersection = getNearest(lightRay, self, distance);
+		if (intersection != null && intersection.isHit()) {
+			return true;
+		}
+		return false;
+	}
 
 	/**  This is where our scene is actually ray-traced **/
 	public void renderScene(){

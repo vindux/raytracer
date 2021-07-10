@@ -14,7 +14,7 @@
 
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
- <<< YOUR TEAM NAME >>>
+ <<< Rebooters >>>
 
      Master of Documentation: Timur Linden
      Master of Structure: Philipp Reichel
@@ -73,7 +73,7 @@ public class Main {
     static final int GI_SAMPLES = 0;
 
     static final RgbColor LIGHT_COLOR = null;
-    static final RgbColor AMBIENT_LIGHT = RgbColor.WHITE;
+    static final RgbColor AMBIENT_LIGHT = RgbColor.GRAY;
 
     static final boolean USE_AO = false;
     static final int NUMBER_OF_AO_SAMPLES = 0;
@@ -93,7 +93,7 @@ public class Main {
     static Lambert lambertRed = new Lambert(AMBIENT_LIGHT, new RgbColor(0.5f,0,0), new RgbColor(0.5f, 0, 0));
     static Lambert lambertBlue = new Lambert(AMBIENT_LIGHT, new RgbColor(0,0,0.5f), new RgbColor(0, 0, 0.5f));
     static Lambert lambertWhite = new Lambert(AMBIENT_LIGHT, new RgbColor(0.5f, 0.5f, 0.5f), new RgbColor(0.25f,0.25f, 0.25f));
-    static Lambert lambertSquare = new Lambert(AMBIENT_LIGHT, new RgbColor(1, 1, 1), new RgbColor(0,0, 0));
+    static Lambert lambertSquare = new Lambert(RgbColor.WHITE, new RgbColor(1, 1, 1), new RgbColor(0,0, 0));
 
     static Phong phongBlue = new Phong(RgbColor.BLUE, new RgbColor(0,0,0.75f), new RgbColor(0,0,0.75f), new RgbColor(0.8f,0.8f,0.8f), 50);
     static Phong phongRed = new Phong(RgbColor.RED, new RgbColor(0.75f,0,0), new RgbColor(0.75f,0,0), new RgbColor(0.8f,0.8f,0.8f), 50);
@@ -128,7 +128,7 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (0, 4.45f, -6), RgbColor.LIGHT_GRAY);
+        renderScene.createPointLight(new Vec3 (0, 4.40f, -6), RgbColor.LIGHT_GRAY);
     }
 
     private static void setupCameras(Scene renderScene) {
