@@ -13,13 +13,14 @@ public class Sphere extends Shape {
 
     private float radius;
     private Vec3 normal;
-    private Matrix4x4 transformationMatrix = new Matrix4x4();
+    private Matrix4x4 transformationMatrix;
 
     /** Constructor **/
     public Sphere(Vec3 _center, Float _radius, Material _material) {
         super(_center, _material);
         this.radius = _radius;
         this.center = _center;
+        this.transformationMatrix = transform();
     }
 
     public float getRadius() {
@@ -34,8 +35,8 @@ public class Sphere extends Shape {
         return normal;
     }
 
-    public void setNormal(Vec3 normal) {
-        this.normal = normal;
+    public void setNormal(Vec3 _normal) {
+        this.normal = _normal;
     }
 
     public Vec3 calculateNormal(Vec3 point) {

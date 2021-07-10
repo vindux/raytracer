@@ -133,7 +133,7 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(0,0,0), 1f, lambertGreen);
+        renderScene.createSphere(new Vec3(0,2,0), 1f, lambertGreen);
         //renderScene.createSphere(new Vec3(0.5f,-2,2), 1f, lambertRed);
     }
 

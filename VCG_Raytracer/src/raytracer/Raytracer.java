@@ -261,6 +261,18 @@ public class Raytracer {
 		return pixelColor;
 	}
 
+	public Ray invertRay(Ray _ray, Shape _shape) {
+		Ray invertedRay = new Ray(
+				new Vec3(0,0,0),
+				new Vec3(0,0,0),
+				new Vec3(0,0,0),
+				0f);
+		invertedRay.setDirection(_ray.getDirection());
+		Vec3 invertedStartPoint = _shape.getTransformMatrix().invert().multVec3(_ray.getStartPoint(), true);
+		invertedRay.setStartPoint(invertedStartPoint);
+
+		return invertedRay;
+	}
 
 	/**  This is where our scene is actually ray-traced **/
 	public void renderScene(){
@@ -276,8 +288,9 @@ public class Raytracer {
 				//mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), calculateColor(intersection), new Vec2(x, y));
 				Ray ray = setupRay(x,y);
 				for (Shape shape : shapeList) {
+					Ray invertedRay = invertRay(ray, shape);
 					Intersection intersection = new Intersection();
-					intersection.setIntersectionRay(ray);
+					intersection.setIntersectionRay(invertedRay);
 					intersection.setShape(shape);
 					intersection.intersect();
 					intersection.setIntersectionPoint();

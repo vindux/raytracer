@@ -38,7 +38,7 @@ public class Intersection {
 
     public void setIntersectionPoint() {
         Vec3 intersectionPoint = intersectionRay.getStartPoint().add(intersectionRay.getDirection().multScalar(t));
-        this.mIntersectionPoint = intersectionPoint;
+        this.mIntersectionPoint = mShape.getTransformMatrix().multVec3(intersectionPoint, true);
     }
 
     public Vec3 getNormal() {
