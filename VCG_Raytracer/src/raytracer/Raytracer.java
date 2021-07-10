@@ -235,6 +235,32 @@ public class Raytracer {
 		return ray;
 	}
 
+	public RgbColor calculateColor(Intersection intersection) {
+		// Depending on the material calculate the pixel color
+		RgbColor calculatedColor = null;
+		RgbColor pixelColor = mAmbientLight;
+
+		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
+			for (Light light : lightList) {
+				switch (intersection.getShape().getMaterial().toString().toLowerCase()) {
+					case "lambert":
+						calculatedColor = (calculatedColor == null)
+								? intersection.getShape().getMaterial().getColor(light, intersection)
+								: calculatedColor.add(intersection.getShape().getMaterial().getColor(light, intersection));
+						break;
+					default:
+						// do nothing
+				}
+			}
+			RgbColor pixelColorAmbient = intersection.getShape().getMaterial().getAmbient();
+			pixelColor = (calculatedColor != null)
+					? pixelColorAmbient.add(calculatedColor)
+					: pixelColorAmbient;
+
+		}
+		return pixelColor;
+	}
+
 
 	/**  This is where our scene is actually ray-traced **/
 	public void renderScene(){
@@ -254,9 +280,12 @@ public class Raytracer {
 					intersection.setIntersectionRay(ray);
 					intersection.setShape(shape);
 					intersection.intersect();
+					intersection.setIntersectionPoint();
+					intersection.setNormal();
 
 					if (intersection.isHit()) {
-						mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), RgbColor.YELLOW, new Vec2(x, y));
+						RgbColor pixelColor = calculateColor(intersection);
+						mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 					}
 				}
 			}

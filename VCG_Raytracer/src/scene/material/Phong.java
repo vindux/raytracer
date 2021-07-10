@@ -1,4 +1,4 @@
-package scene.material;
+/*package scene.material;
 
 import ray.Ray;
 import scene.light.Light;
@@ -15,7 +15,7 @@ public class Phong extends Material{
     /**
      * Constructor
      */
-    public Phong(RgbColor _ambientLight, float _ambientCoefficient, float _diffuseCoefficient, float _specularCoefficient, float _specularExponent) {
+   /* public Phong(RgbColor _ambientLight, float _ambientCoefficient, float _diffuseCoefficient, float _specularCoefficient, float _specularExponent) {
         super(_ambientLight, _ambientCoefficient, _diffuseCoefficient);
         this.mSpecularCoefficient = _specularCoefficient;
         this.mSpecularExponent = _specularExponent;
@@ -46,4 +46,4 @@ public class Phong extends Material{
 
         return _light.getColor().multScalar(diffuse+specular);
     }
-}
+} */

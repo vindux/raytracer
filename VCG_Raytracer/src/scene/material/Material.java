@@ -9,30 +9,29 @@ import utils.RgbColor;
 /**
  * Base class for materials
  */
-public class Material {
+public abstract class Material {
 
     protected RgbColor mAmbientLight;
-    protected float mDiffuseCoefficient;
-    protected float mAmbientCoefficient;
+    protected RgbColor mDiffuseCoefficient;
+    protected RgbColor mAmbientCoefficient;
+    protected RgbColor mAmbient;
 
     /**
      * Constructor
      */
-    public Material(RgbColor mAmbientLight, float mAmbientCoefficient, float mDiffuseCoefficient) {
-        this.mAmbientLight = mAmbientLight;
-        this.mDiffuseCoefficient = mDiffuseCoefficient;
-        this.mAmbientCoefficient = mAmbientCoefficient;
+    public Material(RgbColor _mAmbientLight, RgbColor _mAmbientCoefficient, RgbColor _mDiffuseCoefficient) {
+        this.mAmbientLight = _mAmbientLight;
+        this.mAmbientCoefficient = _mAmbientCoefficient;
+        this.mDiffuseCoefficient = _mDiffuseCoefficient;
+        this.mAmbient = _mAmbientLight.multRGB(mAmbientCoefficient);
     }
-
-    public  RgbColor getAmbient() {return  RgbColor.WHITE;}
 
     // Returning the name of the material
     public String toString() {
         return this.getClass().getSimpleName();
     }
 
-    public RgbColor getDiffuse(Light light, Intersection tempIntersection) {return  RgbColor.WHITE;}
-
-    public RgbColor getDiffuseSpecular(Light light, Intersection tempIntersection, Ray lightRay) {return  RgbColor.WHITE;}
-    public RgbColor getDiffuseSpecular(Light light, Camera camera, Intersection tempIntersection, Ray lightRay) {return  RgbColor.WHITE;}
+    public RgbColor getAmbient() { return this.mAmbient; }
+    public RgbColor getColor(Light light, Intersection intersection) {return  RgbColor.WHITE;}
+    public RgbColor getColor(Light light, Camera camera, Intersection intersection) {return  RgbColor.WHITE;}
 }

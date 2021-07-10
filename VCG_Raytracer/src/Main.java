@@ -26,7 +26,7 @@
 import raytracer.Raytracer;
 import scene.camera.Camera;
 import scene.material.Lambert;
-import scene.material.Phong;
+//import scene.material.Phong;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
@@ -90,12 +90,9 @@ public class Main {
     static public Camera mCamera;
 
     /** MATERIALS **/
-    static Lambert lambertLightWhite = new Lambert(RgbColor.WHITE, 0.2f, 0);
-    static Lambert lambertWhite = new Lambert(RgbColor.WHITE, 0.2f, 0.4f);
-    static Lambert lambertBlue = new Lambert(RgbColor.BLUE, 0.9f, 0.3f);
-    static Lambert lambertRed = new Lambert(RgbColor.RED, 0.9f, 0.3f);
-    static Phong phongBlue = new Phong(RgbColor.BLUE, 0.5f, 0.3f, 0.5f, 50);
-    static Phong phongRed = new Phong(RgbColor.RED, 0.5f, 0.3f, 0.5f, 50);
+    static Lambert lambertGreen = new Lambert(RgbColor.GREEN, new RgbColor(0,0.75f,0), new RgbColor(0f, 0.75f, 0f));
+
+    static Lambert lambertRed = new Lambert(AMBIENT_LIGHT, new RgbColor(0.75f,0,0), new RgbColor(0.75f,0,0));
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -128,7 +125,7 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (0,1.3f, 0), RgbColor.WHITE);
+        renderScene.createPointLight(new Vec3 (0,4f, 0), RgbColor.WHITE);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -136,8 +133,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(0,0,0), 1f, phongBlue);
-        //renderScene.createSphere(new Vec3(0.5f,-2,2), 1f, phongRed);
+        renderScene.createSphere(new Vec3(0,0,0), 1f, lambertGreen);
+        //renderScene.createSphere(new Vec3(0.5f,-2,2), 1f, lambertRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {

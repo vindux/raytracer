@@ -36,7 +36,8 @@ public class Intersection {
         return mIntersectionPoint;
     }
 
-    public void setIntersectionPoint(Vec3 intersectionPoint) {
+    public void setIntersectionPoint() {
+        Vec3 intersectionPoint = intersectionRay.getStartPoint().add(intersectionRay.getDirection().multScalar(t));
         this.mIntersectionPoint = intersectionPoint;
     }
 
@@ -44,7 +45,8 @@ public class Intersection {
         return mNormal;
     }
 
-    public void setNormal(Vec3 normal) {
+    public void setNormal() {
+        Vec3 normal = mShape.calculateNormal(mIntersectionPoint);
         this.mNormal = normal;
     }
 
