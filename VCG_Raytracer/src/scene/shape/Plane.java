@@ -1,6 +1,5 @@
 package scene.shape;
 
-import ray.Ray;
 import scene.material.Material;
 import utils.algebra.Matrix4x4;
 import utils.algebra.Vec3;
@@ -12,9 +11,9 @@ import utils.algebra.Vec3;
  */
 public class Plane extends Shape {
 
-    private Vec3 center;
-    private Vec3 normal;
-    private Matrix4x4 transformationMatrix;
+    protected Vec3 center;
+    protected Vec3 normal;
+    protected Matrix4x4 transformationMatrix;
 
     /**
      * Constructor
