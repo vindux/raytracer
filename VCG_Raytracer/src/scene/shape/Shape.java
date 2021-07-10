@@ -1,6 +1,5 @@
 package scene.shape;
 
-import ray.Ray;
 import scene.SceneObject;
 import scene.material.Material;
 import utils.algebra.Matrix4x4;
@@ -18,28 +17,6 @@ public abstract class Shape extends SceneObject {
     /**
      * Constructor used for basic shapes
      */
-   /* public Shape(Vec3 _center, Material _material) {
-        this.transformMatrix.translateXYZ(_center);
-        this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
-        this.material = _material;
-    }
-
-    /**
-     * Constructor used for shapes with normals e.g. planes
-     *//*
-    public Shape(Vec3 _center, Vec3 _normal, Material _material) {
-        this.transformMatrix.translateXYZ(_center);
-        this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
-        this.normal = _normal;
-        this.material = _material;
-    }
-    public Shape(Vec3 _center, Vec3 _normal, float _size, Material _material) {
-        this.transformMatrix.translateXYZ(_center);
-        this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
-        this.normal = _normal;
-        this.size = _size;
-        this.material = _material;
-    }**/
     public Shape(Vec3 _center, Material _material) {
         this.center = _center;
         this.material = _material;

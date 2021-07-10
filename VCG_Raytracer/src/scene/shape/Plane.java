@@ -1,7 +1,8 @@
-/*package scene.shape;
+package scene.shape;
 
 import ray.Ray;
 import scene.material.Material;
+import utils.algebra.Matrix4x4;
 import utils.algebra.Vec3;
 
 /**
@@ -9,47 +10,45 @@ import utils.algebra.Vec3;
  * Subclass of Shape, defines a plane that can be placed in our scene
  * A plane is described as A*x+B*y+C*z+Q=0
  */
-/*public class Plane extends Shape {
+public class Plane extends Shape {
 
     private Vec3 center;
     private Vec3 normal;
-    private Vec3 rayDirection;
-    private Vec3 rayStartPoint;
+    private Matrix4x4 transformationMatrix;
 
     /**
      * Constructor
      **/
-  /*  public Plane(Vec3 _center, Vec3 _normal, Material _material) {
-        super(_center, _normal, _material);
+    public Plane(Vec3 _center, Material _material, Vec3 _normal) {
+        super(_center, _material);
         this.center = _center;
-        this.normal = _normal.multScalar(-1);
+        this.normal = _normal;
         this.material = _material;
+        this.transformationMatrix = transform();
     }
 
+    public Matrix4x4 transform() {
+        return new Matrix4x4().translateXYZ(getPosition());
+    }
     public Vec3 calculateNormal(Vec3 point) {
-        return normal.multScalar(-1);
+        return normal;
+    }
+    public Matrix4x4 getTransformMatrix() {
+        return this.transformationMatrix;
     }
 
     /**
      * Method that calculates intersection between a plane and a ray
      */
- /*   public double intersect(Ray ray) {
-        // First, get ray parameters
-        rayDirection = ray.getDirection();
-        rayStartPoint = ray.getStartPoint();
-
+    public float intersect(Vec3 rayStartPoint, Vec3 rayDirection) {
         // Breakdown of the plane-ray equation
-        float rayPlaneEquation = normal.scalar(rayDirection);
+        float discriminant = normal.scalar(rayDirection);
         float t;
 
-        if (Math.abs(rayPlaneEquation) >= 0) {
-            t = center.sub(ray.getStartPoint()).scalar(normal)/rayPlaneEquation;
-            if ( t >= 0 ) {
-                ray.setT(t);
-            } else {
-                return Double.NaN;
-            }
+        if (discriminant < 0) {
+            t = -1 * (normal.scalar(rayStartPoint)) / discriminant;
+            return(t);
         }
-        return rayPlaneEquation;
+        return Float.NaN;
     }
-}*/
+}

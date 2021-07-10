@@ -5,6 +5,7 @@ import scene.light.PointLight;
 import scene.material.Material;
 import scene.shape.Shape;
 import scene.shape.Sphere;
+import scene.shape.Plane;
 import utils.RgbColor;
 import utils.algebra.Vec3;
 import utils.io.Log;
@@ -35,10 +36,10 @@ public class Scene {
         Sphere sphere = new Sphere(_center, _radius, _material);
         objects.add(sphere);
     }
-//    public void createPlane(Vec3 _center, Vec3 _normal, Material _material) {
-//        Plane plane = new Plane(_center, _normal, _material);
-//        objects.add(plane);
-//    }
+    public void createPlane(Vec3 _center, Vec3 _normal, Material _material) {
+        Plane plane = new Plane(_center, _material, _normal);
+        objects.add(plane);
+    }
 //    public void createSquare(Vec3 _center, Vec3 _normal, float _size, Material _material) {
 //        Square square = new Square(_center, _normal, _size, _material);
 //        objects.add(square);
