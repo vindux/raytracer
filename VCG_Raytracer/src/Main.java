@@ -80,11 +80,11 @@ public class Main {
     static final float AO_MAX_DISTANCE = 0f;
 
     /** CAMERA **/
-    static final Vec3 CAM_POS = new Vec3(0, 0, 25);
+    static final Vec3 CAM_POS = new Vec3(0, 0, 5);
     static final Vec3 LOOK_AT = new Vec3(0, 0, 0);
     static final Vec3 USER_UP_VECTOR = new Vec3(0, 1, 0);
 
-    static final float VIEW_ANGLE = 40f;
+    static final float VIEW_ANGLE = 70f;
     static final float FOCAL_LENGTH = 1f;
 
     static public Camera mCamera;
@@ -136,17 +136,17 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-0.5f,-2,1), 1f, phongBlue);
-        renderScene.createSphere(new Vec3(0.5f,-2,2), 1f, phongRed);
+        renderScene.createSphere(new Vec3(0,0,0), 1f, phongBlue);
+        //renderScene.createSphere(new Vec3(0.5f,-2,2), 1f, phongRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {
         //renderScene.createSquare(new Vec3(0,1.45f,0), new Vec3(0,-1,0), 1, lambertRed);
-        renderScene.createPlane(new Vec3(0,0,-2), new Vec3(0,0,1), lambertWhite);
-        renderScene.createPlane(new Vec3(0, 1.5f,0), new Vec3(0,-1,0),lambertWhite);
-        renderScene.createPlane(new Vec3(0,-1.5f,0), new Vec3(0,1,0),lambertWhite);
-        renderScene.createPlane(new Vec3(-2f,0,0), new Vec3(1,0,0),lambertRed);
-        renderScene.createPlane(new Vec3(2f,0,0), new Vec3(-1,0,0),lambertBlue);
+        //renderScene.createPlane(new Vec3(0,0,-2), new Vec3(0,0,1), lambertWhite);
+        //renderScene.createPlane(new Vec3(0, 1.5f,0), new Vec3(0,-1,0),lambertWhite);
+        //renderScene.createPlane(new Vec3(0,-1.5f,0), new Vec3(0,1,0),lambertWhite);
+        //renderScene.createPlane(new Vec3(-2f,0,0), new Vec3(1,0,0),lambertRed);
+        //renderScene.createPlane(new Vec3(2f,0,0), new Vec3(-1,0,0),lambertBlue);
 
     }
 

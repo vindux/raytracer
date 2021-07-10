@@ -1,6 +1,7 @@
-package scene;
+package scene.shape;
 
 import ray.Ray;
+import scene.SceneObject;
 import scene.material.Material;
 import utils.algebra.Matrix4x4;
 import utils.algebra.Vec3;
@@ -9,18 +10,15 @@ import utils.algebra.Vec3;
  * Shape class
  * Shape defines the shape of the SceneObject
  */
-public class Shape extends SceneObject {
+public abstract class Shape extends SceneObject {
 
     protected Vec3 center;
-    protected Vec3 normal;
-    protected float size;
     protected Material material;
-    protected Matrix4x4 transformMatrix = new Matrix4x4();
 
     /**
      * Constructor used for basic shapes
      */
-    public Shape(Vec3 _center, Material _material) {
+   /* public Shape(Vec3 _center, Material _material) {
         this.transformMatrix.translateXYZ(_center);
         this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
         this.material = _material;
@@ -28,7 +26,7 @@ public class Shape extends SceneObject {
 
     /**
      * Constructor used for shapes with normals e.g. planes
-     */
+     *//*
     public Shape(Vec3 _center, Vec3 _normal, Material _material) {
         this.transformMatrix.translateXYZ(_center);
         this.center = transformMatrix.multVec3(new Vec3(0,0,0), true);
@@ -41,31 +39,24 @@ public class Shape extends SceneObject {
         this.normal = _normal;
         this.size = _size;
         this.material = _material;
+    }**/
+    public Shape(Vec3 _center, Material _material) {
+        this.center = _center;
+        this.material = _material;
     }
 
-    public Vec3 getCenter() {
-        return center;
-    }
-    public void setCenter(Vec3 _center) { this.center = _center; }
+    public Material getMaterial(){return this.material;}
+    public void setMaterial(Material _material){this.material = _material;}
+    public abstract Matrix4x4 getTransformMatrix();
+    public abstract float intersect(Vec3 startPoint, Vec3 direction);
+    public abstract Vec3 calculateNormal(Vec3 point);
 
-    public Vec3 getNormal() { return normal; }
-    public void setNormal(Vec3 normal) { this.normal = normal; }
-    public Material getMaterial() {
-        return material;
-    }
-
-    public void setMaterial(Material material) {
-        this.material = material;
+    public Vec3 getPosition() {
+        return this.center;
     }
 
-    public Matrix4x4 getTransformMatrix() {
-        return transformMatrix;
+    public void setPosition(Vec3 center) {
+        this.center = center;
     }
-    public void setTransformMatrix(Matrix4x4 transformMatrix) {
-        this.transformMatrix = transformMatrix;
-    }
-
-    public double intersect(Ray ray) { return Double.NaN; }
-    public Vec3 calculateNormal(Vec3 point) {return null;}
 }
 

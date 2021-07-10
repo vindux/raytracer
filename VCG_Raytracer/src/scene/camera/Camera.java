@@ -86,18 +86,27 @@ public class Camera extends SceneObject {
         this.screenHeight = _screenHeight;
         this.screenWidth = _screenWidth;
         this.aspect_ratio = screenWidth/screenHeight;
-        this.height = 2*(Math.tan(Math.toRadians(viewAngle)/2))*focalLength;
+        this.height = 2 * Math.tan(Math.toRadians(viewAngle)/2) * focalLength;
         this.width = aspect_ratio*height;
-        this.focalPoint = cameraPosition.add(viewVector.sub(cameraPosition).multScalar(focalLength).normalize());
+        this.focalPoint = cameraPosition.add((viewVector.sub(cameraPosition)).normalize().multScalar(focalLength));
     }
 
     /**
      * Method that calculates the direction of our viewpoint
      **/
-    public Vec3 calculateDirection(float deltaX, float deltaY) {
-        destinationVector = viewVector.add(sideVector.multScalar(deltaX));
-        //System.out.println(destinationVector.add(cameraUpVector.multScalar(deltaY)).add(focalPoint));
-        return destinationVector.add(cameraUpVector.multScalar(deltaY)).add(focalPoint);
+    public Vec3 calculateDestination(float x, float y, float _width, float _height) {
+        Vec3 destinationVector;
+        Vec3 globalCoordinates = new Vec3(0, 0, 0);
+
+        globalCoordinates.x = (float) ((2 * (x + 0.5) / _width - 1) * (this.width/2));
+        globalCoordinates.y = (float) ((2 * (y + 0.5) / _height - 1) * (-1) * this.height/2);
+        globalCoordinates.z = focalPoint.z;
+
+        destinationVector = focalPoint.add(sideVector.multScalar(globalCoordinates.x).add(cameraUpVector.multScalar(globalCoordinates.y)));
+        return destinationVector;
+
+        //destinationVector = viewVector.add(sideVector.multScalar(deltaX));
+        //return destinationVector.add(cameraUpVector.multScalar(deltaY)).add(focalPoint);
     }
 
 }

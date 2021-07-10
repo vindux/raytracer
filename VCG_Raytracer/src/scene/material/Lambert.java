@@ -1,5 +1,6 @@
 package scene.material;
 
+import org.w3c.dom.css.RGBColor;
 import ray.Ray;
 import scene.light.Light;
 import utils.Intersection;

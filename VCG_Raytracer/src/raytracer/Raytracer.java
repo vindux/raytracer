@@ -16,12 +16,12 @@
 
 package raytracer;
 
+import org.w3c.dom.css.RGBColor;
 import ray.Ray;
 import scene.Scene;
-import scene.Shape;
+import scene.shape.Shape;
 import scene.camera.Camera;
 import scene.light.Light;
-import scene.material.Material;
 import ui.Window;
 import utils.*;
 import utils.algebra.Matrix4x4;
@@ -91,7 +91,7 @@ public class Raytracer {
 	}
 
 	/** Create intersection instance **/
-	public Intersection intersect(double hitValue, Ray ray, Shape shape) {
+/*	public Intersection intersect(double hitValue, Ray ray, Shape shape) {
 		Intersection intersection = new Intersection();
 		intersection.setInRay(ray.getDirection());
 		float rayTValue = ray.getT();
@@ -111,17 +111,12 @@ public class Raytracer {
 	}
 
 	public Ray setupRay(float x, float y) {
-		float screenHeight = camera.getScreenHeight();
-		float screenWidth = camera.getScreenWidth();
-		double width = camera.getWidth();
-		double height = camera.getHeight();
-
-		// First transform pixel to world coordinates
-		float deltaX = (float) ((2*(x+0.5)/screenWidth-1)*(width/2));
-		float deltaY = (float) ((2*(y+0.5)/screenHeight-1)*-(height/2));
-
-		Vec3 cameraDirection = camera.calculateDirection(deltaX,deltaY);
-		Ray ray = new Ray(camera.getCameraPosition(), cameraDirection, 1);
+		Ray ray = new Ray(camera.getCameraPosition(),
+				new Vec3(0, 0, 0),
+				new Vec3(0, 0, 0),
+				0.0f);
+		ray.setDestinationPoint(camera.calculateDestination(x, y, camera.getScreenWidth(), camera.getScreenHeight()));
+		ray.setDirection(ray.getDestinationPoint().sub(ray.getStartPoint()).normalize());
 
 		return ray;
 	}
@@ -227,6 +222,17 @@ public class Raytracer {
 	   }
 
 	   return hit;
+	} */
+
+	public Ray setupRay(float x, float y) {
+		Ray ray = new Ray(camera.getCameraPosition(),
+				new Vec3(0, 0, 0),
+				new Vec3(0, 0, 0),
+				0.0f);
+		ray.setDestinationPoint(camera.calculateDestination(x, y, camera.getScreenWidth(), camera.getScreenHeight()));
+		ray.setDirection(ray.getDestinationPoint().sub(ray.getStartPoint()).normalize());
+
+		return ray;
 	}
 
 
@@ -240,9 +246,19 @@ public class Raytracer {
 		// Iterate through every pixel
 		for(int y = 0; y < screenHeight; y++) {
 			for (int x = 0; x < screenWidth; x++) {
-				Intersection intersection = getNearest(x,y);
+				//Intersection intersection = getNearest(x,y);
+				//mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), calculateColor(intersection), new Vec2(x, y));
+				Ray ray = setupRay(x,y);
+				for (Shape shape : shapeList) {
+					Intersection intersection = new Intersection();
+					intersection.setIntersectionRay(ray);
+					intersection.setShape(shape);
+					intersection.intersect();
 
-				mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), calculateColor(intersection), new Vec2(x, y));
+					if (intersection.isHit()) {
+						mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), RgbColor.YELLOW, new Vec2(x, y));
+					}
+				}
 			}
 		}
 		mRenderWindow.exportRendering("1",1,1,true);

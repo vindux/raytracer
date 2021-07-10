@@ -1,4 +1,4 @@
-package scene;
+/*package scene.shape;
 
 import ray.Ray;
 import scene.material.Material;
@@ -9,7 +9,7 @@ import utils.algebra.Vec3;
  * Subclass of Shape, defines a plane that can be placed in our scene
  * A plane is described as A*x+B*y+C*z+Q=0
  */
-public class Plane extends Shape {
+/*public class Plane extends Shape {
 
     private Vec3 center;
     private Vec3 normal;
@@ -19,7 +19,7 @@ public class Plane extends Shape {
     /**
      * Constructor
      **/
-    public Plane(Vec3 _center, Vec3 _normal, Material _material) {
+  /*  public Plane(Vec3 _center, Vec3 _normal, Material _material) {
         super(_center, _normal, _material);
         this.center = _center;
         this.normal = _normal.multScalar(-1);
@@ -33,7 +33,7 @@ public class Plane extends Shape {
     /**
      * Method that calculates intersection between a plane and a ray
      */
-    public double intersect(Ray ray) {
+ /*   public double intersect(Ray ray) {
         // First, get ray parameters
         rayDirection = ray.getDirection();
         rayStartPoint = ray.getStartPoint();
@@ -52,4 +52,4 @@ public class Plane extends Shape {
         }
         return rayPlaneEquation;
     }
-}
+}*/

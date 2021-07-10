@@ -10,13 +10,15 @@ public class Ray {
 
     private Vec3 direction;
     private Vec3 startPoint;
-    private float t;
+    private Vec3 destinationPoint;
+    private float distance;
 
     /** Constructor **/
-    public Ray(Vec3 _startPoint, Vec3 _direction, float _t) {
+    public Ray(Vec3 _startPoint, Vec3 _destinationPoint, Vec3 _direction, float _distance) {
         this.startPoint = _startPoint;
-        this.direction = _direction.sub(startPoint).normalize();
-        this.t = _t;
+        this.destinationPoint = _destinationPoint;
+        this.direction = _direction;
+        this.distance = _distance;
     }
 
     public Vec3 getStartPoint() {
@@ -35,29 +37,11 @@ public class Ray {
         this.direction = _direction;
     }
 
-    public float getT() {
-        return t;
-    }
+    public Vec3 getDestinationPoint() { return destinationPoint; }
 
-    public void setT(float t) {
-        this.t = t;
-    }
+    public void setDestinationPoint(Vec3 destinationPoint) { this.destinationPoint = destinationPoint; }
 
-    /**
-     * Method that returns the normalized ray vector
-     * Parameter t influences the length of the vector
-     * Ray is described as : R = startPoint + t * rayDirection
-    **/
-    public Vec3 calculateRayAt() {
-        // Formulate ray
-        Vec3 rayVector = startPoint.add(direction.multScalar(t)).normalize();
+    public float getDistance() { return distance; }
 
-        // Tweak direction to adapt it to the viewplane
-        rayVector.x = (rayVector.x+1)/2;
-        rayVector.y = (rayVector.y+1)/2;
-        rayVector.z = (rayVector.z+1)/2;
-
-        return rayVector;
-    }
-
+    public void setDistance(float distance) { this.distance = distance; }
 }

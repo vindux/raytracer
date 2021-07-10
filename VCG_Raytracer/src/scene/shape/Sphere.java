@@ -1,7 +1,7 @@
-package scene;
+package scene.shape;
 
-import ray.Ray;
 import scene.material.Material;
+import utils.algebra.Matrix4x4;
 import utils.algebra.Vec3;
 
 /**
@@ -11,11 +11,9 @@ import utils.algebra.Vec3;
  */
 public class Sphere extends Shape {
 
-    private Vec3 center;
     private float radius;
-    private Vec3 rayDirection;
-    private Vec3 rayStartPoint;
     private Vec3 normal;
+    private Matrix4x4 transformationMatrix = new Matrix4x4();
 
     /** Constructor **/
     public Sphere(Vec3 _center, Float _radius, Material _material) {
@@ -44,44 +42,49 @@ public class Sphere extends Shape {
         return point.sub(center).normalize();
     }
 
+    public Matrix4x4 getTransformMatrix() {
+        return this.transformationMatrix;
+    }
+
+    public Matrix4x4 transform() {
+        return new Matrix4x4().translateXYZ(getPosition());
+    }
+
     /**
      * Method that calculates intersection between a sphere and a ray
      */
-    public double intersect(Ray ray) {
-        // First, get ray parameters
-        rayDirection = ray.getDirection();
-        rayStartPoint = ray.getStartPoint();
-
+    public float intersect(Vec3 rayStartPoint, Vec3 rayDirection) {
         // Set equations describing the discriminant
-        double raySphereEquation1 = 2*(rayStartPoint.x * rayDirection.x + rayStartPoint.y * rayDirection.y + rayStartPoint.z * rayDirection.z);
-        double raySphereEquation2 = Math.pow(rayStartPoint.x, 2) + Math.pow(rayStartPoint.y, 2) + Math.pow(rayStartPoint.z, 2) - Math.pow(radius,2);
-        double discriminant = Math.pow(raySphereEquation1, 2)-4*raySphereEquation2;
+        double raySphereEquation1 = 2*(rayStartPoint.scalar(rayDirection));
+        double raySphereEquation2 = rayStartPoint.scalar(rayStartPoint) - Math.pow(radius,2);
+        double discriminant = Math.pow(raySphereEquation1, 2) - 4 * raySphereEquation2;
 
         /*
          * Do the intersection test
          * The discriminant can already lead to an answer without calculating everything
          */
         if (discriminant < 0) {
-            return Double.NaN;
+            return Float.NaN;
         } else {
-            float t0 = (float) ((-(raySphereEquation1)-Math.sqrt(Math.pow(raySphereEquation1,2)-4*raySphereEquation2))/2);
-            float t1 = (float) ((-(raySphereEquation1)+Math.sqrt(Math.pow(raySphereEquation1,2)-4*raySphereEquation2))/2);
+            float t0 = (float) ((-(raySphereEquation1)-Math.sqrt(discriminant))/2);
+            float t1 = (float) ((-(raySphereEquation1)+Math.sqrt(discriminant))/2);
 
             if (discriminant == 0) {
                 // It does not matter which t we take since both are equal
-                ray.setT(t0);
+                return t0;
             } else if (discriminant > 0) {
-                if (t0 > 0 && t1 > 0) {
-                    ray.setT(Math.min(t0, t1));
-                } else if (t0 < 0 && t1 < 0) {
-                    ray.setT(Float.NaN);
-                } else if (t0 < 0 && t1 > 0) {
-                    ray.setT(t1);
-                } else if (t0 > 0 && t1 < 0) {
-                    ray.setT(t0);
+                if(t0 < 0.01f && t1 >= 0.01f || t1 < 0.01f && t0 >= 0.01f) {
+                    // inside a sphere
+                    return Math.max(t0, t1);
+                } else if (t0 >= 0.01f && t1 >= 0.01f) {
+                    // hit
+                    return Math.min(t0, t1);
+                } else {
+                    // no hit
+                    return Float.NaN;
                 }
             }
         }
-        return discriminant;
+        return Float.NaN;
     }
 }
