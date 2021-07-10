@@ -274,6 +274,32 @@ public class Raytracer {
 		return invertedRay;
 	}
 
+	/** Get nearest intersection with shape **/
+	public Intersection getNearest(float x, float y) {
+		float nearest = 99999;
+		Intersection nearestIntersection = null;
+
+		Ray ray = setupRay(x,y);
+		for (Shape shape : shapeList) {
+			Ray invertedRay = invertRay(ray, shape);
+			Intersection intersection = new Intersection();
+			intersection.setIntersectionRay(invertedRay);
+			intersection.setShape(shape);
+			intersection.intersect();
+			intersection.setIntersectionPoint();
+			intersection.setNormal();
+
+			if (intersection.isHit()) {
+				if (intersection.getDistance() <= nearest) {
+					nearestIntersection = intersection;
+					nearest = intersection.getDistance();
+				}
+			}
+		}
+		return nearestIntersection;
+	}
+
+
 	/**  This is where our scene is actually ray-traced **/
 	public void renderScene(){
 		Log.print(this, "Prepare rendering at " + stopTime(tStart));
@@ -284,23 +310,9 @@ public class Raytracer {
 		// Iterate through every pixel
 		for(int y = 0; y < screenHeight; y++) {
 			for (int x = 0; x < screenWidth; x++) {
-				//Intersection intersection = getNearest(x,y);
-				//mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), calculateColor(intersection), new Vec2(x, y));
-				Ray ray = setupRay(x,y);
-				for (Shape shape : shapeList) {
-					Ray invertedRay = invertRay(ray, shape);
-					Intersection intersection = new Intersection();
-					intersection.setIntersectionRay(invertedRay);
-					intersection.setShape(shape);
-					intersection.intersect();
-					intersection.setIntersectionPoint();
-					intersection.setNormal();
-
-					if (intersection.isHit()) {
-						RgbColor pixelColor = calculateColor(intersection);
-						mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
-					}
-				}
+				Intersection intersection = getNearest(x,y);
+				RgbColor pixelColor = calculateColor(intersection);
+				mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 			}
 		}
 		mRenderWindow.exportRendering("1",1,1,true);
