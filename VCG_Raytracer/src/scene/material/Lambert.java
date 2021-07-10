@@ -36,4 +36,8 @@ public class Lambert extends Material {
     public RgbColor getColor(Light _light, Intersection _intersection) {
         return getDiffuse(_light, _intersection);
     }
+
+    public boolean isReflective() {
+        return false;
+    }
 }

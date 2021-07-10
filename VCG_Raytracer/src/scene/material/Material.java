@@ -1,10 +1,10 @@
 package scene.material;
 
 import ray.Ray;
-import scene.camera.Camera;
 import scene.light.Light;
 import utils.Intersection;
 import utils.RgbColor;
+import utils.algebra.Vec3;
 
 /**
  * Base class for materials
@@ -33,4 +33,12 @@ public abstract class Material {
 
     public RgbColor getAmbient() { return this.mAmbient; }
     public RgbColor getColor(Light light, Intersection intersection) {return  RgbColor.WHITE;}
+    public Ray calculateReflection(Intersection _intersection) {
+        return new Ray(
+            new Vec3(0,0,0),
+            new Vec3(0,0,0),
+            new Vec3(0,0,0),
+            0f);
+    }
+    public abstract boolean isReflective();
 }

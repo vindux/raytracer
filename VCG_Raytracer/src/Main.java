@@ -95,8 +95,8 @@ public class Main {
     static Lambert lambertWhite = new Lambert(AMBIENT_LIGHT, new RgbColor(0.5f, 0.5f, 0.5f), new RgbColor(0.25f,0.25f, 0.25f));
     static Lambert lambertSquare = new Lambert(RgbColor.WHITE, new RgbColor(1, 1, 1), new RgbColor(0,0, 0));
 
-    static Phong phongBlue = new Phong(RgbColor.BLUE, new RgbColor(0,0,0.75f), new RgbColor(0,0,0.75f), new RgbColor(0.8f,0.8f,0.8f), 50);
-    static Phong phongRed = new Phong(RgbColor.RED, new RgbColor(0.75f,0,0), new RgbColor(0.75f,0,0), new RgbColor(0.8f,0.8f,0.8f), 50);
+    static Phong phongBlue = new Phong(RgbColor.BLUE, new RgbColor(0,0,0.75f), new RgbColor(0,0,0.75f), new RgbColor(0.8f,0.8f,0.8f), 50, 1f);
+    static Phong phongRed = new Phong(RgbColor.RED, new RgbColor(0.75f,0,0), new RgbColor(0.75f,0,0), new RgbColor(0.8f,0.8f,0.8f), 50, 0f);
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -148,6 +148,8 @@ public class Main {
         renderScene.createPlane(new Vec3(-6f,0,0), new Vec3(1,0,0),lambertRed);
         renderScene.createPlane(new Vec3(6f,0,0), new Vec3(-1,0,0),lambertBlue);
 
+        // behind camera
+        renderScene.createPlane(new Vec3(0,0,10), new Vec3(0,0,-1), lambertWhite);
     }
 
     /** Create our personal renderer and give it all of our items and prefs to calculate our scene **/

@@ -18,6 +18,7 @@ package raytracer;
 
 import ray.Ray;
 import scene.Scene;
+import scene.material.Material;
 import scene.shape.Shape;
 import scene.camera.Camera;
 import scene.light.Light;
@@ -89,25 +90,6 @@ public class Raytracer {
 	}
 
 	/** Create intersection instance **/
-/*	public Intersection intersect(double hitValue, Ray ray, Shape shape) {
-		Intersection intersection = new Intersection();
-		intersection.setInRay(ray.getDirection());
-		float rayTValue = ray.getT();
-		if (rayTValue == Float.NaN) {
-			intersection.setHit(false);
-			return intersection;
-		}
-		intersection.setShape(shape);
-		intersection.setHit(hitValue >= 0);
-		if (intersection.isHit()) {
-			Vec3 rayDefinition = ray.getStartPoint().add(ray.getDirection().multScalar(ray.getT()));
-			intersection.setIntersectionPoint(shape.getTransformMatrix().multVec3(rayDefinition, true));
-			intersection.setNormal(shape.calculateNormal(intersection.getIntersectionPoint()));
-			intersection.setDistance(intersection.getIntersectionPoint().sub(ray.getStartPoint()).length());
-		}
-		return intersection;
-	}
-
 	public Ray setupRay(float x, float y) {
 		Ray ray = new Ray(camera.getCameraPosition(),
 				new Vec3(0, 0, 0),
@@ -119,142 +101,36 @@ public class Raytracer {
 		return ray;
 	}
 
-	public Intersection getNearest(float x, float y) {
-		Intersection intersection;
-		Intersection nearestIntersection = null;
-		float nearest = 99999;
-		Ray ray;
-
-		for (Shape shape : shapeList ) {
-			ray = setupRay(x,y);
-			// Invert matrix and ray for transformed shape
-			Matrix4x4 inverse = shape.getTransformMatrix().invert();
-			//ray.setDirection(inverse.multVec3(ray.getDirection(), false));
-			ray.setStartPoint(inverse.multVec3(ray.getStartPoint(), true));
-
-			double discriminant = shape.intersect(ray);
-			intersection = intersect(discriminant, ray, shape);
-
-			// If we hit the shape we compare the distance with the current nearest shape
-			if (intersection.isHit()) {
-				if (intersection.getDistance() <= nearest) {
-					nearestIntersection = intersection;
-					nearest = intersection.getDistance();
-				}
-			}
-		}
-		return nearestIntersection;
-	}
-
-
-	       public Intersection getNearest(Ray lightRay, Shape self, float distance) {
-			   Intersection intersection;
-			   Intersection nearestIntersection = null;
-			   float nearest = distance;
-			   Ray ray;
-
-			   for (Shape shape : shapeList) {
-				   if (shape != self) {
-					   ray = lightRay;
-					   // Invert matrix and ray for transformed shape
-					   Matrix4x4 inverse = shape.getTransformMatrix().invert();
-					   //ray.setDirection(inverse.multVec3(ray.getDirection(), false));
-					   ray.setStartPoint(inverse.multVec3(ray.getStartPoint(), true));
-
-					   double discriminant = shape.intersect(ray);
-					   intersection = intersect(discriminant, ray, shape);
-					   // If we hit the shape we compare the distance with the current nearest shape
-					   if (intersection.isHit()) {
-						   if (intersection.getDistance() <= nearest) {
-							   nearestIntersection = intersection;
-							   nearest = intersection.getDistance();
-						   }
-					   }
-				   }
-			   }
-
-
-			   return nearestIntersection;
-		   }
-
-	public RgbColor calculateColor(Intersection intersection) {
-		// Depending on the material calculate the pixel color
-		RgbColor pixelColorDiffuseSpecular = null;
-		RgbColor pixelColor = mAmbientLight;
-
-		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
-			for (Light light : lightList) {
-				Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), 1);
-				if(!inShadow(lightRay, intersection.getShape(), light)) {
-					switch (intersection.getShape().getMaterial().toString().toLowerCase()) {
-						case "lambert":
-							pixelColorDiffuseSpecular = (pixelColorDiffuseSpecular == null)
-									? intersection.getShape().getMaterial().getDiffuseSpecular(light, intersection, lightRay)
-									: pixelColorDiffuseSpecular.add(intersection.getShape().getMaterial().getDiffuseSpecular(light, intersection, lightRay));
-							break;
-						case "phong":
-							// For every light we sum up the pixel colors
-							pixelColorDiffuseSpecular = (pixelColorDiffuseSpecular == null)
-									? intersection.getShape().getMaterial().getDiffuseSpecular(light, camera, intersection, lightRay)
-									: pixelColorDiffuseSpecular.add(intersection.getShape().getMaterial().getDiffuseSpecular(light, camera, intersection, lightRay));
-						default:
-							// do nothing
-					}
-				}
-			}
-			RgbColor pixelColorAmbient = intersection.getShape().getMaterial().getAmbient();
-			pixelColor = (pixelColorDiffuseSpecular != null)
-					? pixelColorAmbient.add(pixelColorDiffuseSpecular)
-					: pixelColorAmbient;
-
-		}
-		return pixelColor;
-	}
-
-   public boolean inShadow(Ray lightRay, Shape self, Light light) {
-	   boolean hit = false;
-	   float distance = lightRay.getStartPoint().sub(light.getPosition()).length();
-	   Intersection intersection = getNearest(lightRay, self, distance);
-	   if (intersection != null && intersection.isHit()) {
-	   		hit = true;
-	   }
-
-	   return hit;
-	} */
-
-	public Ray setupRay(float x, float y) {
-		Ray ray = new Ray(camera.getCameraPosition(),
-				new Vec3(0, 0, 0),
-				new Vec3(0, 0, 0),
-				0.0f);
-		ray.setDestinationPoint(camera.calculateDestination(x, y, camera.getScreenWidth(), camera.getScreenHeight()));
-		ray.setDirection(ray.getDestinationPoint().sub(ray.getStartPoint()).normalize());
-
-		return ray;
-	}
-
-	public RgbColor calculateColor(Intersection intersection) {
+	public RgbColor calculateColor(Intersection intersection, RgbColor _pixelColor) {
 		// Depending on the material calculate the pixel color
 		RgbColor calculatedColor = null;
-		RgbColor pixelColor = mAmbientLight;
+		RgbColor pixelColor = _pixelColor;
 
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
-			for (Light light : lightList) {
-				Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), light.getPosition().sub(intersection.getIntersectionPoint()).normalize(), 0f);
-				if (!inShadow(lightRay, intersection.getShape(), light)) {
-					calculatedColor = (calculatedColor == null)
-							? intersection.getShape().getMaterial().getColor(light, intersection)
-							: calculatedColor.add(intersection.getShape().getMaterial().getColor(light, intersection));
+			Material shapeMaterial = intersection.getShape().getMaterial();
+			if(shapeMaterial.isReflective()) {
+				Ray reflectionRay = shapeMaterial.calculateReflection(intersection);
+				Intersection nextIntersection = getNearest(reflectionRay, intersection.getShape(), 9999f);
+				if(nextIntersection.isHit()) {
+					pixelColor = intersection.getShape().getMaterial().getAmbient();
+					calculateColor(nextIntersection, pixelColor);
 				}
-				else {
-					return RgbColor.BLACK;
+			} else {
+				for (Light light : lightList) {
+					Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), light.getPosition().sub(intersection.getIntersectionPoint()).normalize(), 0f);
+					if (!inShadow(lightRay, intersection.getShape(), light)) {
+						calculatedColor = (calculatedColor == null)
+								? shapeMaterial.getColor(light, intersection)
+								: calculatedColor.add(shapeMaterial.getColor(light, intersection));
+					} else {
+						return RgbColor.BLACK;
+					}
 				}
+				RgbColor pixelColorAmbient = shapeMaterial.getAmbient();
+				pixelColor = (calculatedColor != null)
+						? pixelColorAmbient.add(calculatedColor)
+						: pixelColorAmbient;
 			}
-			RgbColor pixelColorAmbient = intersection.getShape().getMaterial().getAmbient();
-			pixelColor = (calculatedColor != null)
-					? pixelColorAmbient.add(calculatedColor)
-					: pixelColorAmbient;
-
 		}
 		return pixelColor;
 	}
@@ -345,7 +221,7 @@ public class Raytracer {
 		for(int y = 0; y < screenHeight; y++) {
 			for (int x = 0; x < screenWidth; x++) {
 				Intersection intersection = getNearest(x,y);
-				RgbColor pixelColor = calculateColor(intersection);
+				RgbColor pixelColor = calculateColor(intersection, mAmbientLight);
 				mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 			}
 		}
