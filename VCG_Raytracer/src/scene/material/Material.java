@@ -33,5 +33,4 @@ public abstract class Material {
 
     public RgbColor getAmbient() { return this.mAmbient; }
     public RgbColor getColor(Light light, Intersection intersection) {return  RgbColor.WHITE;}
-    public RgbColor getColor(Light light, Camera camera, Intersection intersection) {return  RgbColor.WHITE;}
 }

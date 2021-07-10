@@ -26,7 +26,7 @@
 import raytracer.Raytracer;
 import scene.camera.Camera;
 import scene.material.Lambert;
-//import scene.material.Phong;
+import scene.material.Phong;
 import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
@@ -93,9 +93,11 @@ public class Main {
     static Lambert lambertGreen = new Lambert(RgbColor.GREEN, new RgbColor(0,0.75f,0), new RgbColor(0f, 0.75f, 0f));
     static Lambert lambertRed = new Lambert(RgbColor.RED, new RgbColor(0.75f,0,0), new RgbColor(0.75f, 0f, 0f));
 
+    static Phong phongBlue = new Phong(RgbColor.BLUE, new RgbColor(0,0,0.75f), new RgbColor(0,0,0.75f), new RgbColor(0.8f,0.8f,0.8f), 50);
+    static Phong phongRed = new Phong(RgbColor.RED, new RgbColor(0.75f,0,0), new RgbColor(0.75f,0,0), new RgbColor(0.8f,0.8f,0.8f), 50);
+
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
-
 
     /** Initial method. This is where the show begins. **/
     public static void main(String[] args){
@@ -132,8 +134,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(0.5f,0,1), 1f, lambertGreen);
-        renderScene.createSphere(new Vec3(-1f,0,-2), 1f, lambertRed);
+        renderScene.createSphere(new Vec3(0.5f, 0, 1), 1f, phongBlue);
+        renderScene.createSphere(new Vec3(-1f, 0, -2), 1f, phongRed);
     }
 
     private static void setupCornellBox(Scene renderScene) {

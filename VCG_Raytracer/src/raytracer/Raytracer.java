@@ -16,7 +16,6 @@
 
 package raytracer;
 
-import org.w3c.dom.css.RGBColor;
 import ray.Ray;
 import scene.Scene;
 import scene.shape.Shape;
@@ -24,7 +23,6 @@ import scene.camera.Camera;
 import scene.light.Light;
 import ui.Window;
 import utils.*;
-import utils.algebra.Matrix4x4;
 import utils.algebra.Vec2;
 import utils.algebra.Vec3;
 import utils.io.Log;
@@ -242,15 +240,9 @@ public class Raytracer {
 
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
 			for (Light light : lightList) {
-				switch (intersection.getShape().getMaterial().toString().toLowerCase()) {
-					case "lambert":
-						calculatedColor = (calculatedColor == null)
-								? intersection.getShape().getMaterial().getColor(light, intersection)
-								: calculatedColor.add(intersection.getShape().getMaterial().getColor(light, intersection));
-						break;
-					default:
-						// do nothing
-				}
+				calculatedColor = (calculatedColor == null)
+						? intersection.getShape().getMaterial().getColor(light, intersection)
+						: calculatedColor.add(intersection.getShape().getMaterial().getColor(light, intersection));
 			}
 			RgbColor pixelColorAmbient = intersection.getShape().getMaterial().getAmbient();
 			pixelColor = (calculatedColor != null)
