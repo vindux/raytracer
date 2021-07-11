@@ -74,8 +74,6 @@ public class Raytracer {
 		camera = _camera;
 		shapeList = mScene.getObjects();
 		lightList = mScene.getLights();
-
-		this.exportRendering();
 	}
 
 	/**  Send the created window to the frame delivered by JAVA to display our result **/
@@ -226,6 +224,7 @@ public class Raytracer {
 			}
 		}
 		mRenderWindow.exportRendering("1",1,1,true);
+		this.exportRendering();
 		Log.print(this, "Finished rendering at " + stopTime(tStart));
 	}
 }
