@@ -40,4 +40,11 @@ public class Lambert extends Material {
     public boolean isReflective() {
         return false;
     }
+    public boolean isRefractive() { return false; }
+    public float getRefractionCoefficient() {
+        return 0f;
+    }
+    public float getRefractiveIndex() {
+        return 1f;
+    }
 }

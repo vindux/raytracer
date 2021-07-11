@@ -40,5 +40,15 @@ public abstract class Material {
             new Vec3(0,0,0),
             0f);
     }
+    public Ray calculateRefraction(Intersection _intersection, float _entryIndex, float _exitIndex) {
+        return new Ray(
+            new Vec3(0,0,0),
+            new Vec3(0,0,0),
+            new Vec3(0,0,0),
+            0f);
+    }
     public abstract boolean isReflective();
+    public abstract boolean isRefractive();
+    public abstract float getRefractionCoefficient();
+    public abstract float getRefractiveIndex();
 }

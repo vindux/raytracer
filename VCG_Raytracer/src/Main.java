@@ -54,7 +54,7 @@ public class Main {
     static final float BOX_DIMENSION = 4f;
 
     /** RAYTRACER **/
-    static final int RECURSIONS = 8;
+    static final int RECURSIONS = 4;
     static final int ANTI_ALIASING = 1;
     static final boolean USE_SOFT_SHADOWS = false;
 
@@ -90,11 +90,13 @@ public class Main {
     static public Camera mCamera;
 
     /** MATERIALS **/
+
+    /** LAMBERT **/
     static Lambert lambertRed = new Lambert(AMBIENT_LIGHT,
-            new RgbColor(0.15f,0,0),
+            new RgbColor(0.1f,0.1f,0.1f),
             new RgbColor(0.5f, 0, 0));
     static Lambert lambertBlue = new Lambert(AMBIENT_LIGHT,
-            new RgbColor(0,0,0.15f),
+            new RgbColor(0.1f,0.1f,0.1f),
             new RgbColor(0, 0, 0.5f));
     static Lambert lambertWhite = new Lambert(AMBIENT_LIGHT,
             new RgbColor(0.15f, 0.15f, 0.15f),
@@ -102,22 +104,41 @@ public class Main {
     static Lambert lambertGray = new Lambert(AMBIENT_LIGHT,
             new RgbColor(0.15f, 0.15f, 0.15f),
             new RgbColor(0.15f,0.15f, 0.15f));
-    static Lambert lambertSquare = new Lambert(RgbColor.WHITE,
+    static Lambert lambertSquareWhite = new Lambert(RgbColor.WHITE,
             new RgbColor(1, 1, 1),
             new RgbColor(0,0, 0));
 
-    static Phong phongBlue = new Phong(RgbColor.BLUE,
-            new RgbColor(0,0,0.75f),
+    /** PHONG **/
+    static Phong phongGray = new Phong(AMBIENT_LIGHT,
+            new RgbColor(0.1f,0.1f,0.1f),
+            new RgbColor(0.5f,0.5f,0.5f),
+            new RgbColor(1f,1f,1f),
+            50,
+            1f);
+
+    /** REFRACTIVE MATERIALS **/
+    static Phong water = new Phong(AMBIENT_LIGHT,
+            new RgbColor(0,0,0.25f),
+            new RgbColor(0,0,0.25f),
+            new RgbColor(0,0,0.25f),
+            50,
+            1f,
+            1.3f);
+    static Phong glass = new Phong(AMBIENT_LIGHT,
+            new RgbColor(0.75f,0,0),
             new RgbColor(0.75f,0,0),
             new RgbColor(0.8f,0.8f,0.8f),
             50,
-            1f);
-    static Phong phongRed = new Phong(RgbColor.RED,
+            1f,
+            1.5f);
+    static Phong diamond = new Phong(AMBIENT_LIGHT,
             new RgbColor(0.75f,0,0),
             new RgbColor(0.75f,0,0),
             new RgbColor(0.8f,0.8f,0.8f),
-            50,
-            1f);
+            1f,
+            1f,
+            1.8f);
+
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -158,18 +179,22 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(1.5f, -3.25f, -7), 1.5f, phongBlue);
-        renderScene.createSphere(new Vec3(-1f, -3.25f, -5), 1.5f, phongRed);
+        renderScene.createSphere(new Vec3(1.5f, -3.25f, -7), 1.5f, lambertRed);
+        renderScene.createSphere(new Vec3(-1f, -3.25f, -5), 1.5f, water);
     }
 
     private static void setupCornellBox(Scene renderScene) {
-        renderScene.createSquare(new Vec3(0,4.45f,-6), new Vec3(0,-1,0), 2,lambertSquare);
+        renderScene.createSquare(new Vec3(0,4.45f,-6), new Vec3(0,-1,0), 2, lambertSquareWhite);
+        // back
         renderScene.createPlane(new Vec3(0,0,-10), new Vec3(0,0,1), lambertWhite);
+        // ceiling
         renderScene.createPlane(new Vec3(0, 4.5f,0), new Vec3(0,-1,0),lambertWhite);
+        // ground
         renderScene.createPlane(new Vec3(0,-4.5f,0), new Vec3(0,1,0),lambertWhite);
+        // left
         renderScene.createPlane(new Vec3(-6f,0,0), new Vec3(1,0,0),lambertRed);
+        // right
         renderScene.createPlane(new Vec3(6f,0,0), new Vec3(-1,0,0),lambertBlue);
-
         // behind camera
         renderScene.createPlane(new Vec3(0,0,10), new Vec3(0,0,-1), lambertGray);
     }

@@ -54,7 +54,8 @@ public class Raytracer {
 	private long tStart;
 	private ArrayList<Shape> shapeList;
 	private ArrayList<Light> lightList;
-	int counter = 0;
+	private int counter = 0;
+	private float currentIndex = 0;
 
 	/**  Constructor **/
 	public Raytracer(Scene _scene, Window _renderWindow, int _recursions, RgbColor _backColor, RgbColor _ambientLight, int _antiAliasingSamples, boolean _debugOn, Camera _camera){
@@ -112,6 +113,10 @@ public class Raytracer {
 				Ray reflectionRay = shapeMaterial.calculateReflection(intersection);
 				Intersection nextIntersection = getNearest(reflectionRay, intersection.getShape(), 9999f);
 				pixelColor = calculateColor(nextIntersection);
+			} else if (shapeMaterial.isRefractive() && counter < mMaxRecursions) {
+				counter++;
+				currentIndex = shapeMaterial.getRefractiveIndex();
+				pixelColor = calculateRefraction(intersection);
 			} else {
 				for (Light light : lightList) {
 					Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), light.getPosition().sub(intersection.getIntersectionPoint()).normalize(), 0f);
@@ -120,7 +125,7 @@ public class Raytracer {
 								? shapeMaterial.getColor(light, intersection)
 								: calculatedColor.add(shapeMaterial.getColor(light, intersection));
 					} else {
-						return RgbColor.DARK_GRAY;
+						return shapeMaterial.getAmbient();
 					}
 				}
 				RgbColor pixelColorAmbient = shapeMaterial.getAmbient();
@@ -206,6 +211,24 @@ public class Raytracer {
 			return true;
 		}
 		return false;
+	}
+
+	public RgbColor calculateRefraction(Intersection _intersection) {
+		RgbColor pixelColor;
+		Ray refractionRay;
+		Material shapeMaterial = _intersection.getShape().getMaterial();
+		float entryIndex = 0, exitIndex = 0;
+		if (currentIndex == shapeMaterial.getRefractiveIndex()) { // we start inside the sphere
+			entryIndex = currentIndex;
+			exitIndex = 1f;
+		}
+
+		refractionRay = shapeMaterial.calculateRefraction(_intersection, entryIndex, exitIndex);
+		Intersection nextIntersection = getNearest(refractionRay, _intersection.getShape(), 9999f);
+
+		pixelColor = calculateColor(nextIntersection).multScalar(shapeMaterial.getRefractionCoefficient());
+
+		return pixelColor;
 	}
 
 	/**  This is where our scene is actually ray-traced **/
