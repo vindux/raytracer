@@ -55,7 +55,7 @@ public class Raytracer {
 	private ArrayList<Shape> shapeList;
 	private ArrayList<Light> lightList;
 	private int counter = 0;
-	private float currentIndex = 0;
+	private float currentIndex = 1;
 
 	/**  Constructor **/
 	public Raytracer(Scene _scene, Window _renderWindow, int _recursions, RgbColor _backColor, RgbColor _ambientLight, int _antiAliasingSamples, boolean _debugOn, Camera _camera){
@@ -115,7 +115,6 @@ public class Raytracer {
 				pixelColor = calculateColor(nextIntersection);
 			} else if (shapeMaterial.isRefractive() && counter < mMaxRecursions) {
 				counter++;
-				currentIndex = shapeMaterial.getRefractiveIndex();
 				pixelColor = calculateRefraction(intersection);
 			} else {
 				for (Light light : lightList) {
@@ -181,23 +180,22 @@ public class Raytracer {
 		float nearest = distance;
 		Ray ray;
 
+		//if (shape != self) { }
 		for (Shape shape : shapeList) {
-			if (shape != self) {
-				ray = lightRay;
-				Ray invertedRay = invertRay(ray, shape);
-				Intersection intersection = new Intersection();
-				intersection.setIntersectionRay(invertedRay);
-				intersection.setShape(shape);
-				intersection.intersect();
-				intersection.setIntersectionPoint();
-				intersection.setNormal();
+			ray = lightRay;
+			Ray invertedRay = invertRay(ray, shape);
+			Intersection intersection = new Intersection();
+			intersection.setIntersectionRay(invertedRay);
+			intersection.setShape(shape);
+			intersection.intersect();
+			intersection.setIntersectionPoint();
+			intersection.setNormal();
 
-				// If we hit the shape we compare the distance with the current nearest shape
-				if (intersection.isHit()) {
-					if (intersection.getDistance() <= nearest) {
-						nearestIntersection = intersection;
-						nearest = intersection.getDistance();
-					}
+			// If we hit the shape we compare the distance with the current nearest shape
+			if (intersection.isHit()) {
+				if (intersection.getDistance() <= nearest) {
+					nearestIntersection = intersection;
+					nearest = intersection.getDistance();
 				}
 			}
 		}
@@ -214,19 +212,26 @@ public class Raytracer {
 	}
 
 	public RgbColor calculateRefraction(Intersection _intersection) {
-		RgbColor pixelColor;
+		RgbColor pixelColor = mAmbientLight;
 		Ray refractionRay;
 		Material shapeMaterial = _intersection.getShape().getMaterial();
-		float entryIndex = 0, exitIndex = 0;
-		if (currentIndex == shapeMaterial.getRefractiveIndex()) { // we start inside the sphere
+		boolean inside = false;
+		float entryIndex = 1;
+		float exitIndex = shapeMaterial.getRefractiveIndex();
+		if (currentIndex == exitIndex) { // we start inside the sphere
 			entryIndex = currentIndex;
 			exitIndex = 1f;
+			currentIndex = exitIndex;
+			inside = true;
 		}
+		currentIndex = exitIndex;
 
-		refractionRay = shapeMaterial.calculateRefraction(_intersection, entryIndex, exitIndex);
+		refractionRay = shapeMaterial.calculateRefraction(_intersection, entryIndex, exitIndex, inside);
+		refractionRay.setStartPoint(_intersection.getIntersectionPoint());
 		Intersection nextIntersection = getNearest(refractionRay, _intersection.getShape(), 9999f);
-
-		pixelColor = calculateColor(nextIntersection).multScalar(shapeMaterial.getRefractionCoefficient());
+		System.out.println(nextIntersection.getShape().toString());
+		if (nextIntersection != null)
+			pixelColor = calculateColor(nextIntersection).multScalar(shapeMaterial.getRefractionCoefficient());
 
 		return pixelColor;
 	}

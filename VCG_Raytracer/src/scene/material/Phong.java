@@ -85,7 +85,7 @@ public class Phong extends Material{
         return reflectionRay;
     }
 
-    public Ray calculateRefraction(Intersection _intersection, float _entryIndex, float _exitIndex){
+    public Ray calculateRefraction(Intersection _intersection, float _entryIndex, float _exitIndex, boolean inside) {
         Ray refractionRay = new Ray(
                 new Vec3(0,0,0),
                 new Vec3(0,0,0),
@@ -98,13 +98,13 @@ public class Phong extends Material{
         Ray ray = _intersection.getIntersectionRay();
         Vec3 negatedDirection = ray.getDirection().negate();
         Vec3 normal = _intersection.getNormal();
+        if (inside) normal.negate();
 
         float snellius = entryIndex / exitIndex;
         float cosAlpha = normal.scalar(negatedDirection.normalize());
         float cosBeta = (float) Math.sqrt(1 - Math.pow(snellius, 2) * (1 - Math.pow(cosAlpha, 2)));
 
-        Vec3 exitDirection = ((normal.multScalar(cosAlpha).sub(negatedDirection.normalize())).multScalar(snellius)).sub(normal.multScalar(cosBeta));
-        refractionRay.setStartPoint(_intersection.getIntersectionPoint());
+        Vec3 exitDirection = ((normal.multScalar(cosAlpha).sub(negatedDirection)).multScalar(snellius)).sub(normal.multScalar(cosBeta));
         refractionRay.setDirection(exitDirection);
 
         return refractionRay;
