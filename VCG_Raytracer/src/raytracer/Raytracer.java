@@ -54,7 +54,7 @@ public class Raytracer {
 	private long tStart;
 	private ArrayList<Shape> shapeList;
 	private ArrayList<Light> lightList;
-	private int counter = 0;
+	private int currentRecursion = 0;
 	private float currentIndex = 1;
 
 	/**  Constructor **/
@@ -108,13 +108,13 @@ public class Raytracer {
 
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
 			Material shapeMaterial = intersection.getShape().getMaterial();
-			if(shapeMaterial.isReflective() && counter < mMaxRecursions) {
-				counter++;
+			if(shapeMaterial.isReflective() && currentRecursion < mMaxRecursions) {
+				currentRecursion++;
 				Ray reflectionRay = shapeMaterial.calculateReflection(intersection);
 				Intersection nextIntersection = getNearest(reflectionRay, intersection.getShape(), 9999f);
 				pixelColor = calculateColor(nextIntersection);
-			} else if (shapeMaterial.isRefractive() && counter < mMaxRecursions) {
-				counter++;
+			} else if (shapeMaterial.isRefractive() && currentRecursion < mMaxRecursions) {
+				currentRecursion++;
 				pixelColor = calculateRefraction(intersection);
 			} else {
 				for (Light light : lightList) {
@@ -133,7 +133,7 @@ public class Raytracer {
 						: pixelColorAmbient;
 			}
 		}
-		counter = 0;
+		currentRecursion = 0;
 		return pixelColor;
 	}
 
@@ -212,26 +212,22 @@ public class Raytracer {
 	}
 
 	public RgbColor calculateRefraction(Intersection _intersection) {
-		RgbColor pixelColor = mAmbientLight;
+		RgbColor pixelColor;
 		Ray refractionRay;
 		Material shapeMaterial = _intersection.getShape().getMaterial();
-		boolean inside = false;
 		float entryIndex = 1;
 		float exitIndex = shapeMaterial.getRefractiveIndex();
-		if (currentIndex == exitIndex) { // we start inside the sphere
+		boolean inside = false;
+		if (currentIndex == shapeMaterial.getRefractiveIndex()) { // we start inside the sphere
 			entryIndex = currentIndex;
 			exitIndex = 1f;
-			currentIndex = exitIndex;
 			inside = true;
 		}
-		currentIndex = exitIndex;
 
 		refractionRay = shapeMaterial.calculateRefraction(_intersection, entryIndex, exitIndex, inside);
-		refractionRay.setStartPoint(_intersection.getIntersectionPoint());
 		Intersection nextIntersection = getNearest(refractionRay, _intersection.getShape(), 9999f);
-		System.out.println(nextIntersection.getShape().toString());
-		if (nextIntersection != null)
-			pixelColor = calculateColor(nextIntersection).multScalar(shapeMaterial.getRefractionCoefficient());
+
+		pixelColor = calculateColor(nextIntersection).multScalar(shapeMaterial.getRefractionCoefficient());
 
 		return pixelColor;
 	}

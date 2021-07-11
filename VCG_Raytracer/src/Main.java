@@ -102,14 +102,14 @@ public class Main {
             new RgbColor(0.15f, 0.15f, 0.15f),
             new RgbColor(0.8f,0.8f, 0.8f));
     static Lambert lambertGray = new Lambert(AMBIENT_LIGHT,
-            new RgbColor(0.15f, 0.15f, 0.15f),
-            new RgbColor(0.15f,0.15f, 0.15f));
+            new RgbColor(0.05f, 0.05f, 0.05f),
+            new RgbColor(0.05f,0.05f, 0.05f));
     static Lambert lambertSquareWhite = new Lambert(RgbColor.WHITE,
             new RgbColor(1, 1, 1),
             new RgbColor(0,0, 0));
 
     /** PHONG **/
-    static Phong phongGray = new Phong(AMBIENT_LIGHT,
+    static Phong phongGrayReflective = new Phong(AMBIENT_LIGHT,
             new RgbColor(0.1f,0.1f,0.1f),
             new RgbColor(0.5f,0.5f,0.5f),
             new RgbColor(1f,1f,1f),
@@ -179,8 +179,9 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(1.5f, -3.25f, -7), 1.5f, lambertRed);
-        renderScene.createSphere(new Vec3(-1f, -3.25f, -5), 1.5f, water);
+        renderScene.createSphere(new Vec3(-2, -3.5f, -8), 1f, phongGrayReflective);
+        renderScene.createSphere(new Vec3(0, -3.5f, -4), 1f, glass);
+
     }
 
     private static void setupCornellBox(Scene renderScene) {
@@ -196,7 +197,7 @@ public class Main {
         // right
         renderScene.createPlane(new Vec3(6f,0,0), new Vec3(-1,0,0),lambertBlue);
         // behind camera
-        renderScene.createPlane(new Vec3(0,0,10), new Vec3(0,0,-1), lambertGray);
+        renderScene.createPlane(new Vec3(0,0,6), new Vec3(0,0,-1), lambertGray);
     }
 
     /** Create our personal renderer and give it all of our items and prefs to calculate our scene **/

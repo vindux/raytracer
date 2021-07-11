@@ -92,17 +92,16 @@ public class Phong extends Material{
                 new Vec3(0,0,0),
                 0f);
 
-        float entryIndex = _entryIndex;
-        float exitIndex = _exitIndex;
-
         Ray ray = _intersection.getIntersectionRay();
         Vec3 negatedDirection = ray.getDirection().negate();
         Vec3 normal = _intersection.getNormal();
-        if (inside) normal.negate();
+        float snellius = _entryIndex / _exitIndex;
+        if (inside) {
+            normal.negate();
+        }
 
-        float snellius = entryIndex / exitIndex;
         float cosAlpha = normal.scalar(negatedDirection.normalize());
-        float cosBeta = (float) Math.sqrt(1 - Math.pow(snellius, 2) * (1 - Math.pow(cosAlpha, 2)));
+        float cosBeta = (float) Math.sqrt(Math.abs(1 - ((snellius * snellius) * (1 - (cosAlpha * cosAlpha)))));
 
         Vec3 exitDirection = ((normal.multScalar(cosAlpha).sub(negatedDirection)).multScalar(snellius)).sub(normal.multScalar(cosBeta));
         refractionRay.setDirection(exitDirection);
