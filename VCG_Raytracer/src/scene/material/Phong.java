@@ -31,7 +31,7 @@ public class Phong extends Material{
         Vec3 lightPosition = _light.getPosition();
         Vec3 lightVector = lightPosition.sub(_intersection.getIntersectionPoint()).normalize();
         float diffuseScalar = lightVector.scalar(normal);
-        Vec3 reflectionVector = normal.multScalar(diffuseScalar).multScalar(2f).sub(lightVector);
+        Vec3 reflectionVector = normal.multScalar(diffuseScalar).multScalar(2f).sub(lightVector).normalize();
         float specularScalar = reflectionVector.scalar(_intersection.getIntersectionRay().getDirection().negate());
 
         if(diffuseScalar < 0){
@@ -62,8 +62,8 @@ public class Phong extends Material{
         Ray ray = _intersection.getIntersectionRay();
         Vec3 normal = _intersection.getNormal();
         // Calculate reflection
-        float scalar = normal.scalar(ray.getDirection());
-        Vec3 direction = (normal.multScalar(scalar).multScalar(2)).sub(ray.getDirection()).normalize();
+        float diffuseScalar = normal.scalar(ray.getDirection());
+        Vec3 direction = ray.getDirection().sub(normal.multScalar(diffuseScalar).multScalar(2));
 
         // Set ray properties
         reflectionRay.setStartPoint(_intersection.getIntersectionPoint());

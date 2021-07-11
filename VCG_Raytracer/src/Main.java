@@ -54,7 +54,7 @@ public class Main {
     static final float BOX_DIMENSION = 4f;
 
     /** RAYTRACER **/
-    static final int RECURSIONS = 0;
+    static final int RECURSIONS = 8;
     static final int ANTI_ALIASING = 1;
     static final boolean USE_SOFT_SHADOWS = false;
 
@@ -73,7 +73,7 @@ public class Main {
     static final int GI_SAMPLES = 0;
 
     static final RgbColor LIGHT_COLOR = null;
-    static final RgbColor AMBIENT_LIGHT = RgbColor.GRAY;
+    static final RgbColor AMBIENT_LIGHT = RgbColor.WHITE;
 
     static final boolean USE_AO = false;
     static final int NUMBER_OF_AO_SAMPLES = 0;
@@ -90,13 +90,34 @@ public class Main {
     static public Camera mCamera;
 
     /** MATERIALS **/
-    static Lambert lambertRed = new Lambert(AMBIENT_LIGHT, new RgbColor(0.5f,0,0), new RgbColor(0.5f, 0, 0));
-    static Lambert lambertBlue = new Lambert(AMBIENT_LIGHT, new RgbColor(0,0,0.5f), new RgbColor(0, 0, 0.5f));
-    static Lambert lambertWhite = new Lambert(AMBIENT_LIGHT, new RgbColor(0.5f, 0.5f, 0.5f), new RgbColor(0.25f,0.25f, 0.25f));
-    static Lambert lambertSquare = new Lambert(RgbColor.WHITE, new RgbColor(1, 1, 1), new RgbColor(0,0, 0));
+    static Lambert lambertRed = new Lambert(AMBIENT_LIGHT,
+            new RgbColor(0.15f,0,0),
+            new RgbColor(0.5f, 0, 0));
+    static Lambert lambertBlue = new Lambert(AMBIENT_LIGHT,
+            new RgbColor(0,0,0.15f),
+            new RgbColor(0, 0, 0.5f));
+    static Lambert lambertWhite = new Lambert(AMBIENT_LIGHT,
+            new RgbColor(0.15f, 0.15f, 0.15f),
+            new RgbColor(0.8f,0.8f, 0.8f));
+    static Lambert lambertGray = new Lambert(AMBIENT_LIGHT,
+            new RgbColor(0.15f, 0.15f, 0.15f),
+            new RgbColor(0.15f,0.15f, 0.15f));
+    static Lambert lambertSquare = new Lambert(RgbColor.WHITE,
+            new RgbColor(1, 1, 1),
+            new RgbColor(0,0, 0));
 
-    static Phong phongBlue = new Phong(RgbColor.BLUE, new RgbColor(0,0,0.75f), new RgbColor(0,0,0.75f), new RgbColor(0.8f,0.8f,0.8f), 50, 1f);
-    static Phong phongRed = new Phong(RgbColor.RED, new RgbColor(0.75f,0,0), new RgbColor(0.75f,0,0), new RgbColor(0.8f,0.8f,0.8f), 50, 0f);
+    static Phong phongBlue = new Phong(RgbColor.BLUE,
+            new RgbColor(0,0,0.75f),
+            new RgbColor(0.75f,0,0),
+            new RgbColor(0.8f,0.8f,0.8f),
+            50,
+            1f);
+    static Phong phongRed = new Phong(RgbColor.RED,
+            new RgbColor(0.75f,0,0),
+            new RgbColor(0.75f,0,0),
+            new RgbColor(0.8f,0.8f,0.8f),
+            50,
+            1f);
 
     /** DEBUG **/
     static final boolean SHOW_PARAM_LABEL = true;
@@ -128,7 +149,8 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (0, 4.40f, -6), RgbColor.LIGHT_GRAY);
+        renderScene.createPointLight(new Vec3 (0, 4.0f, -6),
+                RgbColor.LIGHT_GRAY);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -149,7 +171,7 @@ public class Main {
         renderScene.createPlane(new Vec3(6f,0,0), new Vec3(-1,0,0),lambertBlue);
 
         // behind camera
-        renderScene.createPlane(new Vec3(0,0,10), new Vec3(0,0,-1), lambertWhite);
+        renderScene.createPlane(new Vec3(0,0,10), new Vec3(0,0,-1), lambertGray);
     }
 
     /** Create our personal renderer and give it all of our items and prefs to calculate our scene **/

@@ -54,6 +54,7 @@ public class Raytracer {
 	private long tStart;
 	private ArrayList<Shape> shapeList;
 	private ArrayList<Light> lightList;
+	int counter = 0;
 
 	/**  Constructor **/
 	public Raytracer(Scene _scene, Window _renderWindow, int _recursions, RgbColor _backColor, RgbColor _ambientLight, int _antiAliasingSamples, boolean _debugOn, Camera _camera){
@@ -101,20 +102,18 @@ public class Raytracer {
 		return ray;
 	}
 
-	public RgbColor calculateColor(Intersection intersection, RgbColor _pixelColor) {
+	public RgbColor calculateColor(Intersection intersection) {
 		// Depending on the material calculate the pixel color
 		RgbColor calculatedColor = null;
-		RgbColor pixelColor = _pixelColor;
+		RgbColor pixelColor = null;
 
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
 			Material shapeMaterial = intersection.getShape().getMaterial();
-			if(shapeMaterial.isReflective()) {
+			if(shapeMaterial.isReflective() && counter < mMaxRecursions) {
+				counter++;
 				Ray reflectionRay = shapeMaterial.calculateReflection(intersection);
 				Intersection nextIntersection = getNearest(reflectionRay, intersection.getShape(), 9999f);
-				if(nextIntersection.isHit()) {
-					pixelColor = intersection.getShape().getMaterial().getAmbient();
-					calculateColor(nextIntersection, pixelColor);
-				}
+				pixelColor = calculateColor(nextIntersection);
 			} else {
 				for (Light light : lightList) {
 					Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), light.getPosition().sub(intersection.getIntersectionPoint()).normalize(), 0f);
@@ -123,7 +122,7 @@ public class Raytracer {
 								? shapeMaterial.getColor(light, intersection)
 								: calculatedColor.add(shapeMaterial.getColor(light, intersection));
 					} else {
-						return RgbColor.BLACK;
+						return RgbColor.DARK_GRAY;
 					}
 				}
 				RgbColor pixelColorAmbient = shapeMaterial.getAmbient();
@@ -132,6 +131,7 @@ public class Raytracer {
 						: pixelColorAmbient;
 			}
 		}
+		counter = 0;
 		return pixelColor;
 	}
 
@@ -221,7 +221,7 @@ public class Raytracer {
 		for(int y = 0; y < screenHeight; y++) {
 			for (int x = 0; x < screenWidth; x++) {
 				Intersection intersection = getNearest(x,y);
-				RgbColor pixelColor = calculateColor(intersection, mAmbientLight);
+				RgbColor pixelColor = calculateColor(intersection);
 				mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 			}
 		}
