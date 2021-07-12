@@ -117,7 +117,7 @@ public class Raytracer {
 			if(shapeMaterial.isReflective() && currentRecursion < mMaxRecursions) {
 				currentRecursion++;
 				Ray reflectionRay = shapeMaterial.calculateReflection(intersection);
-				Intersection nextIntersection = getNearest(reflectionRay, intersection.getShape(), 9999f);
+				Intersection nextIntersection = getNearest(reflectionRay, 9999f);
 				pixelColor = calculateColor(nextIntersection);
 			} else if (shapeMaterial.isRefractive() && currentRecursion < mMaxRecursions) {
 				currentRecursion++;
@@ -190,12 +190,11 @@ public class Raytracer {
 		return nearestIntersection;
 	}
 
-	public Intersection getNearest(Ray lightRay, Shape self, float distance) {
+	public Intersection getNearest(Ray lightRay, float distance) {
 		Intersection nearestIntersection = null;
 		float nearest = distance;
 		Ray ray;
 
-		//if (shape != self) { }
 		for (Shape shape : shapeList) {
 			ray = lightRay;
 			Ray invertedRay = invertRay(ray, shape);
@@ -217,7 +216,7 @@ public class Raytracer {
 		return nearestIntersection;
 	}
 
-	public boolean inShadow(Ray lightRay, Shape self, Light light) {
+	public boolean inShadow(Ray lightRay, Light light) {
 		float distance = lightRay.getStartPoint().sub(light.getPosition()).length();
 		Intersection intersection = getNearest(lightRay,distance);
 		return intersection != null && intersection.isHit();
@@ -237,7 +236,7 @@ public class Raytracer {
 		}
 
 		refractionRay = shapeMaterial.calculateRefraction(_intersection, entryIndex, exitIndex, inside);
-		Intersection nextIntersection = getNearest(refractionRay, _intersection.getShape(), 9999f);
+		Intersection nextIntersection = getNearest(refractionRay, 9999f);
 
 		pixelColor = calculateColor(nextIntersection).multScalar(shapeMaterial.getRefractionCoefficient());
 
@@ -245,23 +244,48 @@ public class Raytracer {
 	}
 
 	/**  This is where our scene is actually ray-traced **/
-	public void renderScene(){
+	public void renderScene() {
 		Log.print(this, "Prepare rendering at " + stopTime(tStart));
-		// Get height and width properties
-		float screenHeight = camera.getScreenHeight();
-		float screenWidth = camera.getScreenWidth();
+		ArrayList<Thread> threads = createThreads(mThreads);
 
-		// Iterate through every pixel
-		for(int y = 0; y < screenHeight; y++) {
-			for (int x = 0; x < screenWidth; x++) {
+		for (Thread thread : threads) {
+			thread.start();
+		}
+		for (Thread thread : threads) {
+			try {
+				thread.join(60000);
+			} catch (Exception e) {
+			}
+		}
+		this.exportRendering();
+		Log.print(this, "Finished rendering at " + stopTime(tStart));
+	}
+
+	public ArrayList<Thread> createThreads(int threadCount) {
+		ArrayList<Thread> threads = new ArrayList<>();
+		ArrayList<Runnable> runnableList = new ArrayList<>();
+		float portion = camera.getScreenHeight() / threadCount;
+
+		for (int i = 0; i < threadCount; i++) {
+			int finalI = i;
+			runnableList.add(() -> render(portion*finalI,portion*(finalI +1)));
+		}
+
+		for(int i = 0; i < runnableList.size(); i++) {
+			threads.add(new Thread(runnableList.get(i)));
+		}
+		return threads;
+	}
+
+
+	public void render(float _minHeight, float _maxHeight) {
+		for(float y = _minHeight; y < _maxHeight; y++) {
+			for (float x = 0; x < camera.getScreenWidth(); x++) {
 				Intersection intersection = getNearest(x,y);
 				RgbColor pixelColor = calculateColor(intersection);
 				mRenderWindow.setPixel(mRenderWindow.getBufferedImage(), pixelColor, new Vec2(x, y));
 			}
 		}
-		mRenderWindow.exportRendering("1",1,1,true);
-		this.exportRendering();
-		Log.print(this, "Finished rendering at " + stopTime(tStart));
 	}
 }
 
