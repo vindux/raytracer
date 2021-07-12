@@ -103,7 +103,6 @@ public class Raytracer {
 
 	public RgbColor calculateColor(Intersection intersection) {
 		// Depending on the material calculate the pixel color
-		RgbColor calculatedColor = null;
 		RgbColor pixelColor = null;
 
 		if (intersection != null && intersection.isHit() && intersection.getShape() != null) {
@@ -117,23 +116,32 @@ public class Raytracer {
 				currentRecursion++;
 				pixelColor = calculateRefraction(intersection);
 			} else {
-				for (Light light : lightList) {
-					Ray lightRay = new Ray(intersection.getIntersectionPoint(), light.getPosition(), light.getPosition().sub(intersection.getIntersectionPoint()).normalize(), 0f);
-					if (!inShadow(lightRay, intersection.getShape(), light)) {
-						calculatedColor = (calculatedColor == null)
-								? shapeMaterial.getColor(light, intersection)
-								: calculatedColor.add(shapeMaterial.getColor(light, intersection));
-					} else {
-						return shapeMaterial.getAmbient();
-					}
-				}
-				RgbColor pixelColorAmbient = shapeMaterial.getAmbient();
-				pixelColor = (calculatedColor != null)
-						? pixelColorAmbient.add(calculatedColor)
-						: pixelColorAmbient;
+				pixelColor = calculateColorAndShadow(intersection);
 			}
 		}
 		currentRecursion = 0;
+		return pixelColor;
+	}
+
+	public RgbColor calculateColorAndShadow(Intersection _intersection) {
+		RgbColor pixelColor;
+		RgbColor calculatedColor = null;
+		Material shapeMaterial = _intersection.getShape().getMaterial();
+
+		for (Light light : lightList) {
+			Ray lightRay = new Ray(_intersection.getIntersectionPoint(), light.getPosition(), light.getPosition().sub(_intersection.getIntersectionPoint()).normalize(), 0f);
+			if (!inShadow(lightRay, light)) {
+				calculatedColor = (calculatedColor == null)
+						? shapeMaterial.getColor(light, _intersection)
+						: calculatedColor.add(shapeMaterial.getColor(light, _intersection));
+			}
+		}
+
+		RgbColor pixelColorAmbient = shapeMaterial.getAmbient();
+		pixelColor = (calculatedColor != null)
+				? pixelColorAmbient.add(calculatedColor)
+				: pixelColorAmbient;
+
 		return pixelColor;
 	}
 
@@ -204,11 +212,8 @@ public class Raytracer {
 
 	public boolean inShadow(Ray lightRay, Shape self, Light light) {
 		float distance = lightRay.getStartPoint().sub(light.getPosition()).length();
-		Intersection intersection = getNearest(lightRay, self, distance);
-		if (intersection != null && intersection.isHit()) {
-			return true;
-		}
-		return false;
+		Intersection intersection = getNearest(lightRay,distance);
+		return intersection != null && intersection.isHit();
 	}
 
 	public RgbColor calculateRefraction(Intersection _intersection) {

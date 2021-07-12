@@ -118,23 +118,23 @@ public class Main {
 
     /** REFRACTIVE MATERIALS **/
     static Phong water = new Phong(AMBIENT_LIGHT,
-            new RgbColor(0,0,0.25f),
-            new RgbColor(0,0,0.25f),
-            new RgbColor(0,0,0.25f),
+            new RgbColor(0.1f, 0.1f, 0.1f),
+            new RgbColor(0.5f, 0.5f, 0.5f),
+            new RgbColor(1f, 1f, 1f),
             50,
             1f,
             1.3f);
     static Phong glass = new Phong(AMBIENT_LIGHT,
-            new RgbColor(0.75f,0,0),
-            new RgbColor(0.75f,0,0),
-            new RgbColor(0.8f,0.8f,0.8f),
+            new RgbColor(0.1f, 0.1f, 0.1f),
+            new RgbColor(0.5f, 0.5f, 0.5f),
+            new RgbColor(1f, 1f, 1f),
             50,
             1f,
             1.5f);
     static Phong diamond = new Phong(AMBIENT_LIGHT,
-            new RgbColor(0.75f,0,0),
-            new RgbColor(0.75f,0,0),
-            new RgbColor(0.8f,0.8f,0.8f),
+            new RgbColor(0.1f, 0.1f, 0.1f),
+            new RgbColor(0.5f, 0.5f, 0.5f),
+            new RgbColor(1f, 1f, 1f),
             1f,
             1f,
             1.8f);
@@ -170,8 +170,8 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        renderScene.createPointLight(new Vec3 (0, 4.0f, -6),
-                RgbColor.LIGHT_GRAY);
+        // renderScene.createPointLight(new Vec3 (0, 4.0f, -6), RgbColor.LIGHT_GRAY);
+        renderScene.createAreaLight(new Vec3 (0, 4.0f, -6), new RgbColor(0.5f, 0.5f, 0.5f), 2f, 4);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -181,7 +181,6 @@ public class Main {
     private static void setupObjects(Scene renderScene) {
         renderScene.createSphere(new Vec3(-2, -3.5f, -8), 1f, phongGrayReflective);
         renderScene.createSphere(new Vec3(0, -3.5f, -4), 1f, glass);
-
     }
 
     private static void setupCornellBox(Scene renderScene) {

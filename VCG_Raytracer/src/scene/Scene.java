@@ -1,5 +1,6 @@
 package scene;
 
+import scene.light.AreaLight;
 import scene.light.Light;
 import scene.light.PointLight;
 import scene.material.Material;
@@ -50,6 +51,11 @@ public class Scene {
     public void createPointLight(Vec3 _position, RgbColor _intensity){
         PointLight pointlight = new PointLight(_position, _intensity);
         lights.add(pointlight);
+    }
+
+    public void createAreaLight(Vec3 _position, RgbColor _color, float _size, int _lightMultiples){
+        AreaLight arealight = new AreaLight(_position, _color, _size, _lightMultiples);
+        lights.addAll(arealight.getAreaLight());
     }
 
 }

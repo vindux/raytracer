@@ -68,6 +68,12 @@ public class RgbColor {
                              colors.z * color.blue() );
     }
 
+    public RgbColor divideRGB(int value){
+        return new RgbColor( colors.x  / value,
+                colors.y / value,
+                             colors.z / value);
+    }
+
     public RgbColor multScalar(float value){
         return new RgbColor( colors.multScalar(value) );
     }
