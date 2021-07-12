@@ -35,7 +35,6 @@ import utils.algebra.Vec3;
     - THE RAYTRACER -
 
     TEAM:
-
     1. Alexander Funke
     2. Matthias Wolpert
     3. Philipp Reichel
@@ -49,23 +48,15 @@ public class Main {
     static final int IMAGE_HEIGHT = 600;
     static final int IMAGE_WIDTH = 800;
 
-
-    /** CORNELL_BOX_DIMENSION **/
-    static final float BOX_DIMENSION = 4f;
-
     /** RAYTRACER **/
-    static final int RECURSIONS = 4;
+    static final int RECURSIONS = 8;
     static final int ANTI_ALIASING = 1;
-    static final boolean USE_SOFT_SHADOWS = false;
+    static final int THREADS = 16;
 
     /** LIGHT **/
-    static final short LIGHT_DENSITY = 20;
-    static final short LIGHT_SAMPLES = 40;
+    static final short AREA_LIGHT_SIZE = 4;
 
     static final RgbColor BACKGROUND_COLOR = RgbColor.BLACK;
-
-    static final Vec3 LIGHT_POSITION = null;
-    static final short AREA_LIGHT_SIZE = 2;
 
     /** GI **/
     static final boolean USE_GI = false;
@@ -171,7 +162,7 @@ public class Main {
 
     private static void setupLights(Scene renderScene) {
         // renderScene.createPointLight(new Vec3 (0, 4.0f, -6), RgbColor.LIGHT_GRAY);
-        renderScene.createAreaLight(new Vec3 (0, 4.0f, -6), new RgbColor(0.5f, 0.5f, 0.5f), 2f, 4);
+        renderScene.createAreaLight(new Vec3 (0, 4.0f, -6), new RgbColor(0.5f, 0.5f, 0.5f), 2f, AREA_LIGHT_SIZE);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -179,8 +170,8 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-2, -3.5f, -8), 1f, phongGrayReflective);
-        renderScene.createSphere(new Vec3(0, -3.5f, -4), 1f, glass);
+        renderScene.createSphere(new Vec3(-1, -3.5f, -7), 1f, phongGrayReflective);
+        renderScene.createSphere(new Vec3(2, -3.5f, -6), 1f, glass);
     }
 
     private static void setupCornellBox(Scene renderScene) {
@@ -209,7 +200,9 @@ public class Main {
                 AMBIENT_LIGHT,
                 ANTI_ALIASING,
                 SHOW_PARAM_LABEL,
-                mCamera);
+                mCamera,
+                AREA_LIGHT_SIZE,
+                THREADS);
 
         raytracer.renderScene();
     }

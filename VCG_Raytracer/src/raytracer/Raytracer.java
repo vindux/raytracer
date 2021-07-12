@@ -30,6 +30,7 @@ import utils.io.Log;
 
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 /**
  * Raytracer class
@@ -47,8 +48,10 @@ public class Raytracer {
 
 	private RgbColor mBackgroundColor;
 	private RgbColor mAmbientLight;
+	private int mLights;
 
 	private int mAntiAliasingSamples;
+	private int mThreads;
 
 	private boolean mDebug;
 	private long tStart;
@@ -58,7 +61,7 @@ public class Raytracer {
 	private float currentIndex = 1;
 
 	/**  Constructor **/
-	public Raytracer(Scene _scene, Window _renderWindow, int _recursions, RgbColor _backColor, RgbColor _ambientLight, int _antiAliasingSamples, boolean _debugOn, Camera _camera){
+	public Raytracer(Scene _scene, Window _renderWindow, int _recursions, RgbColor _backColor, RgbColor _ambientLight, int _antiAliasingSamples, boolean _debugOn, Camera _camera, int _lights, int _threads){
 		Log.print(this, "Init");
 		mMaxRecursions = _recursions;
 
@@ -73,13 +76,17 @@ public class Raytracer {
 		mDebug = _debugOn;
 		tStart = System.currentTimeMillis();
 		camera = _camera;
+
+		mThreads = _threads;
+		mLights = _lights;
+
 		shapeList = mScene.getObjects();
 		lightList = mScene.getLights();
 	}
 
 	/**  Send the created window to the frame delivered by JAVA to display our result **/
 	public void exportRendering(){
-		mRenderWindow.exportRendering(String.valueOf(stopTime(tStart)), mMaxRecursions, mAntiAliasingSamples, mDebug);
+		mRenderWindow.exportRendering(String.valueOf(stopTime(tStart)), mMaxRecursions, mAntiAliasingSamples, mLights, mThreads, mDebug);
 	}
 
 	/**  Stop time of rendering **/
