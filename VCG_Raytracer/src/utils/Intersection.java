@@ -13,8 +13,6 @@ public class Intersection {
 
     private Vec3 mIntersectionPoint;
     private Vec3 mNormal;
-    private Vec3 mInRay;
-    private Vec3 mOutRay;
     private Shape mShape;
     private Ray intersectionRay;
     private float mDistance;
@@ -46,24 +44,7 @@ public class Intersection {
     }
 
     public void setNormal() {
-        Vec3 normal = mShape.calculateNormal(mIntersectionPoint);
-        this.mNormal = normal;
-    }
-
-    public Vec3 getInRay() {
-        return mInRay;
-    }
-
-    public void setInRay(Vec3 inRay) {
-        this.mInRay = inRay;
-    }
-
-    public Vec3 getOutRay() {
-        return mOutRay;
-    }
-
-    public void setOutRay(Vec3 outRay) {
-        this.mOutRay = outRay;
+        this.mNormal = mShape.calculateNormal(mIntersectionPoint);
     }
 
     public Shape getShape() {

@@ -21,10 +21,10 @@ import java.util.ArrayList;
 public class Scene {
 
     // Store all objects in an array list
-    private ArrayList<Shape> objects = new ArrayList<>();
+    private final ArrayList<Shape> objects = new ArrayList<>();
 
     // Store all lights in an array list
-    private ArrayList<Light> lights = new ArrayList<>();
+    private final ArrayList<Light> lights = new ArrayList<>();
 
     /** Constructor **/
     public Scene() {

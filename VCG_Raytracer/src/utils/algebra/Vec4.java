@@ -1,5 +1,7 @@
 package utils.algebra;
 
+
+@SuppressWarnings("unused")
 public class Vec4 {
     public float x;
     public float y;
@@ -27,11 +29,11 @@ public class Vec4 {
     }
 
     public void setValue(int index, float value){
-        switch (index){
-            case 0: this.x = value; break;
-            case 1: this.y = value; break;
-            case 2: this.z = value; break;
-            case 3: this.w = value; break;
+        switch (index) {
+            case 0 -> this.x = value;
+            case 1 -> this.y = value;
+            case 2 -> this.z = value;
+            case 3 -> this.w = value;
         }
     }
 
@@ -100,7 +102,7 @@ public class Vec4 {
                 this.y * inputVec.z - inputVec.y * this.z,
                 this.z * inputVec.w - inputVec.z * this.w,
                 this.w * inputVec.x - inputVec.w * this.x,
-                this.x * inputVec.y - inputVec.y * this.x
+                0.0f
         );
     }
 

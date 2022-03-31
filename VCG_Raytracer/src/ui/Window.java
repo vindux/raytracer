@@ -10,10 +10,10 @@ import java.awt.image.BufferedImage;
 
 public class Window {
 
-    private int mWidth;
-    private int mHeight;
+    private final int mWidth;
+    private final int mHeight;
 
-    private BufferedImage mBufferedImage;
+    private final BufferedImage mBufferedImage;
 
     private JFrame mFrame;
 
@@ -58,7 +58,7 @@ public class Window {
         graphic.fill3DRect(0,mHeight - 30,mWidth,mHeight,true);
         graphic.setColor(Color.green);
 //        graphic.drawString("Elapsed rendering time: " + text + " sec, Recursions: " + recursions + ", AA: x" + antiAliasing, 10, mHeight - 10);
-        graphic.drawString("Elapsed rendering time: " + text + " sec, Recursions: " + recursions + ", Lights: " + lights + "x" + lights + ", Threads: " + threads, 10, mHeight - 10);
+        graphic.drawString("Elapsed rendering time: " + text + " sec, Recursions: " + recursions + ", AA Samples: " + antiAliasing + "x" + antiAliasing + ", Lights: " + lights + "x" + lights + ", Threads: " + threads, 10, mHeight - 10);
 
         mFrame.repaint();
     }

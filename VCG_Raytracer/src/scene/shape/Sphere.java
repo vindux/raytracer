@@ -11,9 +11,8 @@ import utils.algebra.Vec3;
  */
 public class Sphere extends Shape {
 
-    private float radius;
-    private Vec3 normal;
-    private Matrix4x4 transformationMatrix;
+    private final float radius;
+    private final Matrix4x4 transformationMatrix;
 
     /** Constructor **/
     public Sphere(Vec3 _center, Float _radius, Material _material) {
@@ -21,22 +20,6 @@ public class Sphere extends Shape {
         this.radius = _radius;
         this.center = _center;
         this.transformationMatrix = transform();
-    }
-
-    public float getRadius() {
-        return radius;
-    }
-
-    public void setRadius(Float _radius) {
-        this.radius = _radius;
-    }
-
-    public Vec3 getNormal() {
-        return normal;
-    }
-
-    public void setNormal(Vec3 _normal) {
-        this.normal = _normal;
     }
 
     public Vec3 calculateNormal(Vec3 point) {
@@ -70,18 +53,14 @@ public class Sphere extends Shape {
             float t0 = (float) ((-(raySphereEquation1)-Math.sqrt(discriminant))/2);
             float t1 = (float) ((-(raySphereEquation1)+Math.sqrt(discriminant))/2);
 
-            if (discriminant == 0) {
-                // It does not matter which t we take since both are equal
+            if (discriminant == 0) { // It does not matter which t we take since both are equal
                 return t0;
             } else if (discriminant > 0) {
-                if(t0 < 0.01f && t1 >= 0.01f || t1 < 0.01f && t0 >= 0.01f) {
-                    // inside a sphere
+                if(t0 < 0.01f && t1 >= 0.01f || t1 < 0.01f && t0 >= 0.01f) { // inside a sphere
                     return Math.max(t0, t1);
-                } else if (t0 >= 0.01f && t1 >= 0.01f) {
-                    // hit
+                } else if (t0 >= 0.01f && t1 >= 0.01f) { // hit
                     return Math.min(t0, t1);
-                } else {
-                    // no hit
+                } else { // no hit
                     return Float.NaN;
                 }
             }

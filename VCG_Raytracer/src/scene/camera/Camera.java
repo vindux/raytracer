@@ -9,60 +9,23 @@ import utils.algebra.Vec3;
  **/
 public class Camera extends SceneObject {
 
-    private Vec3 cameraPosition;
-    private Vec3 lookAt;
-    private Vec3 userUpVector;
-    private Vec3 viewVector;
-    private Vec3 sideVector;
-    private Vec3 cameraUpVector;
-    private Vec3 destinationVector;
-    private Vec3 focalPoint;
-    private float viewAngle;
-    private float focalLength;
-    private double width;
-    private double height;
-    private double aspect_ratio;
-    private float screenHeight;
-    private float screenWidth;
+    private final Vec3 cameraPosition;
+    private final Vec3 lookAt;
+    private final Vec3 userUpVector;
+    private final Vec3 viewVector;
+    private final Vec3 sideVector;
+    private final Vec3 cameraUpVector;
+    private final Vec3 focalPoint;
+    private final float viewAngle;
+    private final float focalLength;
+    private final double width;
+    private final double height;
+    private final double aspect_ratio;
+    private final float screenHeight;
+    private final float screenWidth;
 
     public Vec3 getCameraPosition() {
         return cameraPosition;
-    }
-
-    public Vec3 getLookAt() {
-        return lookAt;
-    }
-
-    public Vec3 getUserUpVector() {
-        return userUpVector;
-    }
-
-    public Vec3 getViewVector() {
-        return viewVector;
-    }
-
-    public Vec3 getSideVector() {
-        return sideVector;
-    }
-
-    public Vec3 getCameraUpVector() {
-        return cameraUpVector;
-    }
-
-    public Float getViewAngle() {
-        return viewAngle;
-    }
-
-    public Float getFocalLength() {
-        return focalLength;
-    }
-
-    public double getWidth() {
-        return width;
-    }
-
-    public double getHeight() {
-        return height;
     }
 
     public float getScreenHeight() {
@@ -104,9 +67,6 @@ public class Camera extends SceneObject {
 
         destinationVector = focalPoint.add(sideVector.multScalar(globalCoordinates.x).add(cameraUpVector.multScalar(globalCoordinates.y)));
         return destinationVector;
-
-        //destinationVector = viewVector.add(sideVector.multScalar(deltaX));
-        //return destinationVector.add(cameraUpVector.multScalar(deltaY)).add(focalPoint);
     }
 
 }

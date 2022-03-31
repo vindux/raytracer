@@ -8,8 +8,8 @@ import utils.algebra.Vec3;
 
 public class Phong extends Material{
 
-    private RgbColor mSpecularCoefficient;
-    private float mSpecularExponent;
+    private final RgbColor mSpecularCoefficient;
+    private final float mSpecularExponent;
     private float mReflectionCoefficient;
     private float mRefractionCoefficient;
     private float mIor;
@@ -39,6 +39,9 @@ public class Phong extends Material{
         return this.mReflectionCoefficient > 0;
     }
 
+    /**
+     * Calculates the diffuse and specular portion of the light
+     */
     public RgbColor getDiffuseSpecular(Light _light, Intersection _intersection) {
         Vec3 normal = _intersection.getNormal();
         Vec3 lightPosition = _light.getPosition();
@@ -65,6 +68,9 @@ public class Phong extends Material{
         return getDiffuseSpecular(_light, _intersection);
     }
 
+    /**
+     * Creates a secondary ray to send to another shape
+     */
     public Ray calculateReflection(Intersection _intersection) {
         Ray reflectionRay = new Ray(
                 new Vec3(0,0,0),
@@ -85,6 +91,9 @@ public class Phong extends Material{
         return reflectionRay;
     }
 
+    /**
+     * Creates a secondary ray to send to through the same shape
+     */
     public Ray calculateRefraction(Intersection _intersection, float _entryIndex, float _exitIndex, boolean inside) {
         Ray refractionRay = new Ray(
                 new Vec3(0,0,0),

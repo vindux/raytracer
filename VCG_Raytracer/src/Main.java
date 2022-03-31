@@ -31,44 +31,32 @@ import ui.Window;
 import scene.Scene;
 import utils.RgbColor;
 import utils.algebra.Vec3;
-/*
-    - THE RAYTRACER -
 
-    TEAM:
-    1. Alexander Funke
-    2. Matthias Wolpert
-    3. Philipp Reichel
-    4. Timur Linden
- */
-
-// Main application class. This is the routine called by the JVM to run the program.
 public class Main {
 
     /** RESOLUTION **/
-    static final int IMAGE_HEIGHT = 600;
     static final int IMAGE_WIDTH = 800;
+    static final int IMAGE_HEIGHT = 600;
 
     /** RAYTRACER **/
-    static final int RECURSIONS = 8;
-    static final int ANTI_ALIASING = 1;
-    static final int THREADS = 16;
-
-    /** LIGHT **/
     static final short AREA_LIGHT_SIZE = 4;
+    static final int ANTI_ALIASING = 2;
+    static final int RECURSIONS = 4;
+    static final int THREADS = Runtime.getRuntime().availableProcessors();
 
     static final RgbColor BACKGROUND_COLOR = RgbColor.BLACK;
+    static final RgbColor AMBIENT_LIGHT = RgbColor.WHITE;
+
 
     /** GI **/
     static final boolean USE_GI = false;
     static final int GI_LEVEL = 0;
     static final int GI_SAMPLES = 0;
-
     static final RgbColor LIGHT_COLOR = null;
-    static final RgbColor AMBIENT_LIGHT = RgbColor.WHITE;
-
     static final boolean USE_AO = false;
     static final int NUMBER_OF_AO_SAMPLES = 0;
     static final float AO_MAX_DISTANCE = 0f;
+
 
     /** CAMERA **/
     static final Vec3 CAM_POS = new Vec3(0, 0, 5);
@@ -89,6 +77,9 @@ public class Main {
     static Lambert lambertBlue = new Lambert(AMBIENT_LIGHT,
             new RgbColor(0.1f,0.1f,0.1f),
             new RgbColor(0, 0, 0.5f));
+    static Lambert lambertGreen = new Lambert(AMBIENT_LIGHT,
+            new RgbColor(0.1f,0.1f,0.1f),
+            new RgbColor(0, 0.5f, 0.0f));
     static Lambert lambertWhite = new Lambert(AMBIENT_LIGHT,
             new RgbColor(0.15f, 0.15f, 0.15f),
             new RgbColor(0.8f,0.8f, 0.8f));
@@ -98,6 +89,12 @@ public class Main {
     static Lambert lambertSquareWhite = new Lambert(RgbColor.WHITE,
             new RgbColor(1, 1, 1),
             new RgbColor(0,0, 0));
+    static Lambert lambertSquareBlack = new Lambert(RgbColor.BLACK,
+            new RgbColor(1, 1, 1),
+            new RgbColor(0,0, 0));
+    static Lambert lambertSquareBrown = new Lambert(new RgbColor(0.6f, 0.3f, 0),
+            new RgbColor(0.5f, 0.5f, 0.5f),
+            new RgbColor(0,0, 0));
 
     /** PHONG **/
     static Phong phongGrayReflective = new Phong(AMBIENT_LIGHT,
@@ -106,6 +103,30 @@ public class Main {
             new RgbColor(1f,1f,1f),
             50,
             1f);
+    static Phong phongGreen = new Phong(AMBIENT_LIGHT,
+            new RgbColor(0.1f,0.1f,0.1f),
+            new RgbColor(0.0f,0.8f,0.0f),
+            new RgbColor(0.5f,0.5f,0.5f),
+            50,
+            0f);
+    static Phong phongBlue = new Phong(AMBIENT_LIGHT,
+            new RgbColor(0.1f,0.1f,0.1f),
+            new RgbColor(0.0f,0.8f,1.0f),
+            new RgbColor(0.5f,0.5f,0.5f),
+            50,
+            0f);
+    static Phong phongPurple = new Phong(AMBIENT_LIGHT,
+            new RgbColor(0.1f,0.1f,0.1f),
+            new RgbColor(0.8f,0.0f,0.8f),
+            new RgbColor(0.5f,0.5f,0.5f),
+            50,
+            0f);
+    static Phong phongYellow = new Phong(AMBIENT_LIGHT,
+            new RgbColor(0.1f,0.1f,0.1f),
+            new RgbColor(1f,0.9f,0.1f),
+            new RgbColor(0.5f,0.5f,0.5f),
+            50,
+            0f);
 
     /** REFRACTIVE MATERIALS **/
     static Phong water = new Phong(AMBIENT_LIGHT,
@@ -128,7 +149,7 @@ public class Main {
             new RgbColor(1f, 1f, 1f),
             1f,
             1f,
-            1.8f);
+            2.33f);
 
 
     /** DEBUG **/
@@ -161,8 +182,7 @@ public class Main {
     }
 
     private static void setupLights(Scene renderScene) {
-        // renderScene.createPointLight(new Vec3 (0, 4.0f, -6), RgbColor.LIGHT_GRAY);
-        renderScene.createAreaLight(new Vec3 (0, 4.0f, -6), new RgbColor(0.5f, 0.5f, 0.5f), 2f, AREA_LIGHT_SIZE);
+        renderScene.createAreaLight(new Vec3 (0, 4.0f, -6), new RgbColor(0.9f, 0.9f, 0.9f), 2f, AREA_LIGHT_SIZE);
     }
 
     private static void setupCameras(Scene renderScene) {
@@ -170,12 +190,14 @@ public class Main {
     }
 
     private static void setupObjects(Scene renderScene) {
-        renderScene.createSphere(new Vec3(-1, -3.5f, -7), 1f, phongGrayReflective);
-        renderScene.createSphere(new Vec3(2, -3.5f, -6), 1f, glass);
+        renderScene.createSphere(new Vec3(-1.5f, -3f, -7f), 1.5f, phongBlue);
+        renderScene.createSphere(new Vec3(-1f, -0.5f, -6.5f), 0.55f, phongPurple);
+        renderScene.createSphere(new Vec3(0.55f, -0.1f, -7.5f), 0.55f, phongYellow);
+        renderScene.createSphere(new Vec3(2, -3.5f, -6f), 1f, glass);
     }
 
     private static void setupCornellBox(Scene renderScene) {
-        renderScene.createSquare(new Vec3(0,4.45f,-6), new Vec3(0,-1,0), 2, lambertSquareWhite);
+        renderScene.createSquare(new Vec3(0,4.45f,-6), new Vec3(0,-1,0), 2f, lambertSquareWhite);
         // back
         renderScene.createPlane(new Vec3(0,0,-10), new Vec3(0,0,1), lambertWhite);
         // ceiling
@@ -185,7 +207,9 @@ public class Main {
         // left
         renderScene.createPlane(new Vec3(-6f,0,0), new Vec3(1,0,0),lambertRed);
         // right
-        renderScene.createPlane(new Vec3(6f,0,0), new Vec3(-1,0,0),lambertBlue);
+        renderScene.createPlane(new Vec3(6f,0,0), new Vec3(-1,0,0),lambertGreen);
+        // renderScene.createSquare(new Vec3(5.99f,-2f,-4f), new Vec3(-1,0,0), 4.2f, lambertSquareBrown);
+        // renderScene.createSquare(new Vec3(5.98f,-2f,-4f), new Vec3(-1,0,0), 4f, phongGrayReflective);
         // behind camera
         renderScene.createPlane(new Vec3(0,0,6), new Vec3(0,0,-1), lambertGray);
     }

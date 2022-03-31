@@ -11,7 +11,7 @@ import utils.algebra.Matrix4x4;
  */
 public class Square extends Plane {
 
-    private float size;
+    private final float size;
 
     /**
      * Constructor

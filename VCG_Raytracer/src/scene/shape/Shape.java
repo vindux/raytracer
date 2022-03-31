@@ -23,17 +23,12 @@ public abstract class Shape extends SceneObject {
     }
 
     public Material getMaterial(){return this.material;}
-    public void setMaterial(Material _material){this.material = _material;}
     public abstract Matrix4x4 getTransformMatrix();
     public abstract float intersect(Vec3 startPoint, Vec3 direction);
     public abstract Vec3 calculateNormal(Vec3 point);
 
     public Vec3 getPosition() {
         return this.center;
-    }
-
-    public void setPosition(Vec3 center) {
-        this.center = center;
     }
 }
 

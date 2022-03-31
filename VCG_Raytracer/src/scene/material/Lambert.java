@@ -1,23 +1,22 @@
 package scene.material;
 
-import ray.Ray;
 import scene.light.Light;
 import utils.Intersection;
 import utils.RgbColor;
 import utils.algebra.Vec3;
 
-/**
- * Lambert material class
- */
 public class Lambert extends Material {
 
     /**
-     * Constructor
+     * Constructor for lambert
      */
     public Lambert(RgbColor _ambientLight, RgbColor _ambientCoefficient, RgbColor _diffuseCoefficient) {
         super(_ambientLight, _ambientCoefficient, _diffuseCoefficient);
     }
 
+    /**
+     * Calculates the diffuse portion of the light
+     */
     public RgbColor getDiffuse(Light _light, Intersection _intersection) {
         Vec3 lightPosition = _light.getPosition();
         Vec3 lightVector = lightPosition.sub(_intersection.getIntersectionPoint()).normalize();
